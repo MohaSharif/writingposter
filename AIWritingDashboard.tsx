@@ -1,19 +1,68 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Lightbulb, Layers3, Fingerprint, ClipboardList, ChevronDown, ChevronUp, Copy, BookOpenCheck, ExternalLink, Shield, PenTool, Images, AudioLines, Settings2, Share2 } from "lucide-react";
+import {
+  Search,
+  Lightbulb,
+  Layers3,
+  Fingerprint,
+  ClipboardList,
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  BookOpenCheck,
+  ExternalLink,
+  Shield,
+  PenTool,
+  Images,
+  AudioLines,
+  Settings2,
+  Share2,
+  Star,
+  Printer,
+  Download,
+  X,
+} from "lucide-react";
 
 // واجهة عربية تفاعلية مستوحاة مباشرة من هيكل الوحدة المرفقة
 // أقسام رئيسية: تمهيد + 4 مستويات (أفكار، تطوير النص، تعميق الأسلوب، المراجعة والإخراج)
 // كل عنصر يحتوي على وصف ونماذج موجهات جاهزة للنسخ
 
-const SECTION_STYLES = [
-  "from-emerald-50 to-emerald-100 border-emerald-200",
-  "from-sky-50 to-sky-100 border-sky-200",
-  "from-fuchsia-50 to-fuchsia-100 border-fuchsia-200",
-  "from-amber-50 to-amber-100 border-amber-200",
-];
+const COLOR_OPTIONS = ["emerald", "sky", "fuchsia", "amber"] as const;
+type ColorOption = (typeof COLOR_OPTIONS)[number];
 
-const Prompt = ({ text }: { text: string }) => {
+const buildPalette = (c: string) => `from-${c}-50 to-${c}-100 border-${c}-200`;
+
+const promptKey = (sec: string, item: string, idx: number) => `${sec}::${item}::${idx}`;
+
+function useLocalStorage<T>(key: string, initial: T) {
+  const [state, setState] = useState<T>(() => {
+    try {
+      const raw = window.localStorage.getItem(key);
+      return raw ? (JSON.parse(raw) as T) : initial;
+    } catch {
+      return initial;
+    }
+  });
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(state));
+    } catch {}
+  }, [key, state]);
+  return [state, setState] as const;
+}
+
+
+const Prompt = ({
+  id,
+  text,
+  isFav,
+  toggleFav,
+}: {
+  id: string;
+  text: string;
+  isFav: boolean;
+  toggleFav: () => void;
+}) => {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     try {
@@ -23,17 +72,28 @@ const Prompt = ({ text }: { text: string }) => {
     } catch (e) {}
   };
   return (
-    <div className="group relative rounded-xl border bg-white/80 p-3 text-sm leading-7 shadow-sm hover:shadow transition">
-      <div className="whitespace-pre-wrap text-gray-800">{text}</div>
-      <button onClick={copy} className="absolute -top-2 -left-2 inline-flex items-center gap-1 rounded-full border bg-white px-2 py-1 text-[11px] text-gray-700 shadow hover:bg-gray-50">
+    <div className="group relative rounded-xl border bg-white/80 dark:bg-gray-800/80 p-3 text-sm leading-7 shadow-sm hover:shadow transition">
+      <div className="whitespace-pre-wrap text-gray-800 dark:text-gray-100">{text}</div>
+      <button
+        title="انسخ"
+        onClick={copy}
+        className="absolute -top-2 -left-2 inline-flex items-center gap-1 rounded-full border bg-white dark:bg-gray-800 px-2 py-1 text-[11px] text-gray-700 dark:text-gray-300 shadow hover:bg-gray-50 dark:hover:bg-gray-700"
+      >
         <Copy className="h-3.5 w-3.5" /> {copied ? "تم النسخ" : "انسخ"}
+      </button>
+      <button
+        title="أضف للمفضلة"
+        onClick={toggleFav}
+        className="absolute -top-2 -right-2 inline-flex items-center rounded-full border bg-white dark:bg-gray-800 p-1 text-gray-700 dark:text-gray-300 shadow hover:bg-gray-50 dark:hover:bg-gray-700"
+      >
+        <Star className={`h-4 w-4 ${isFav ? "fill-amber-400 text-amber-400" : ""}`} />
       </button>
     </div>
   );
 };
 
 const Pill = ({ children }: { children: React.ReactNode }) => (
-  <span className="inline-flex items-center rounded-full border bg-white/70 px-2 py-0.5 text-xs text-gray-700">
+  <span className="inline-flex items-center rounded-full border bg-white/70 dark:bg-gray-700 px-2 py-0.5 text-xs text-gray-700 dark:text-gray-200">
     {children}
   </span>
 );
@@ -317,18 +377,29 @@ const LEVELS = [
   },
 ];
 
-function Section({ section, expandedId, setExpandedId }: any) {
+function Section({
+  section,
+  expandedId,
+  setExpandedId,
+  favorites,
+  toggleFav,
+  notify,
+  color,
+}: any) {
   const isOpen = expandedId === section.id;
-  const palette = SECTION_STYLES[section.colorIndex % SECTION_STYLES.length];
+  const palette = buildPalette(color);
 
   return (
-    <motion.div layout className={`rounded-2xl border bg-gradient-to-b ${palette} p-4 shadow-sm`}>
+    <motion.div
+      layout
+      className={`rounded-2xl border bg-gradient-to-b ${palette} p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800`}
+    >
       <button
         onClick={() => setExpandedId(isOpen ? null : section.id)}
         className="flex w-full items-center justify-between gap-3 text-right"
       >
-        <div className="flex items-center gap-2 text-gray-800">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-emerald-700 shadow-sm">
+        <div className="flex items-center gap-2 text-gray-800 dark:text-gray-100">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white dark:bg-gray-900 text-emerald-700 shadow-sm">
             {section.icon}
           </span>
           <h3 className="text-base font-bold leading-snug">{section.title}</h3>
@@ -337,103 +408,388 @@ function Section({ section, expandedId, setExpandedId }: any) {
       </button>
 
       <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            key="content"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="overflow-hidden"
-          >
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              {section.items.map((item: any, idx: number) => (
-                <div key={idx} className="rounded-xl border bg-white/90 p-4 shadow-sm">
-                  <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                    <h4 className="text-sm font-extrabold text-gray-900">{item.title}</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {item.chips?.map((c: string, i: number) => (
-                        <Pill key={i}>{c}</Pill>
-                      ))}
-                    </div>
-                  </div>
-                  <p className="mb-3 text-sm text-gray-700">{item.description}</p>
-                  <div className="space-y-3">
-                    {item.prompts?.map((p: string, i: number) => (
-                      <Prompt key={i} text={p} />
+      {isOpen && (
+        <motion.div
+          key="content"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="overflow-hidden"
+        >
+          <div className="mt-4 grid gap-4 md:grid-cols-2 print:grid-cols-1">
+            {section.items.map((item: any, idx: number) => (
+              <div
+                key={idx}
+                className="rounded-xl border bg-white/90 dark:bg-gray-900 dark:border-gray-700 p-4 shadow-sm break-inside-avoid"
+              >
+                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                  <h4 className="text-sm font-extrabold text-gray-900 dark:text-gray-100">{item.title}</h4>
+                  <div className="flex flex-wrap items-center gap-1">
+                    {item.chips?.map((c: string, i: number) => (
+                      <Pill key={i}>{c}</Pill>
                     ))}
+                    <button
+                      title="انسخ كل الموجهات"
+                      onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(item.prompts.map((p: any) => p.text || p).join("\n\n"));
+                          notify("تم النسخ");
+                        } catch {}
+                      }}
+                      className="inline-flex items-center gap-1 rounded-full border bg-white dark:bg-gray-800 px-2 py-0.5 text-xs shadow hover:bg-gray-50 dark:hover:bg-gray-700"
+                    >
+                      <ClipboardList className="h-3.5 w-3.5" />
+                      انسخ كل الموجهات
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
+                <p className="mb-3 text-sm text-gray-700 dark:text-gray-200">{item.description}</p>
+                <div className="space-y-3">
+                  {item.prompts?.map((p: any, i: number) => (
+                    <Prompt
+                      key={p.id || i}
+                      id={p.id || promptKey(section.id, item.title, i)}
+                      text={p.text || p}
+                      isFav={favorites.has(p.id || promptKey(section.id, item.title, i))}
+                      toggleFav={() => toggleFav(p.id || promptKey(section.id, item.title, i))}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
       </AnimatePresence>
     </motion.div>
   );
 }
 
 export default function AIWritingDashboard() {
+  const searchRef = useRef<HTMLInputElement>(null);
   const [expandedId, setExpandedId] = useState<string | null>("lvl1");
   const [q, setQ] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [showFavs, setShowFavs] = useState(false);
+  const [favArr, setFavArr] = useLocalStorage<string[]>("aiw:favorites:v1", []);
+  const favorites = useMemo(() => new Set(favArr), [favArr]);
+  const toggleFav = (id: string) =>
+    setFavArr((arr) =>
+      arr.includes(id) ? arr.filter((x) => x !== id) : [...arr, id]
+    );
+
+  const [theme, setTheme] = useLocalStorage<string>("aiw:theme", "light");
+  const isDark = theme === "dark";
+  const [color, setColor] = useLocalStorage<ColorOption>("aiw:color", "emerald");
+  const colorOrder = useMemo(() => {
+    const idx = COLOR_OPTIONS.indexOf(color);
+    return [...COLOR_OPTIONS.slice(idx), ...COLOR_OPTIONS.slice(0, idx)];
+  }, [color]);
+
+  const allTags = useMemo(() => {
+    const s = new Set<string>();
+    LEVELS.forEach((sec) =>
+      sec.items.forEach((it: any) =>
+        (it.chips || []).forEach((t: string) => s.add(t))
+      )
+    );
+    return Array.from(s);
+  }, []);
+
+  // URL state
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sec = params.get("section");
+    const q = params.get("q");
+    const tags = params.get("tags");
+    const fav = params.get("fav");
+    if (sec) setExpandedId(sec);
+    if (q) setQ(q);
+    if (tags) setSelectedTags(tags.split(",").filter(Boolean));
+    if (fav === "1") setShowFavs(true);
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (expandedId) params.set("section", expandedId);
+    if (q) params.set("q", q);
+    if (selectedTags.length) params.set("tags", selectedTags.join(","));
+    if (showFavs) params.set("fav", "1");
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState(null, "", newUrl);
+  }, [expandedId, q, selectedTags, showFavs]);
 
   const filtered = useMemo(() => {
-    if (!q.trim()) return LEVELS;
     const k = q.trim();
-    return LEVELS.map((sec) => ({
-      ...sec,
-      items: sec.items.filter((it: any) =>
-        [it.title, it.description, ...(it.prompts || [])].join("\n").includes(k)
-      ),
-    })).filter((sec) => sec.items.length > 0);
-  }, [q]);
+    return LEVELS.map((sec) => {
+      const items = sec.items
+        .map((it: any) => {
+          if (selectedTags.length && !selectedTags.every((t) => it.chips?.includes(t))) return null;
+          const prompts = (it.prompts || [])
+            .map((p: string, i: number) => ({
+              text: p,
+              id: promptKey(sec.id, it.title, i),
+            }))
+            .filter((pr) => {
+              if (showFavs && !favorites.has(pr.id)) return false;
+              if (k && ![it.title, it.description, pr.text].join("\n").includes(k))
+                return false;
+              return true;
+            });
+          if (prompts.length === 0) return null;
+          return { ...it, prompts };
+        })
+        .filter(Boolean);
+      if (items.length === 0) return null;
+      return { ...sec, items };
+    }).filter(Boolean);
+  }, [q, selectedTags, showFavs, favorites]);
+
+  const [toast, setToast] = useState<string | null>(null);
+  useEffect(() => {
+    if (toast) {
+      const t = setTimeout(() => setToast(null), 1500);
+      return () => clearTimeout(t);
+    }
+  }, [toast]);
+
+  const share = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setToast("تم النسخ");
+    } catch {}
+  };
+
+  const exportJson = () => {
+    const data = {
+      favorites: favArr,
+      query: q,
+      tags: selectedTags,
+      prompts: favArr
+        .map((id) => {
+          const [secId, itemTitle, idxStr] = id.split("::");
+          const sec = LEVELS.find((s) => s.id === secId);
+          const item = sec?.items.find((it: any) => it.title === itemTitle);
+          const text = item?.prompts[Number(idxStr)];
+          return text ? { id, section: secId, item: itemTitle, text } : null;
+        })
+        .filter(Boolean),
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const d = new Date();
+    const ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `aiw-export-${ymd}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      if (e.key === "/") {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+      if (e.key === "f") {
+        e.preventDefault();
+        setShowFavs((v) => !v);
+      }
+      if (e.key === "?") {
+        e.preventDefault();
+        setShowHelp(true);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  const toggleTag = (t: string) =>
+    setSelectedTags((prev) =>
+      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
+    );
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gradient-to-b from-white to-gray-50 px-4 py-6 font-sans text-gray-900">
-      <div className="mx-auto max-w-6xl">
-        {/* العنوان الرئيسي */}
-        <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h1 className="text-2xl font-black tracking-tight">لوحة الكتابة الإبداعية بالذكاء الاصطناعي</h1>
-            <p className="text-sm text-gray-600">رحلة متدرجة: من الفكرة → النص → الأسلوب → الإخراج والنشر</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="relative w-full md:w-80">
-              <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="ابحث داخل التمارين والموجهات…"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                className="w-full rounded-xl border bg-white px-10 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-              />
+    <div dir="rtl" className={isDark ? "dark" : ""}>
+      <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950 px-4 py-6 font-sans text-gray-900 dark:text-gray-100">
+        <div className="mx-auto max-w-6xl">
+          {/* العنوان الرئيسي */}
+          <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between print:hidden">
+            <div>
+              <h1 className="text-2xl font-black tracking-tight">لوحة الكتابة الإبداعية بالذكاء الاصطناعي</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-300">رحلة متدرجة: من الفكرة → النص → الأسلوب → الإخراج والنشر</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="relative w-full md:w-80">
+                <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <input
+                  ref={searchRef}
+                  type="text"
+                  placeholder="ابحث داخل التمارين والموجهات…"
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  className={
+                    "w-full rounded-xl border bg-white dark:bg-gray-800 px-10 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 " +
+                    `focus:ring-${color}-400`
+                  }
+                />
+              </div>
+              <button
+                title="الكل / المفضلة"
+                onClick={() => setShowFavs((v) => !v)}
+                className="inline-flex items-center rounded-full border bg-white dark:bg-gray-800 p-2 text-sm shadow hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                <Star className={`h-4 w-4 ${showFavs ? "fill-amber-400 text-amber-400" : ""}`} />
+              </button>
+              <button
+                title="مشاركة"
+                onClick={share}
+                className="inline-flex items-center rounded-full border bg-white dark:bg-gray-800 p-2 shadow hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                <Share2 className="h-4 w-4" />
+              </button>
+              <button
+                title="تصدير JSON"
+                onClick={exportJson}
+                className="inline-flex items-center rounded-full border bg-white dark:bg-gray-800 p-2 shadow hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                <Download className="h-4 w-4" />
+              </button>
+              <button
+                title="طباعة"
+                onClick={() => window.print()}
+                className="inline-flex items-center rounded-full border bg-white dark:bg-gray-800 p-2 shadow hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                <Printer className="h-4 w-4" />
+              </button>
+              <button
+                title="إعدادات"
+                onClick={() => setSettingsOpen(true)}
+                className="inline-flex items-center rounded-full border bg-white dark:bg-gray-800 p-2 shadow hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                <Settings2 className="h-4 w-4" />
+              </button>
             </div>
           </div>
-        </div>
 
-        <div className="grid gap-4">
-          {filtered.map((sec) => (
-            <Section key={sec.id} section={sec} expandedId={expandedId} setExpandedId={setExpandedId} />
-          ))}
-        </div>
-
-        {/* تذييل مختصر */}
-        <div className="mt-10 rounded-2xl border bg-white p-4 text-xs text-gray-600">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-2 font-semibold text-gray-800">
-              <BookOpenCheck className="h-4 w-4" />
-              ملاحظات سريعة
-            </span>
-            <Pill>RTL</Pill>
-            <Pill>Tailwind</Pill>
-            <Pill>Framer Motion</Pill>
+          {/* وسوم */}
+          <div className="mb-4 flex flex-wrap gap-2 print:hidden">
+            {allTags.map((t) => (
+              <button
+                key={t}
+                onClick={() => toggleTag(t)}
+                className={
+                  "rounded-full border px-2 py-1 text-xs " +
+                  (selectedTags.includes(t)
+                    ? `bg-${color}-600 text-white`
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200")
+                }
+              >
+                {t}
+              </button>
+            ))}
           </div>
-          <ul className="mt-2 list-disc pr-6 leading-7">
-            <li>استخدم الأدوات كمُسرّع لا كبديل، وحافظ على صوتك الشخصي دائمًا.</li>
-            <li>كرّر على دفعات قصيرة: عصف → مخطط → مسودة → تحرير → مراجعة أقران.</li>
-            <li>احفظ الأصالة والأخلاقيات: إفصاح عن استخدام الأدوات ورصد التحيّزات وتجنّب محاكاة مؤلف بعينه.</li>
-          </ul>
+
+          <div className="grid gap-4 print:grid-cols-1">
+            {filtered.map((sec, i) => (
+              <Section
+                key={sec.id}
+                section={sec}
+                expandedId={expandedId}
+                setExpandedId={setExpandedId}
+                favorites={favorites}
+                toggleFav={toggleFav}
+                notify={setToast}
+                color={colorOrder[i % colorOrder.length]}
+              />
+            ))}
+          </div>
+
+          {/* تذييل مختصر */}
+          <div className="mt-10 rounded-2xl border bg-white dark:bg-gray-800 p-4 text-xs text-gray-600 dark:text-gray-300">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-2 font-semibold text-gray-800 dark:text-gray-100">
+                <BookOpenCheck className="h-4 w-4" />
+                ملاحظات سريعة
+              </span>
+              <Pill>RTL</Pill>
+              <Pill>Tailwind</Pill>
+              <Pill>Framer Motion</Pill>
+            </div>
+            <ul className="mt-2 list-disc pr-6 leading-7">
+              <li>استخدم الأدوات كمُسرّع لا كبديل، وحافظ على صوتك الشخصي دائمًا.</li>
+              <li>كرّر على دفعات قصيرة: عصف → مخطط → مسودة → تحرير → مراجعة أقران.</li>
+              <li>احفظ الأصالة والأخلاقيات: إفصاح عن استخدام الأدوات ورصد التحيّزات وتجنّب محاكاة مؤلف بعينه.</li>
+            </ul>
+          </div>
         </div>
+
+        {toast && (
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-gray-800 px-4 py-2 text-sm text-white shadow">
+            {toast}
+          </div>
+        )}
+
+        {settingsOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div className="rounded-2xl bg-white dark:bg-gray-800 p-6 text-sm text-gray-800 dark:text-gray-100 shadow">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="font-bold">الإعدادات</h2>
+                <button onClick={() => setSettingsOpen(false)}>
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="mb-4 flex items-center justify-between">
+                <span>الوضع الداكن</span>
+                <input
+                  type="checkbox"
+                  checked={isDark}
+                  onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
+                />
+              </div>
+              <div className="flex items-center gap-3">
+                {COLOR_OPTIONS.map((c) => (
+                  <button
+                    key={c}
+                    title={c}
+                    onClick={() => setColor(c)}
+                    className={
+                      `h-6 w-6 rounded-full border-2 border-white bg-${c}-500 ` +
+                      (color === c ? `ring-2 ring-${c}-500` : "")
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showHelp && (
+          <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 text-white">
+            <div className="rounded-xl bg-gray-900 p-6 text-sm">
+              <div className="mb-2 flex justify-between">
+                <h3 className="font-bold">اختصارات</h3>
+                <button onClick={() => setShowHelp(false)}>
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <ul className="space-y-2">
+                <li><kbd>/</kbd> للبحث</li>
+                <li><kbd>f</kbd> تبديل المفضلة</li>
+                <li><kbd>?</kbd> عرض هذه النافذة</li>
+              </ul>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
