@@ -19,13 +19,8 @@
       .wrap{max-width:1100px;margin:0 auto;padding:20px 16px}
       h1.title{font-weight:800;font-size:26px;margin:0 0 8px}
       p.subtitle{margin:0 0 16px;color:#475569}
-      .toolbar{
-        display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px
-      }
-      .btn{
-        border:1px solid #e2e8f0;background:#fff;border-radius:999px;
-        padding:8px 12px;font-size:13px;cursor:pointer
-      }
+      .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}
+      .btn{border:1px solid #e2e8f0;background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer}
       .btn:hover{background:#f8fafc}
       .legend{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
       .legend span{font-size:12px;border:1px solid #e2e8f0;border-radius:999px;padding:4px 10px;background:#fff}
@@ -40,7 +35,7 @@
 
       .footer{color:#64748b;font-size:12px;margin-top:8px}
       @media (max-width:640px){ svg{height:70vh} h1.title{font-size:22px} }
-      /* طباعة نظيفة (للتصدير PDF عبر الطباعة) */
+      /* طباعة نظيفة */
       @media print{
         body{background:#fff}
         .toolbar,.legend,.footer{display:none!important}
@@ -51,9 +46,9 @@
       }
     </style>
 
-    <!-- مكتبات Markmap (تحويل Markdown إلى خريطة) -->
+    <!-- Markmap -->
     <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader@0.15.7"></script>
-    <!-- مكتبات تصدير PDF من SVG -->
+    <!-- PDF (jsPDF + svg2pdf) -->
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script src="https://unpkg.com/svg2pdf.js@2.2.1/dist/svg2pdf.min.js"></script>
   </head>
@@ -66,7 +61,7 @@
       <div class="toolbar">
         <button class="btn" id="btn-share" title="نسخ رابط الخريطة">🔗 مشاركة</button>
         <button class="btn" id="btn-print" title="طباعة أو حفظ PDF">🖨️ طباعة / PDF</button>
-        <button class="btn" id="btn-pdf" title="تصدير PDF向矢">⬇️ تصدير PDF (向矢)</button>
+        <button class="btn" id="btn-pdf" title="تصدير PDF (متجه)">⬇️ تصدير PDF</button>
       </div>
 
       <div class="legend">
@@ -76,7 +71,7 @@
         <span>✅ الإخراج</span>
       </div>
 
-      <!-- محتوى الخريطة (Markdown) -->
+      <!-- Markdown to render as mind map -->
       <pre class="nohighlight"><code class="language-markdown">
 ---
 markmap:
@@ -142,46 +137,32 @@ markmap:
     </div>
 
     <script>
-      // أدوات بسيطة
-      const bySel = (s, el=document) => el.querySelector(s);
+      const $ = (s,el=document)=>el.querySelector(s);
 
       // مشاركة الرابط
-      bySel('#btn-share').addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(location.href);
-          alert('تم نسخ الرابط للمشاركة');
-        } catch { alert('انسخ الرابط يدويًا من شريط العنوان'); }
+      $('#btn-share').addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(location.href); alert('تم نسخ الرابط'); }
+        catch { alert('انسخ الرابط يدويًا من شريط العنوان'); }
       });
 
-      // طباعة (أو حفظ PDF عبر الطباعة)
-      bySel('#btn-print').addEventListener('click', () => window.print());
+      // طباعة (PDF عبر الطباعة)
+      $('#btn-print').addEventListener('click', () => window.print());
 
-      // تصدير PDF باستخدام jsPDF + svg2pdf (متجه)
+      // تصدير PDF (jsPDF + svg2pdf)
       async function exportPDF(){
-        // انتظر إنشاء SVG من markmap-autoloader
-        const ensureSvg = () => new Promise(resolve => {
-          const tryFind = () => {
-            const svg = bySel('svg'); if (svg) return resolve(svg);
-            setTimeout(tryFind, 150);
-          }; tryFind();
+        const ensureSvg = () => new Promise(resolve=>{
+          const tick=()=>{ const svg=$('svg'); if(svg) return resolve(svg); setTimeout(tick,120); }; tick();
         });
         const svg = await ensureSvg();
-
         const { jsPDF } = window.jspdf;
-        // قياس SVG
         const vb = svg.viewBox && svg.viewBox.baseVal ? svg.viewBox.baseVal : null;
         const w = vb ? vb.width : (svg.getBBox ? svg.getBBox().width : 1200);
         const h = vb ? vb.height : (svg.getBBox ? svg.getBBox().height : 800);
-
-        // إنشاء PDF بنفس أبعاد الـ SVG للحفاظ على الوضوح (أفقي)
-        const pdf = new jsPDF({ orientation: 'landscape', unit: 'pt', format: [w, h] });
-
-        // تحويل SVG إلى PDF (متجه بالكامل)
-        window.svg2pdf(svg, pdf, { x: 0, y: 0, width: w, height: h });
-
+        const pdf = new jsPDF({ orientation:'landscape', unit:'pt', format:[w,h] });
+        window.svg2pdf(svg, pdf, { x:0, y:0, width:w, height:h });
         pdf.save('journalist-ai-journey.pdf');
       }
-      bySel('#btn-pdf').addEventListener('click', exportPDF);
+      $('#btn-pdf').addEventListener('click', exportPDF);
     </script>
   </body>
 </html>
