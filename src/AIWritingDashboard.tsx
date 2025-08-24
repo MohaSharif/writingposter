@@ -27,6 +27,8 @@ import {
 // أقسام رئيسية: تمهيد + 4 مستويات (أفكار، تطوير النص، تعميق الأسلوب، المراجعة والإخراج)
 // كل عنصر يحتوي على وصف ونماذج موجهات جاهزة للنسخ
 
+const MAP_URL = `${import.meta.env.BASE_URL}maps/journalist-ai-journey.html`;
+
 const COLOR_OPTIONS = ["emerald", "sky", "fuchsia", "amber"] as const;
 type ColorOption = (typeof COLOR_OPTIONS)[number];
 
@@ -629,19 +631,27 @@ export default function AIWritingDashboard() {
               <p className="text-sm text-gray-600 dark:text-gray-300">رحلة متدرجة: من الفكرة → النص → الأسلوب → الإخراج والنشر</p>
             </div>
             <div className="flex items-center gap-2">
-              <div className="relative w-full md:w-80">
-                <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <input
-                  ref={searchRef}
-                  type="text"
-                  placeholder="ابحث داخل التمارين والموجهات…"
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  className={
-                    "w-full rounded-xl border bg-white dark:bg-gray-800 px-10 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 " +
-                    `focus:ring-${color}-400`
-                  }
-                />
+              <div className="flex items-center gap-2">
+                <a
+                  href={MAP_URL}
+                  target="_blank"
+                  rel="noopener"
+                  className="no-print inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm hover:bg-gray-50"
+                  title="الخريطة المعرفية: رحلة الصحفي (تفتح في تبويب جديد)"
+                >
+                  🗺️ خريطة رحلة الصحفي (PDF)
+                </a>
+
+                <div className="relative w-full md:w-80">
+                  <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="ابحث داخل التمارين والموجهات…"
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    className="w-full rounded-xl border bg-white px-10 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                  />
+                </div>
               </div>
               <button
                 title="الكل / المفضلة"
