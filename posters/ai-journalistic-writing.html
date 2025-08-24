@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>توظيف الذكاء الاصطناعي في الكتابة الصحفية</title>
+  <meta name="description" content="بوستر إنفوغرافيك جاهز للطباعة كـ PDF، يوضح توظيف الذكاء الاصطناعي في الكتابة الصحفية عبر مراحل متسلسلة رأسياً.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{
+      --brand-1:#8b5cf6; /* violet-500 */
+      --brand-2:#ec4899; /* fuchsia-500 */
+      --brand-3:#0ea5e9; /* sky-500 */
+      --brand-4:#10b981; /* emerald-500 */
+      --brand-5:#f59e0b; /* amber-500 */
+      --brand-6:#ef4444; /* red-500 */
+      --ink:#0f172a;      /* slate-900 */
+      --muted:#425569;    /* deeper slate */
+      --paper:#fafafa;    /* neutral-50 */
+      --paper-dark:#0b1220;
+    }
+    html,body{height:100%}
+    body{font-family:'Cairo', system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Color Emoji", "Apple Color Emoji", sans-serif;}
+
+    /* ====== Print / PDF ====== */
+    @page { size: A3 portrait; margin: 14mm; }
+    @media print{
+      .no-print{display:none !important}
+      .page{box-shadow:none !important;}
+      body{background:white}
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
+  <!-- Toolbar -->
+  <div class="no-print sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
+    <div class="mx-auto max-w-6xl px-4 py-2 flex items-center gap-2">
+      <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50 active:scale-[.99]">🖨️ طباعة / حفظ PDF</button>
+      <button id="toggleTheme" class="ml-auto inline-flex items-center gap-2 rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-50 active:scale-[.99]">🌙 وضع داكن</button>
+    </div>
+  </div>
+
+  <!-- Poster Page -->
+  <main class="page mx-auto my-6 max-w-6xl rounded-3xl border border-slate-200 bg-white shadow-xl">
+    <!-- Header -->
+    <header class="relative overflow-hidden rounded-t-3xl">
+      <div class="absolute inset-0 bg-gradient-to-br from-fuchsia-100 via-violet-100 to-sky-50"></div>
+      <svg class="absolute -left-10 -top-10 opacity-30" width="260" height="260" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+        <defs>
+          <linearGradient id="swirl" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ec4899"/>
+            <stop offset="50%" stop-color="#8b5cf6"/>
+            <stop offset="100%" stop-color="#0ea5e9"/>
+          </linearGradient>
+        </defs>
+        <path d="M10 140 C 60 90, 140 200, 190 150" stroke="url(#swirl)" stroke-width="6" stroke-linecap="round"/>
+        <path d="M20 100 C 70 60, 130 150, 180 110" stroke="#0ea5e9" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      <div class="relative px-8 pt-10 pb-8 text-center">
+        <h1 class="text-3xl md:text-4xl font-extrabold leading-tight">توظيف الذكاء الاصطناعي في الكتابة الصحفية</h1>
+        <p class="mx-auto mt-2 max-w-3xl text-[15px] text-[var(--muted)]">
+          تصور بصري لمسار العمل الصحفي مع إبراز مواضع توظيف الذكاء الاصطناعي كأداة مساعدة في كل مرحلة مع الحفاظ على قيادة الصحفي للتحقيق ونقل الحقيقة.
+        </p>
+      </div>
+    </header>
+
+    <!-- Vertical Timeline -->
+    <section class="relative px-6 pb-8 pt-8">
+      <div class="relative mx-auto max-w-5xl">
+        <ol class="relative border-s-4 border-slate-200 ps-8 space-y-6">
+          <!-- Stage 1 -->
+          <li class="relative">
+            <span class="absolute -right-5 top-2 grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-rose-500 to-fuchsia-500 text-white shadow-lg ring-4 ring-white">1</span>
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <header class="mb-2 flex items-center gap-2">
+                <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-rose-100 text-rose-700">💡</span>
+                <h3 class="text-lg font-extrabold text-rose-700">الانطلاق وبناء زوايا الأخبار والتحقيق</h3>
+              </header>
+              <ul class="list-disc pr-5 text-[15px] leading-relaxed text-slate-700 space-y-1.5">
+                <li><strong>اندفاعة الأفكار:</strong> توليد قائمة كبيرة من زوايا الأخبار أو أفكار التحقيقات.</li>
+                <li><strong>الزاوية والخطاف:</strong> صياغة بدايات قوية للأخبار والتقارير.</li>
+                <li><strong>مختبر العناوين:</strong> ابتكار عناوين جذابة ودقيقة للمقالات الصحفية.</li>
+              </ul>
+              <p class="mt-3 text-[13px] font-semibold text-rose-700/90">الذكاء الاصطناعي هنا: <em>محفز للتفكير والإنتاج الصحفي</em>.</p>
+            </article>
+          </li>
+
+          <!-- Stage 2 -->
+          <li class="relative">
+            <span class="absolute -right-5 top-2 grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 text-white shadow-lg ring-4 ring-white">2</span>
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <header class="mb-2 flex items-center gap-2">
+                <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-violet-100 text-violet-700">🧩</span>
+                <h3 class="text-lg font-extrabold text-violet-700">تطوير النصوص وصياغة البنية الإخبارية</h3>
+              </header>
+              <ul class="list-disc pr-5 text-[15px] leading-relaxed text-slate-700 space-y-1.5">
+                <li><strong>خريطة تسلسل الأحداث:</strong> بناء مخطط واضح للخبر أو التحقيق الصحفي.</li>
+                <li><strong>صوت المصادر والشخصيات:</strong> فهم أعمق للشخصية أو زاوية الخبر مع الحفاظ على الموضوعية.</li>
+                <li><strong>التحرير الأسلوبي والإيقاعي:</strong> رفع جودة الصياغة الإخبارية والتحريرية دون فقدان البصمة الصحفية.</li>
+              </ul>
+              <p class="mt-3 text-[13px] font-semibold text-violet-700/90">الذكاء الاصطناعي هنا: <em>يساعد، لا يحل محل الصحفي في التحقق والتحليل</em>.</p>
+            </article>
+          </li>
+
+          <!-- Stage 3 -->
+          <li class="relative">
+            <span class="absolute -right-5 top-2 grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-lg ring-4 ring-white">3</span>
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <header class="mb-2 flex items-center gap-2">
+                <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-amber-100 text-amber-700">🎨</span>
+                <h3 class="text-lg font-extrabold text-amber-700">التعمق وتخصيص الأسلوب الصحفي</h3>
+              </header>
+              <ul class="list-disc pr-5 text-[15px] leading-relaxed text-slate-700 space-y-1.5">
+                <li><strong>بصمة الأسلوب الشخصي:</strong> استخراج دليل أسلوبك الصحفي الخاص.</li>
+                <li><strong>محاكاة الصوت بأمثلة شخصية:</strong> تدريب الأداة على صوتك الصحفي.</li>
+                <li><strong>تحويل النوع/النبرة:</strong> التحكم بالأسلوب عبر تبديل الأنماط الصحفية.</li>
+              </ul>
+              <p class="mt-3 text-[13px] font-semibold text-amber-700/90">الذكاء الاصطناعي هنا: <em>يعزز هويتك الصحفية، لا يطمسها</em>.</p>
+            </article>
+          </li>
+
+          <!-- Stage 4 -->
+          <li class="relative">
+            <span class="absolute -right-5 top-2 grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-lg ring-4 ring-white">4</span>
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <header class="mb-2 flex items-center gap-2">
+                <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">✅</span>
+                <h3 class="text-lg font-extrabold text-emerald-700">المراجعة والإخراج النهائي للمحتوى الإخباري</h3>
+              </header>
+              <ul class="list-disc pr-5 text-[15px] leading-relaxed text-slate-700 space-y-1.5">
+                <li><strong>الخط العكسي:</strong> اختبار منطق التسلسل وتماسك الحجة أو السرد.</li>
+                <li><strong>تحقق حقائقي ومنطقي:</strong> ضمان السلامة المعلوماتية ودقة الحقائق الصحفية.</li>
+                <li><strong>البوابة الأخلاقية والأصالة:</strong> الإفصاح عن استخدام الذكاء الاصطناعي والوعي بالتحيزات المحتملة.</li>
+              </ul>
+              <p class="mt-3 text-[13px] font-semibold text-emerald-700/90">الذكاء الاصطناعي هنا: <em>مساعد في الصقل والتدقيق اللغوي والتحققي</em>.</p>
+            </article>
+          </li>
+        </ol>
+
+        <!-- Central Message -->
+        <div class="mx-auto mt-10 max-w-4xl rounded-2xl bg-gradient-to-r from-fuchsia-50 via-violet-50 to-cyan-50 border border-slate-200 p-6 text-center">
+          <p class="text-[16px] font-bold">الرسالة المحورية</p>
+          <p class="mt-2 text-[15px] leading-relaxed text-slate-700">
+            الذكاء الاصطناعي أداة لتضخيم مهاراتك الصحفية وتعزيزها، وليس ليحل محل إبداعك البشري في نقل الحقيقة والتحقيق.
+          </p>
+        </div>
+
+        <!-- Golden Tip -->
+        <div class="mx-auto mt-4 max-w-4xl rounded-xl bg-gradient-to-r from-amber-50 via-orange-50 to-rose-50 border border-amber-200 p-4 text-center">
+          <p class="text-[15px] font-semibold text-amber-800">
+            نصيحة ذهبية: تذكّر أنك الصحفي من النوع الثاني، الذي يمزج الذكاء الاصطناعي مع تحليله العميق وأسلوبه الفريد ليقدم تقارير ذات قيمة مضافة وأصالة.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="px-6 pb-8">
+      <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 text-[12.5px] text-slate-500">
+        <div>
+          <span class="font-semibold text-slate-600">رابط:</span>
+          <a href="https://www.canva.com/infographics/templates/business/?utm_source=chatgpt.com" class="underline decoration-dotted hover:text-slate-700" target="_blank" rel="noreferrer">قوالب إنفوغرافيك شبيهة على Canva</a>
+        </div>
+        <div class="text-slate-500">جاهز للطباعة على حجم A3 — نسخة HTML أحادية الملف</div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Theme toggle (light/dark)
+    const btn = document.getElementById('toggleTheme');
+    let dark=false;
+    btn?.addEventListener('click', ()=>{
+      dark=!dark;
+      document.body.classList.toggle('bg-[var(--paper)]', !dark);
+      document.body.classList.toggle('bg-[var(--paper-dark)]', dark);
+      document.body.classList.toggle('text-white', dark);
+      btn.textContent = dark ? '☀️ وضع فاتح' : '🌙 وضع داكن';
+    });
+  </script>
+</body>
+</html>
