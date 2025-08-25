@@ -5,105 +5,135 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>كيف تستخدم ChatGPT للعصف الذهني؟ — بوستر A2</title>
   <meta name="description" content="بوستر A2 احترافي: الأطر السبعة للعصف الذهني مع أمثلة صحفية وبرومبتات جاهزة. قابل للطباعة وتصدير PDF.">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Fonts: أوضح وأحدث -->
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700;800&family=Tajawal:wght@700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     :root{
-      /* الهوية اللونية المطلوبة */
-      --indigo:#0b1437;              /* خلفية عليا داكنة */
-      --sky:#0ea5e9;                 /* أزرق سماوي */
-      --violet:#8b5cf6;              /* بنفسجي فاتح */
-      --orange:#f59e0b;              /* برتقالي دافئ */
-      --turq:#10b981;                /* أخضر تركوازي */
-      --gray:#e5e7eb;                /* رمادي فاتح للشروح */
-      --row1: linear-gradient(90deg, #0ea5e920, #8b5cf620);
-      --row2: linear-gradient(90deg, #10b98120, #0ea5e920);
-      --row3: linear-gradient(90deg, #f59e0b20, #8b5cf620);
+      --indigo:#0b1437;   /* خلفية عليا داكنة */
+      --sky:#0ea5e9;      /* أزرق سماوي */
+      --violet:#8b5cf6;   /* بنفسجي */
+      --orange:#f59e0b;   /* برتقالي */
+      --turq:#10b981;     /* تركوازي */
+      --row1: linear-gradient(90deg, #0ea5e91A, #8b5cf61A);
+      --row2: linear-gradient(90deg, #10b9811A, #0ea5e91A);
+      --row3: linear-gradient(90deg, #f59e0b1A, #8b5cf61A);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{font-family:'Cairo',system-ui,-apple-system,'Noto Sans Arabic',Segoe UI,Roboto,Tahoma,sans-serif;background:#fff;color:#0f172a}
+    body{
+      font-family:'IBM Plex Sans Arabic', system-ui, -apple-system, 'Noto Sans Arabic', Segoe UI, Roboto, Tahoma, sans-serif;
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      letter-spacing:0; line-height:1.7; color:#0f172a; background:#fff;
+      font-feature-settings:"liga" 1, "calt" 1;
+    }
 
-    /* مساحة البوستر A2 */
-    .sheet{width:420mm; height:594mm; margin:10mm auto;
-      background: linear-gradient(180deg,var(--indigo),#eaf4ff 75%, #ffffff 100%);
-      border-radius:22px; overflow:hidden; position:relative;
+    /* ورقة A2 */
+    .sheet{
+      width:420mm; height:594mm; margin:10mm auto; position:relative; overflow:hidden; border-radius:22px;
+      background: linear-gradient(180deg, var(--indigo) 0%, #eaf4ff 75%, #ffffff 100%);
       box-shadow:0 20px 60px rgba(2,6,23,.15);
     }
     .pad{padding:16mm}
 
-    /* شريط أدوات علوي للطباعة/التصدير */
+    /* شريط الأدوات */
     .toolbar{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.75); backdrop-filter:blur(8px); border-bottom:1px solid #e5e7eb}
     .btn{border:1px solid #e5e7eb; background:#fff; border-radius:999px; padding:.55rem .9rem; font-size:.9rem}
     .btn:hover{background:#f8fafc}
 
-    /* العنوان الرئيسي */
+    /* العنوان */
     .hero{position:relative; text-align:center; padding-top:18mm; padding-bottom:10mm; color:#fff}
-    .hero h1{font-weight:900; letter-spacing:.2px; font-size:28pt; text-shadow:0 0 14px rgba(255,255,255,.25);}
+    .hero h1{
+      font-family:'Tajawal', 'IBM Plex Sans Arabic', sans-serif;
+      font-weight:900; font-size:28pt; margin:0; line-height:1.25;
+      text-shadow:0 0 10px rgba(255,255,255,.2);
+      letter-spacing:0;
+    }
     .hero p{max-width:180mm; margin:4mm auto 0; color:#e6efff}
+
     .brain{position:absolute; inset-inline-start:10mm; top:8mm; opacity:.22}
     .brain svg{width:60mm; height:60mm}
 
-    /* شبكة 3×3 (نستخدم 6 أعمدة لمزيد من المرونة) */
-    .grid-areas{display:grid; grid-template-columns:repeat(6, 1fr); grid-auto-rows:1fr; gap:6mm}
-    /* صفوف ملونة خفيفة */
+    /* شبكة البطاقات: إصلاح التمطّط */
+    .grid-areas{
+      display:grid;
+      grid-template-columns:repeat(6, minmax(0,1fr));
+      grid-auto-rows:auto;                /* ← كان 1fr ويسبب فراغات هائلة */
+      align-items:start; gap:8mm 6mm;     /* row-gap / col-gap */
+    }
+
+    /* الخلفيات اللونية الخفيفة لكل صف */
     .row{position:relative}
-    .row::before{content:""; position:absolute; inset: -3mm 0 -3mm 0; background:var(--row1); border-radius:18px; z-index:0}
+    .row::before{
+      content:""; position:absolute; inset:-2mm 0; border-radius:18px; z-index:0; pointer-events:none;
+      background:var(--row1);
+    }
     .row.middle::before{background:var(--row2)}
     .row.bottom::before{background:var(--row3)}
     .row > *{position:relative; z-index:1}
 
-    /* بطاقة إطار */
-    .card{background:#ffffff; border:1px solid #e5e7eb; border-radius:16px; padding:6mm; box-shadow:0 10px 28px rgba(2,6,23,.08)}
+    /* البطاقة */
+    .card{
+      background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:6mm;
+      box-shadow:0 10px 28px rgba(2,6,23,.08);
+      break-inside:avoid; page-break-inside:avoid; /* لا تنقسم في الطباعة */
+    }
     .card h3{font-size:14pt; font-weight:800; margin:0 0 2mm}
     .meta{display:flex; align-items:center; gap:3mm; margin-bottom:2mm}
     .num{display:grid; place-items:center; width:9mm; height:9mm; border-radius:999px; color:#fff; font-weight:800}
-    .desc{font-size:10.5pt; color:#334155}
-    .icon{font-size:14pt}
-    .prompt{margin-top:3mm; border-radius:12px; background:#0b143705; border:1px dashed #94a3b8; padding:4mm}
-    .prompt-title{font-weight:800; font-size:10pt; color:#0b1437; margin-bottom:1.5mm}
-    .prompt pre{white-space:pre-wrap; font: 600 10pt ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; color:#111827}
+    .desc{font-size:11pt; color:#334155}
+    .prompt{margin-top:3mm; border-radius:12px; background:#0b143708; border:1px dashed #94a3b8; padding:4mm}
+    .prompt-title{font-weight:800; font-size:10.5pt; color:#0b1437; margin-bottom:1.5mm}
+    .prompt pre{
+      white-space:pre-wrap;
+      font: 600 10.5pt 'IBM Plex Sans Arabic', ui-sans-serif, system-ui;
+      color:#111827; letter-spacing:0; line-height:1.7;
+    }
 
-    /* ألوان الأطر */
+    /* ألوان الأرقام */
     .c1{--main: var(--sky)} .c2{--main: var(--violet)} .c3{--main: var(--orange)}
     .c4{--main: var(--turq)} .c5{--main: #7c3aed} .c6{--main:#475569} .c7{--main:#f59e0b}
     .num{background:var(--main)}
-    .badge{display:inline-block; border:1px solid #e5e7eb; border-radius:999px; padding:.5mm 2.5mm; font-size:9pt; color:#334155; background:#fff; margin-inline-start:2mm}
+    .badge{display:inline-block; border:1px solid #e5e7eb; border-radius:999px; padding:.5mm 2.5mm; font-size:9.5pt; color:#334155; background:#fff; margin-inline-start:2mm}
 
-    /* فوتر */
-    .footer{margin-top:6mm; background:linear-gradient(180deg,#3b1d72,#4c28a6); color:#fff; border-radius:16px; padding:4mm 6mm; text-align:center; box-shadow:inset 0 18px 40px rgba(255,255,255,.08)}
+    /* الفوتر */
+    .footer{
+      margin-top:8mm; background:linear-gradient(180deg,#3b1d72,#4c28a6);
+      color:#fff; border-radius:16px; padding:5mm 6mm; text-align:center;
+      box-shadow:inset 0 18px 40px rgba(255,255,255,.08)
+    }
     .footer small{opacity:.9}
 
-    /* الطباعة */
+    /* الطباعة: دقة وألوان محفوظة */
     @page{ size:A2 portrait; margin:10mm }
     @media print{
       .toolbar{display:none !important}
       .sheet{margin:0; border-radius:0; box-shadow:none}
       .hero h1{text-shadow:none}
+      *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
     }
 
-    /* شاشات أصغر (معاينة) */
-    @media (max-width:1200px){
-      .sheet{width:100%; height:auto}
-    }
+    /* معاينة الشاشات الصغيرة */
+    @media (max-width:1200px){ .sheet{width:100%; height:auto} }
   </style>
 </head>
 <body>
-  <!-- أدوات -->
+  <!-- Toolbar -->
   <div class="toolbar no-print">
     <div class="mx-auto max-w-7xl px-4 py-2 flex items-center gap-2">
-      <a href="../index.html" class="btn">⬅️ رجوع</a>
+      <a href="../posters/" class="btn">⬅️ فهرس البوسترات</a>
       <button onclick="window.print()" class="btn">🖨️ طباعة / PDF</button>
       <button id="btnPdf" class="btn">⬇️ تصدير PDF</button>
       <span class="ms-auto text-sm text-slate-600">A2 • 3×3 Grid • RTL</span>
     </div>
   </div>
 
-  <!-- البوستر -->
+  <!-- Poster -->
   <main class="sheet">
     <header class="hero pad">
       <div class="brain" aria-hidden="true">
-        <!-- أيقونة دماغ بخطوط متصلة -->
         <svg viewBox="0 0 256 256" fill="none">
           <defs>
             <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
@@ -122,12 +152,12 @@
     </header>
 
     <section class="pad grid-areas">
-      <!-- ===== الصف العلوي: 3 بطاقات ===== -->
+      <!-- الصف العلوي -->
       <div class="row" style="grid-column:1/-1; grid-row:1">
         <div class="card c1" style="grid-column:1/3;">
           <div class="meta"><span class="num">1</span><h3>الأطر الكلاسيكية (Frameworks)</h3><span class="badge">مكعب ◽︎</span></div>
           <div class="desc">
-            5 Whys, SCAMPER, قبعات التفكير الست، خرائط ذهنية، Starbursting. استخدم الإطار الأنسب لتعميق الفكرة سريعًا.
+            5 Whys, SCAMPER, قبعات التفكير الست، خرائط ذهنية، Starbursting. اختر الإطار الأنسب لتعميق الفكرة سريعًا.
             <ul class="list-disc pr-4 mt-2 text-slate-700">
               <li><b>مثال صحفي:</b> «لماذا ينصرف القرّاء عن التغطية المحلية؟» → سلسلة لماذا حتى الجذر: نقص شبكة المصادر.</li>
             </ul>
@@ -142,12 +172,8 @@
 
         <div class="card c2" style="grid-column:3/5;">
           <div class="meta"><span class="num">2</span><h3>وجهات نظر مختلفة (Different Perspectives)</h3><span class="badge">👥</span></div>
-          <div class="desc">
-            انظر للموضوع بأدوار: محرّر، مراسل ميداني، محلّل بيانات، قارئ متشكّك، خبير أخلاقيات.
-            <ul class="list-disc pr-4 mt-2 text-slate-700"><li><b>مثال:</b> أزمة مياه مدينة صغيرة من منظور كل دور → زوايا تحقيق متعددة.</li></ul>
-          </div>
-          <div class="prompt">
-            <div class="prompt-title">💬 برومبت جاهز:</div>
+          <div class="desc">انظر للموضوع بأدوار: محرّر، مراسل ميداني، محلّل بيانات، قارئ متشكّك، خبير أخلاقيات.</div>
+          <div class="prompt"><div class="prompt-title">💬 برومبت جاهز:</div>
 <pre>نخطط لتغطية: [موضوع]. تصرّف كـ(محرر ← مراسل ← محلّل بيانات ← قارئ ← خبير أخلاقيات).
 لكل دور: 8 أسئلة/مخاوف وزاويتان تحقيق قصصي. ادمج المتكرر واقترح 5 زوايا نهائية.</pre>
           </div>
@@ -155,29 +181,22 @@
 
         <div class="card c3" style="grid-column:5/7;">
           <div class="meta"><span class="num">3</span><h3>يوم العكس (Opposite Day)</h3><span class="badge">↔︎</span></div>
-          <div class="desc">
-            فكّر بما يجعل التجربة أسوأ… ثم اعكسه إلى إجراءات تحسين.
-            <ul class="list-disc pr-4 mt-2 text-slate-700"><li><b>مثال:</b> الملل؟ → عناوين دقيقة + تقسيم فقرات + مخططات سريعة.</li></ul>
-          </div>
-          <div class="prompt">
-            <div class="prompt-title">💬 برومبت جاهز:</div>
+          <div class="desc">فكّر بما يجعل التجربة أسوأ… ثم اعكسه إلى إجراءات تحسين.</div>
+          <div class="prompt"><div class="prompt-title">💬 برومبت جاهز:</div>
 <pre>أعطني 15 طريقة قد تجعل [الجمهور] غير راضٍ عن [المحتوى].
 اعكس كل نقطة إلى إجراء عملي، ثم رتّبها وفق (الأثر × الجهد) مع توصية أول 5 إجراءات.</pre>
           </div>
         </div>
       </div>
 
-      <!-- ===== الصف الأوسط: بطاقتان واسعتان ===== -->
+      <!-- الصف الأوسط -->
       <div class="row middle" style="grid-column:1/-1; grid-row:2;">
         <div class="card c4" style="grid-column:1/4;">
           <div class="meta"><span class="num">4</span><h3>خطوة بخطوة (Step-by-Step)</h3><span class="badge">سلم ⤴︎</span></div>
-          <div class="desc">
-            سير عمل صحفي: موضوع عام → محاور فرعية → أسئلة مفتاحية → مصادر/بيانات → زوايا → عناوين/خطّاف → خطة إنتاج.
-          </div>
-          <div class="prompt">
-            <div class="prompt-title">💬 برومبت متسلسل (انسخه على مراحل):</div>
+          <div class="desc">موضوع عام → محاور → أسئلة مفتاحية → مصادر/بيانات → زوايا → عناوين وخطّاف → خطة إنتاج.</div>
+          <div class="prompt"><div class="prompt-title">💬 برومبت متسلسل:</div>
 <pre>اذكر 12 محورًا فرعيًا لموضوع: [موضوع].
-لكل محور: 3 أسئلة تحقيقيّة قابلة للإجابة ومصادر/بيانات علنية.
+لكل محور: 3 أسئلة تحقيقيّة ومصادر/بيانات علنية.
 استخرج 10 زوايا قصصية، ثم 6 عناوين وخطّاف لكل زاوية.
 صِغ خطة إنتاج أسبوعين: (مهمة/مسؤول/موعد/مؤشر نجاح).</pre>
           </div>
@@ -185,11 +204,8 @@
 
         <div class="card c5" style="grid-column:4/7;">
           <div class="meta"><span class="num">5</span><h3>الكلمات الإبداعية (Creative Words)</h3><span class="badge">📣</span></div>
-          <div class="desc">
-            اختر كلمة موجِّهة واحدة لكل جلسة: غير متوقَّع، بديل جريء، إنسانيّ النزعة، غير مُتحيز…
-          </div>
-          <div class="prompt">
-            <div class="prompt-title">💬 أمثلة جاهزة:</div>
+          <div class="desc">اختر كلمة موجِّهة واحدة لكل جلسة: غير متوقَّع، بديل جريء، إنسانيّ النزعة، غير مُتحيز…</div>
+          <div class="prompt"><div class="prompt-title">💬 أمثلة جاهزة:</div>
 <pre>• أعطني 12 فكرة <غير متوقعة> لتغطية [موضوع].
 • اقترح 10 زوايا <إنسانية بعمق> لملف [موضوع] مع مصادر محتملة.
 • أعد صياغة 5 عناوين بأسلوب متميز وقابل للمشاركة (دون تهويل).</pre>
@@ -197,18 +213,15 @@
         </div>
       </div>
 
-      <!-- ===== الصف السفلي: بطاقتان ===== -->
+      <!-- الصف السفلي -->
       <div class="row bottom" style="grid-column:1/-1; grid-row:3;">
         <div class="card c6" style="grid-column:1/4;">
           <div class="meta"><span class="num">6</span><h3>سلسلة الكثافة (Chain of Density)</h3><span class="badge">⛓︎</span></div>
-          <div class="desc">
-            دورات قصيرة لإضافة زوايا/معلومات ناقصة مع الحفاظ على الإيجاز في كل دورة.
-          </div>
-          <div class="prompt">
-            <div class="prompt-title">💬 برومبت شامل:</div>
+          <div class="desc">دورات قصيرة لإضافة زوايا/معلومات ناقصة مع الحفاظ على الإيجاز.</div>
+          <div class="prompt"><div class="prompt-title">💬 برومبت شامل:</div>
 <pre>سنجري سلسلة كثافة حول [موضوع]:
 1) اكتب 10 أفكار أساسية.
-2) حدد 3 فجوات مهمة.
+2) حدّد 3 فجوات مهمة.
 3) أعد الكتابة بإضافة الفجوات من دون زيادة الطول.
 كرر 5 مرات وقدّم النسخة النهائية مع ملاحظات التحسين.</pre>
           </div>
@@ -216,19 +229,15 @@
 
         <div class="card c7" style="grid-column:4/7;">
           <div class="meta"><span class="num">7</span><h3>التفكير بالمبادئ الأولى (First Principles)</h3><span class="badge">◿ مكعب</span></div>
-          <div class="desc">
-            فكّك المشكلة إلى حقائق أولية لا جدال فيها، وافصلها عن الافتراضات؛ ثم أعد التركيب من الصفر.
-          </div>
-          <div class="prompt">
-            <div class="prompt-title">💬 برومبت جاهز:</div>
+          <div class="desc">فكّك المشكلة إلى حقائق أولية، وافصل الافتراضات؛ ثم أعد التركيب من الصفر.</div>
+          <div class="prompt"><div class="prompt-title">💬 برومبت جاهز:</div>
 <pre>طبّق مبادئ أولى على: [تحدّي].
 اعرض: الهدف، الحقائق المؤكدة، الافتراضات، القيود.
-اقترح 3 حلول مبنية فقط على الحقائق مع خطة اختبار أسبوع واحد ومقاييس نجاح.</pre>
+اقترح 3 حلول مبنية فقط على الحقائق مع خطة اختبار أسبوع ومقاييس نجاح.</pre>
           </div>
         </div>
       </div>
 
-      <!-- فوتر -->
       <div class="footer" style="grid-column:1/-1;">
         <div class="text-base font-bold">استخدم هذه الأطر لتفكير أعمق، أفكار أوسع، وإبداع بلا حدود مع ChatGPT.</div>
         <small class="block mt-1">✏️ 💡 💻</small>
@@ -236,7 +245,7 @@
     </section>
   </main>
 
-  <!-- تصدير PDF (A2) -->
+  <!-- PDF export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     document.getElementById('btnPdf').addEventListener('click', () => {
@@ -245,11 +254,13 @@
         margin: [10,10,10,10],
         filename: 'chatgpt-brainstorm-a2.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a2', orientation: 'portrait' }
+        html2canvas: { scale: 3, useCORS: true },   // ← دقة أعلى
+        jsPDF: { unit: 'mm', format: 'a2', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid'] }
       };
       html2pdf().set(opt).from(el).save();
     });
   </script>
 </body>
 </html>
+
