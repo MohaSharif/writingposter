@@ -20,11 +20,14 @@
     html, body {height:100%}
     body {font-family: 'Cairo', 'Tajawal', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg-gradient); color: var(--text-color);}    
     *, *::before, *::after { box-sizing: border-box; }
-    .card {background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;}
+    .card {background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 10px 30px rgba(0,0,0,0.35); transition: transform 0.3s ease, box-shadow 0.3s ease; border-radius: 16px; overflow: hidden; background-clip: padding-box;}
     .card:hover {transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.5);}    
     .glow-title {text-shadow: 0 0 10px rgba(255,212,77,.7), 0 0 20px rgba(255,212,77,.5);}    
     /* Canvas sized artboard for pixel-perfect PNG (1080x1350) */
-    #poster {width:1080px; height:1350px; box-sizing:border-box; overflow:visible;}
+    #poster {width:1080px; height:1350px; box-sizing:border-box; overflow:visible; position:relative;} 
+    .exporting .card{ backdrop-filter:none !important; -webkit-backdrop-filter:none !important; box-shadow: 0 8px 24px rgba(0,0,0,.35) !important; }
+    .exporting *{ background-clip: padding-box !important; text-rendering: geometricPrecision; -webkit-font-smoothing: antialiased; }
+    .exporting{ transform: translateZ(0); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4">
@@ -158,10 +161,12 @@
       const btn = type==='png' ? document.getElementById('downloadPng') : document.getElementById('downloadJpg');
       btn.disabled=true; const old=btn.textContent; btn.textContent='⏳ جارٍ التصدير…';
       try{
-        const engine = await ensureDomToImage();
+        await document.fonts?.ready; const engine = await ensureDomToImage();
         let dataUrl;
         if(engine==='dom-to-image-more'){
+          poster.classList.add('exporting');
           dataUrl = await window.domtoimage.toPng(poster, { width:1080, height:1350, cacheBust:true, quality:1, style:{transform:'none'} });
+          poster.classList.remove('exporting');
           if(type==='jpg'){
             const img = new Image(); await new Promise(r=>{ img.onload=r; img.src=dataUrl; });
             const cnv=document.createElement('canvas'); cnv.width=1080; cnv.height=1350; const ctx=cnv.getContext('2d');
@@ -169,8 +174,10 @@
             dataUrl = cnv.toDataURL('image/jpeg', 0.95);
           }
         } else {
+          poster.classList.add('exporting');
           const rect = poster.getBoundingClientRect();
           const canvas = await window.html2canvas(poster, {scale:3, useCORS:true, backgroundColor:null, width:1080, height:1350, scrollX:0, scrollY:0, windowWidth: Math.max(1080, Math.ceil(rect.width)), windowHeight: Math.max(1350, Math.ceil(rect.height))});
+          poster.classList.remove('exporting');
           dataUrl = (type==='jpg') ? canvas.toDataURL('image/jpeg',0.95) : canvas.toDataURL('image/png');
         }
         const a=document.createElement('a'); a.download = type==='jpg'?'poster-ai-prompts.jpg':'poster-ai-prompts.png'; a.href=dataUrl; a.click(); st.textContent='تم التصدير بنجاح';
@@ -180,7 +187,7 @@
 
     async function runSelfTest(){
       const st = document.getElementById('libStatus');
-      try{ const engine = await ensureDomToImage(); st.textContent = 'اختبار: ' + engine + ' ✅'; }
+      try{ await document.fonts?.ready; const engine = await ensureDomToImage(); st.textContent = 'اختبار: ' + engine + ' ✅'; }
       catch(e){ st.textContent = 'اختبار فشل'; }
     }
 
