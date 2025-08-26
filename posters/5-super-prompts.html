@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root{
       --bg-gradient: linear-gradient(135deg, #2B1743 0%, #0A0F29 100%);
@@ -18,131 +17,201 @@
       --text-color: #FFFFFF;
       --highlight: #5DD8FF;
     }
-    body {
-      font-family: 'Cairo', 'Tajawal', sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text-color);
-    }
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-    }
-    .glow-title {
-      text-shadow: 0 0 10px rgba(255, 212, 77, 0.7), 0 0 20px rgba(255, 212, 77, 0.5);
-    }
+    html, body {height:100%}
+    body {font-family: 'Cairo', 'Tajawal', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg-gradient); color: var(--text-color);}    
+    .card {background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;}
+    .card:hover {transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.5);}    
+    .glow-title {text-shadow: 0 0 10px rgba(255,212,77,.7), 0 0 20px rgba(255,212,77,.5);}    
+    /* Canvas sized artboard for pixel-perfect PNG (1080x1350) */
+    #poster {width:1080px; height:1350px;}
   </style>
 </head>
-<body class="min-h-screen">
-  <div class="no-print sticky top-0 z-50 bg-white/10 backdrop-blur border-b border-slate-200 p-3 text-center">
-    <button id="downloadBtn" class="px-6 py-2 rounded-xl text-white font-bold text-lg" style="background-color:#FF3E6C;">
-      ⬇️ تحميل البوستر كصورة
-    </button>
+<body class="min-h-screen flex flex-col items-center p-4">
+  <!-- Toolbar -->
+  <div class="no-print sticky top-0 z-50 w-full max-w-5xl mb-3">
+    <div class="flex flex-wrap items-center gap-3 rounded-2xl bg-white/10 backdrop-blur border border-white/20 p-3">
+      <button id="downloadPng" class="px-5 py-2 rounded-xl text-white font-bold text-base" style="background-color:#FF3E6C;">⬇️ تحميل البوستر كصورة (PNG)</button>
+      <button id="downloadJpg" class="px-5 py-2 rounded-xl text-white font-bold text-base" style="background-color:#10b981;">⬇️ JPG</button>
+      <button id="selfTest" class="px-4 py-2 rounded-xl text-white font-semibold text-base" style="background-color:#6366f1;">🧪 اختبار سريع</button>
+      <span id="libStatus" class="text-white/80 text-sm ml-auto">المحرّك: جاري الفحص…</span>
+    </div>
   </div>
-  <main id="poster" class="flex flex-col items-center p-8">
+
+  <!-- Artboard -->
+  <main id="poster" class="mx-auto flex flex-col items-center p-8 rounded-[28px]" style="background: var(--bg-gradient); color: var(--text-color);">
     <!-- Header -->
     <header class="text-center mb-12">
-    <h1 class="text-5xl md:text-6xl font-extrabold glow-title" style="color: var(--title-color)">
-      5 برومبتات خارقة لتفجير طاقتك وتخطي عقباتك الذهنية
-    </h1>
-    <p class="mt-4 max-w-2xl mx-auto text-lg opacity-90">
-      باستخدام الذكاء الاصطناعي كمدرب شخصي، ستواجه ذاتك، تعيد كتابة أخطائك كحوافز، تبني انضباطًا حديديًا، وتسمع الحقيقة من نسخة نفسك المستقبلية.
-    </p>
-  </header>
+      <h1 class="text-5xl md:text-6xl font-extrabold glow-title" style="color: var(--title-color)">5 برومبتات خارقة لتفجير طاقتك وتخطي عقباتك الذهنية</h1>
+      <p class="mt-4 max-w-2xl mx-auto text-lg opacity-90">باستخدام الذكاء الاصطناعي كمدرب شخصي، ستواجه ذاتك، تعيد كتابة أخطائك كحوافز، تبني انضباطًا حديديًا، وتسمع الحقيقة من نسخة نفسك المستقبلية.</p>
+    </header>
 
-  <!-- Prompts -->
-  <section class="grid grid-cols-1 gap-8 max-w-3xl w-full">
-    <!-- Prompt 1 -->
-    <div class="card p-6 rounded-2xl">
-      <div class="flex items-center gap-4 mb-3">
-        <span class="text-4xl" style="color: var(--icon-color)">🪞</span>
-        <h3 class="text-2xl font-bold" style="color: var(--highlight)">مواجهة ذاتك المستقبلية</h3>
+    <!-- Prompts -->
+    <section class="grid grid-cols-1 gap-8 max-w-3xl w-full">
+      <!-- Prompt 1 -->
+      <div class="card p-6 rounded-2xl">
+        <div class="flex items-center gap-4 mb-3">
+          <span class="text-4xl" style="color: var(--icon-color)">🪞</span>
+          <h3 class="text-2xl font-bold" style="color: var(--highlight)">مواجهة ذاتك المستقبلية</h3>
+        </div>
+        <p class="text-base leading-relaxed">"تصرّف كأنك أنا بعد خمس سنوات. اطرح عليَّ 8 أسئلة عميقة لاكتشاف وضعي الحالي وأولوياتي ونقاط ضعفي. بعد ذلك، قدّم تحليلًا صريحًا حول العائق الذهني الأكبر الذي يمنع تقدمي، وصِغ لي خطة عملية واضحة لتغييره."</p>
       </div>
-      <p class="text-base leading-relaxed">
-        "تصرّف كأنك أنا بعد خمس سنوات. اطرح عليَّ 8 أسئلة عميقة لاكتشاف وضعي الحالي وأولوياتي ونقاط ضعفي. بعد ذلك، قدّم تحليلًا صريحًا حول العائق الذهني الأكبر الذي يمنع تقدمي، وصِغ لي خطة عملية واضحة لتغييره."
-      </p>
-    </div>
 
-    <!-- Prompt 2 -->
-    <div class="card p-6 rounded-2xl">
-      <div class="flex items-center gap-4 mb-3">
-        <span class="text-4xl" style="color: var(--icon-color)">🚀</span>
-        <h3 class="text-2xl font-bold" style="color: var(--highlight)">تحويل الفشل إلى دافع</h3>
+      <!-- Prompt 2 -->
+      <div class="card p-6 rounded-2xl">
+        <div class="flex items-center gap-4 mb-3">
+          <span class="text-4xl" style="color: var(--icon-color)">🚀</span>
+          <h3 class="text-2xl font-bold" style="color: var(--highlight)">تحويل الفشل إلى دافع</h3>
+        </div>
+        <p class="text-base leading-relaxed">"تصرّف كمدرّ للنمو الشخصي. اسألني 6 أسئلة لفهم أسباب فشلي في الموقف أو المشروع. بعد ذلك، أعد صياغة الفشل كحقيقة محفّزة، وقدّم لي خطة مختصرة من 3 خطوات عملية لتحويل التجربة إلى طاقة إيجابية تدفعني للأمام."</p>
       </div>
-      <p class="text-base leading-relaxed">
-        "تصرّف كمدرّب للنمو الشخصي. اسألني 6 أسئلة لفهم أسباب فشلي في الموقف أو المشروع. بعد ذلك، أعد صياغة الفشل كحقيقة محفّزة، وقدّم لي خطة مختصرة من 3 خطوات عملية لتحويل التجربة إلى طاقة إيجابية تدفعني للأمام."
-      </p>
-    </div>
 
-    <!-- Prompt 3 -->
-    <div class="card p-6 rounded-2xl">
-      <div class="flex items-center gap-4 mb-3">
-        <span class="text-4xl" style="color: var(--icon-color)">🔥</span>
-        <h3 class="text-2xl font-bold" style="color: var(--highlight)">مدرّب الانضباط الصارم</h3>
+      <!-- Prompt 3 -->
+      <div class="card p-6 rounded-2xl">
+        <div class="flex items-center gap-4 mb-3">
+          <span class="text-4xl" style="color: var(--icon-color)">🔥</span>
+          <h3 class="text-2xl font-bold" style="color: var(--highlight)">مدرّب الانضباط الصارم</h3>
+        </div>
+        <p class="text-base leading-relaxed">"أنت مدرّبي العسكري الصارم. اسألني 10 أسئلة دقيقة لفهم أهدافي الحالية في المشاريع أو العادات اليومية. بعد ذلك، صمّم لي خطة انضباطية صارمة توزّع وقتي بدقة وتحدد أولوياتي، واكتبها وكأن حياتي تعتمد عليها."</p>
       </div>
-      <p class="text-base leading-relaxed">
-        "أنت مدرّبي العسكري الصارم. اسألني 10 أسئلة دقيقة لفهم أهدافي الحالية في المشاريع أو العادات اليومية. بعد ذلك، صمّم لي خطة انضباطية صارمة توزّع وقتي بدقة وتحدد أولوياتي، واكتبها وكأن حياتي تعتمد عليها."
-      </p>
-    </div>
 
-    <!-- Prompt 4 -->
-    <div class="card p-6 rounded-2xl">
-      <div class="flex items-center gap-4 mb-3">
-        <span class="text-4xl" style="color: var(--icon-color)">📅</span>
-        <h3 class="text-2xl font-bold" style="color: var(--highlight)">بناء نظام العادات الذكية</h3>
+      <!-- Prompt 4 -->
+      <div class="card p-6 rounded-2xl">
+        <div class="flex items-center gap-4 mb-3">
+          <span class="text-4xl" style="color: var(--icon-color)">📅</span>
+          <h3 class="text-2xl font-bold" style="color: var(--highlight)">بناء نظام العادات الذكية</h3>
+        </div>
+        <p class="text-base leading-relaxed">"أريدك أن تسألني 7 أسئلة لفهم روتيني الحالي وعاداتي الجيدة والسيئة، خاصة فيما يتعلق بعاداتي. بعد ذلك، صِغ لي خطة من 3 خطوات عملية لبناء عادات أقوى وأكثر استدامة، مع نصائح لتجنب العودة إلى الفوضى."</p>
       </div>
-      <p class="text-base leading-relaxed">
-        "أريدك أن تسألني 7 أسئلة لفهم روتيني الحالي وعاداتي الجيدة والسيئة، خاصة فيما يتعلق بعاداتي. بعد ذلك، صِغ لي خطة من 3 خطوات عملية لبناء عادات أقوى وأكثر استدامة، مع نصائح لتجنب العودة إلى الفوضى."
-      </p>
-    </div>
 
-    <!-- Prompt 5 -->
-    <div class="card p-6 rounded-2xl">
-      <div class="flex items-center gap-4 mb-3">
-        <span class="text-4xl" style="color: var(--icon-color)">🧩</span>
-        <h3 class="text-2xl font-bold" style="color: var(--highlight)">حوار مع ذاتك الحكيمة</h3>
+      <!-- Prompt 5 -->
+      <div class="card p-6 rounded-2xl">
+        <div class="flex items-center gap-4 mb-3">
+          <span class="text-4xl" style="color: var(--icon-color)">🧩</span>
+          <h3 class="text-2xl font-bold" style="color: var(--highlight)">حوار مع ذاتك الحكيمة</h3>
+        </div>
+        <p class="text-base leading-relaxed">"تخيّل أنك نسخة نفسي المستقبلية الحكيمة بعد خمس سنوات. اطرح عليَّ 6 أسئلة عميقة لفهم أولوياتي ومشاعري ومخاوفي الحالية، ثم قدّم لي رسالة مختصرة وقوية تلخّص ما أحتاج سماعه الآن لاستعادة توازني وتوجيه طاقتي."</p>
       </div>
-      <p class="text-base leading-relaxed">
-        "تخيّل أنك نسخة نفسي المستقبلية الحكيمة بعد خمس سنوات. اطرح عليَّ 6 أسئلة عميقة لفهم أولوياتي ومشاعري ومخاوفي الحالية، ثم قدّم لي رسالة مختصرة وقوية تلخّص ما أحتاج سماعه الآن لاستعادة توازني وتوجيه طاقتي."
-      </p>
-    </div>
-  </section>
+    </section>
 
-  <!-- Tips -->
-  <section class="mt-12 max-w-3xl text-center space-y-3">
-    <h2 class="text-2xl font-bold" style="color: var(--title-color)">نصائح لاستخدام البرومبتات بفعالية 🎯</h2>
-    <p class="text-base opacity-90">كن صريحًا مع نفسك: كلما كنت أكثر تحديدًا في إدخال تفاصيل مشاكلك، حصلت على نتائج أدق.</p>
-    <p class="text-base opacity-90">اطلب خططًا عملية: لا تكتفِ بالنصائح؛ اطلب خطوات وجداول زمنية.</p>
-    <p class="text-base opacity-90">استخدم البرومبتات دوريًا: أعد تشغيلها كل فترة لتقييم تطورك.</p>
-    <p class="text-base opacity-90">ادمجها مع أدواتك اليومية: يمكنك ربط هذه البرومبتات مع تطبيقات الذكاء الاصطناعي لتتبع التقدم وتنظيم الأهداف.</p>
-  </section>
+    <!-- Tips -->
+    <section class="mt-12 max-w-3xl text-center space-y-3">
+      <h2 class="text-2xl font-bold" style="color: var(--title-color)">نصائح لاستخدام البرومبتات بفعالية 🎯</h2>
+      <p class="text-base opacity-90">كن صريحًا مع نفسك: كلما كنت أكثر تحديدًا في إدخال تفاصيل مشاكلك، حصلت على نتائج أدق.</p>
+      <p class="text-base opacity-90">اطلب خططًا عملية: لا تكتفِ بالنصائح؛ اطلب خطوات وجداول زمنية.</p>
+      <p class="text-base opacity-90">استخدم البرومبتات دوريًا: أعد تشغيلها كل فترة لتقييم تطورك.</p>
+      <p class="text-base opacity-90">ادمجها مع أدواتك اليومية: يمكنك ربط هذه البرومبتات مع تطبيقات الذكاء الاصطناعي لتتبع التقدم وتنظيم الأهداف.</p>
+    </section>
 
-  <!-- Footer -->
-  <footer class="mt-12 text-center space-y-4">
-    <div class="text-lg font-semibold" style="color: var(--title-color)">الذكاء الاصطناعي لتفجير طاقتك وتعزيز إبداعك</div>
-    <div>
-      <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://mohasharif.github.io/Philomoha/&size=120x120" alt="QR Code" class="mx-auto mt-2 shadow-md rounded-xl">
-      <p class="mt-2 text-sm opacity-80">امسح الكود للوصول إلى المزيد من الموارد</p>
+    <!-- Footer -->
+    <footer class="mt-12 text-center space-y-4">
+      <div class="text-lg font-semibold" style="color: var(--title-color)">الذكاء الاصطناعي لتفجير طاقتك وتعزيز إبداعك</div>
+      <div>
+        <!-- قد يسبب هذا المصدر الخارجي مشكلة CORS أثناء التصدير، لذا نعلّمه كغير آمن ويمكن إخفاؤه تلقائيًا إذا فشل التصدير. -->
+        <img data-export-safe="false" crossorigin="anonymous" src="https://api.qrserver.com/v1/create-qr-code/?data=https://mohasharif.github.io/Philomoha/&size=120x120" alt="QR Code" class="mx-auto mt-2 shadow-md rounded-xl">
+        <p class="mt-2 text-sm opacity-80">امسح الكود للوصول إلى المزيد من الموارد</p>
+      </div>
+    </footer>
+
+    <!-- Hidden small test card for exporter self-test -->
+    <div id="testCard" class="card p-4 rounded-2xl mt-8 max-w-xs text-center hidden">
+      <div class="text-xl font-bold" style="color:var(--title-color)">بطاقة اختبار</div>
+      <div class="mt-1 text-sm" style="color:var(--highlight)">يجب أن تظهر هذه البطاقة بنفس الأسلوب عند التصدير</div>
     </div>
-  </footer>
   </main>
 
+  <!-- Export logic with robust fallbacks and tests -->
   <script>
-    document.getElementById("downloadBtn").addEventListener("click", function(){
-      const poster = document.getElementById("poster");
-      html2canvas(poster, { scale: 3 }).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "poster-ai-prompts.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
+    // Dynamic loader helper
+    function loadScript(src){
+      return new Promise((resolve,reject)=>{
+        const s=document.createElement('script');
+        s.src=src; s.async=true; s.onload=()=>resolve(true); s.onerror=()=>reject(new Error('Failed to load '+src));
+        document.head.appendChild(s);
       });
-    });
+    }
+
+    async function ensureExporter(){
+      const statusEl = document.getElementById('libStatus');
+      if(window.htmlToImage){ statusEl.textContent = 'المحرّك: html-to-image (جاهز)'; return 'html-to-image'; }
+      // Try jsDelivr first (بعض البيئات تحظر unpkg)
+      try{ await loadScript('https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js'); }
+      catch(e){ /* ignore */ }
+      if(window.htmlToImage){ statusEl.textContent = 'المحرّك: html-to-image من jsDelivr'; return 'html-to-image'; }
+      // Fallback to html2canvas
+      if(window.html2canvas){ statusEl.textContent = 'المحرّك: html2canvas (جاهز)'; return 'html2canvas'; }
+      try{ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'); }
+      catch(e){ /* ignore */ }
+      if(window.html2canvas){ statusEl.textContent = 'المحرّك: html2canvas من CDNJS'; return 'html2canvas'; }
+      statusEl.textContent = 'المحرّك: غير متوفر — تعذّر تحميل المكتبات';
+      throw new Error('Exporter library unavailable');
+    }
+
+    async function exportAs(type){
+      const poster = document.getElementById('poster');
+      const statusEl = document.getElementById('libStatus');
+      const btn = type==='png' ? document.getElementById('downloadPng') : document.getElementById('downloadJpg');
+      btn.disabled = true; const old = btn.textContent; btn.textContent = '⏳ جارٍ التصدير…';
+      try{
+        const engine = await ensureExporter();
+        let dataUrl;
+        if(engine==='html-to-image'){
+          try{
+            dataUrl = await window.htmlToImage.toPng(poster, {pixelRatio:3, cacheBust:true, width:1080, height:1350, backgroundColor:'#0A0F29'});
+          }catch(e){
+            console.warn('html-to-image failed, falling back to html2canvas', e);
+          }
+        }
+        if(!dataUrl){
+          // Fallback to html2canvas, handle possible CORS by temporarily hiding unsafe externals
+          const hide = [];
+          poster.querySelectorAll('[data-export-safe="false"]').forEach(el=>{ hide.push([el, el.style.visibility]); el.style.visibility='hidden'; });
+          const canvas = await window.html2canvas(poster, {scale:3, useCORS:true, backgroundColor:null, width:1080, height:1350, windowWidth:1080, windowHeight:1350});
+          hide.forEach(([el,v])=>{ el.style.visibility=v; });
+          dataUrl = (type==='jpg') ? canvas.toDataURL('image/jpeg', 0.95) : canvas.toDataURL('image/png');
+        }
+        const a = document.createElement('a');
+        a.download = type==='jpg' ? 'poster-ai-prompts.jpg' : 'poster-ai-prompts.png';
+        a.href = dataUrl; a.click();
+        statusEl.textContent = 'تم التصدير بنجاح';
+      }catch(err){
+        console.error(err);
+        alert('تعذّر إنشاء الصورة تلقائيًا. إن استمرت المشكلة أخبرني لأرسل لك بديلاً.');
+      }finally{
+        btn.disabled = false; btn.textContent = old;
+      }
+    }
+
+    // Self tests
+    async function runSelfTest(){
+      const statusEl = document.getElementById('libStatus');
+      try{
+        const engine = await ensureExporter();
+        statusEl.textContent = 'اختبار: المحرك المستخدم — ' + engine;
+        // Create a tiny sample export
+        const card = document.getElementById('testCard');
+        card.classList.remove('hidden');
+        if(engine==='html-to-image'){
+          const dataUrl = await window.htmlToImage.toPng(card, {pixelRatio:2, cacheBust:true});
+          if(!dataUrl.startsWith('data:image/png')) throw new Error('Sample export failed');
+        } else {
+          const canvas = await window.html2canvas(card, {scale:2, useCORS:true, backgroundColor:null});
+          const dataUrl = canvas.toDataURL('image/png');
+          if(!dataUrl.startsWith('data:image/png')) throw new Error('Sample export failed');
+        }
+        statusEl.textContent += ' — ✅ نجح اختبار العينة';
+        card.classList.add('hidden');
+      }catch(e){
+        console.error(e);
+        statusEl.textContent = '❌ فشل الاختبار: ' + (e.message||e);
+      }
+    }
+
+    document.getElementById('downloadPng').addEventListener('click', ()=>exportAs('png'));
+    document.getElementById('downloadJpg').addEventListener('click', ()=>exportAs('jpg'));
+    document.getElementById('selfTest').addEventListener('click', runSelfTest);
+
+    // Initial probe
+    (async()=>{ try{ await ensureExporter(); }catch(e){} })();
   </script>
 </body>
 </html>
