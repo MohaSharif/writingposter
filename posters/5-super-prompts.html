@@ -21,9 +21,10 @@
     body {font-family: 'Cairo', 'Tajawal', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg-gradient); color: var(--text-color);}    
     .card {background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;}
     .card:hover {transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.5);}    
-    .glow-title {text-shadow: 0 0 10px rgba(255,212,77,.7), 0 0 20px rgba(255,212,77,.5);}    
+    .glow-title {text-shadow: 0 0 10px rgba(255,212,77,.7), 0 0 20px rgba(255,212,77,.5);}
     /* Canvas sized artboard for pixel-perfect PNG (1080x1350) */
-    #poster {width:1080px; height:1350px;}
+    #poster {width:1080px; height:1350px; box-sizing:border-box; overflow:visible;}
+    *, *::before, *::after { box-sizing: border-box; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4">
@@ -146,40 +147,44 @@
       throw new Error('Exporter library unavailable');
     }
 
-    async function exportAs(type){
-      const poster = document.getElementById('poster');
-      const statusEl = document.getElementById('libStatus');
-      const btn = type==='png' ? document.getElementById('downloadPng') : document.getElementById('downloadJpg');
-      btn.disabled = true; const old = btn.textContent; btn.textContent = '⏳ جارٍ التصدير…';
-      try{
-        const engine = await ensureExporter();
-        let dataUrl;
-        if(engine==='html-to-image'){
-          try{
-            dataUrl = await window.htmlToImage.toPng(poster, {pixelRatio:3, cacheBust:true, width:1080, height:1350, backgroundColor:'#0A0F29'});
-          }catch(e){
-            console.warn('html-to-image failed, falling back to html2canvas', e);
+      async function exportAs(type){
+        const poster = document.getElementById('poster');
+        const statusEl = document.getElementById('libStatus');
+        const btn = type==='png' ? document.getElementById('downloadPng') : document.getElementById('downloadJpg');
+        btn.disabled = true; const old = btn.textContent; btn.textContent = '⏳ جارٍ التصدير…';
+        try{
+          const engine = await ensureExporter();
+          let dataUrl;
+          if(engine==='html-to-image'){
+            try{
+              dataUrl = await (async ()=>{ const ratio=3, targetW=1080, targetH=1350; 
+            let dataUrl = await window.htmlToImage.toPng(poster, { pixelRatio: ratio, cacheBust: true, width: targetW, height: targetH, style:{transform:'none'} });
+            await new Promise((res)=>{ const img=new Image(); img.onload=()=>res(img); img.src=dataUrl; }).then(img=>{ if(img.naturalWidth!==targetW*ratio || img.naturalHeight!==targetH*ratio){ throw new Error('Dimension mismatch'); } });
+            window.__EXPORTED_URL__ = dataUrl; })();
+            }catch(e){
+              console.warn('html-to-image failed, falling back to html2canvas', e);
+            }
           }
+          if(!dataUrl){
+            // Fallback to html2canvas, handle possible CORS by temporarily hiding unsafe externals
+            const hide = [];
+            poster.querySelectorAll('[data-export-safe="false"]').forEach(el=>{ hide.push([el, el.style.visibility]); el.style.visibility='hidden'; });
+            const rect2 = poster.getBoundingClientRect();
+            const canvas = await window.html2canvas(poster, {scale:3, useCORS:true, backgroundColor:null, width:1080, height:1350, scrollX:0, scrollY:0, windowWidth: Math.max(1080, Math.ceil(rect2.width)), windowHeight: Math.max(1350, Math.ceil(rect2.height))});
+            hide.forEach(([el,v])=>{ el.style.visibility=v; });
+            dataUrl = (type==='jpg') ? canvas.toDataURL('image/jpeg', 0.95) : canvas.toDataURL('image/png');
+          }
+          const a = document.createElement('a');
+          a.download = type==='jpg' ? 'poster-ai-prompts.jpg' : 'poster-ai-prompts.png';
+          a.href = dataUrl; a.click();
+          statusEl.textContent = 'تم التصدير بنجاح';
+        }catch(err){
+          console.error(err);
+          alert('تعذّر إنشاء الصورة تلقائيًا. إن استمرت المشكلة أخبرني لأرسل لك بديلاً.');
+        }finally{
+          btn.disabled = false; btn.textContent = old;
         }
-        if(!dataUrl){
-          // Fallback to html2canvas, handle possible CORS by temporarily hiding unsafe externals
-          const hide = [];
-          poster.querySelectorAll('[data-export-safe="false"]').forEach(el=>{ hide.push([el, el.style.visibility]); el.style.visibility='hidden'; });
-          const canvas = await window.html2canvas(poster, {scale:3, useCORS:true, backgroundColor:null, width:1080, height:1350, windowWidth:1080, windowHeight:1350});
-          hide.forEach(([el,v])=>{ el.style.visibility=v; });
-          dataUrl = (type==='jpg') ? canvas.toDataURL('image/jpeg', 0.95) : canvas.toDataURL('image/png');
-        }
-        const a = document.createElement('a');
-        a.download = type==='jpg' ? 'poster-ai-prompts.jpg' : 'poster-ai-prompts.png';
-        a.href = dataUrl; a.click();
-        statusEl.textContent = 'تم التصدير بنجاح';
-      }catch(err){
-        console.error(err);
-        alert('تعذّر إنشاء الصورة تلقائيًا. إن استمرت المشكلة أخبرني لأرسل لك بديلاً.');
-      }finally{
-        btn.disabled = false; btn.textContent = old;
       }
-    }
 
     // Self tests
     async function runSelfTest(){
