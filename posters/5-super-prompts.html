@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root{
       --bg-gradient: linear-gradient(135deg, #2B1743 0%, #0A0F29 100%);
@@ -38,9 +39,15 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-8">
-  <!-- Header -->
-  <header class="text-center mb-12">
+<body class="min-h-screen">
+  <div class="no-print sticky top-0 z-50 bg-white/10 backdrop-blur border-b border-slate-200 p-3 text-center">
+    <button id="downloadBtn" class="px-6 py-2 rounded-xl text-white font-bold text-lg" style="background-color:#FF3E6C;">
+      ⬇️ تحميل البوستر كصورة
+    </button>
+  </div>
+  <main id="poster" class="flex flex-col items-center p-8">
+    <!-- Header -->
+    <header class="text-center mb-12">
     <h1 class="text-5xl md:text-6xl font-extrabold glow-title" style="color: var(--title-color)">
       5 برومبتات خارقة لتفجير طاقتك وتخطي عقباتك الذهنية
     </h1>
@@ -124,5 +131,18 @@
       <p class="mt-2 text-sm opacity-80">امسح الكود للوصول إلى المزيد من الموارد</p>
     </div>
   </footer>
+  </main>
+
+  <script>
+    document.getElementById("downloadBtn").addEventListener("click", function(){
+      const poster = document.getElementById("poster");
+      html2canvas(poster, { scale: 3 }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "poster-ai-prompts.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    });
+  </script>
 </body>
 </html>
