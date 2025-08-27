@@ -4,142 +4,120 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>كيف تستخدم ChatGPT للعصف الذهني؟ — بوستر A2</title>
-  <meta name="description" content="بوستر A2 احترافي: الأطر السبعة للعصف الذهني مع أمثلة صحفية وبرومبتات جاهزة. قابل للطباعة وتصدير PDF.">
+  <meta name="description" content="بوستر A2 احترافي: الأطر السبعة للعصف الذهني مع أمثلة صحفية وبرومبتات جاهزة. قابل للطباعة وتصدير PDF في صفحة واحدة.">
 
-  <!-- Fonts: أوضح وأحدث -->
+  <!-- Fonts: أوضح -->
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700;800&family=Tajawal:wght@700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     :root{
-      --indigo:#0b1437;   /* خلفية عليا داكنة */
-      --sky:#0ea5e9;      /* أزرق سماوي */
-      --violet:#8b5cf6;   /* بنفسجي */
-      --orange:#f59e0b;   /* برتقالي */
-      --turq:#10b981;     /* تركوازي */
-      --row1: linear-gradient(90deg, #0ea5e91A, #8b5cf61A);
-      --row2: linear-gradient(90deg, #10b9811A, #0ea5e91A);
-      --row3: linear-gradient(90deg, #f59e0b1A, #8b5cf61A);
+      --indigo:#0b1437; --sky:#0ea5e9; --violet:#8b5cf6; --orange:#f59e0b; --turq:#10b981;
+      --row1: linear-gradient(90deg,#0ea5e91A,#8b5cf61A);
+      --row2: linear-gradient(90deg,#10b9811A,#0ea5e91A);
+      --row3: linear-gradient(90deg,#f59e0b1A,#8b5cf61A);
+      --zoom: 1;          /* سيُعدّل تلقائياً للملاءمة */
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      font-family:'IBM Plex Sans Arabic', system-ui, -apple-system, 'Noto Sans Arabic', Segoe UI, Roboto, Tahoma, sans-serif;
+      font-family:'IBM Plex Sans Arabic',system-ui,-apple-system,'Noto Sans Arabic',Segoe UI,Roboto,Tahoma,sans-serif;
       -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
       letter-spacing:0; line-height:1.7; color:#0f172a; background:#fff;
-      font-feature-settings:"liga" 1, "calt" 1;
+      font-feature-settings:"liga" 1,"calt" 1;
     }
 
     /* ورقة A2 */
     .sheet{
       width:420mm; height:594mm; margin:10mm auto; position:relative; overflow:hidden; border-radius:22px;
-      background: linear-gradient(180deg, var(--indigo) 0%, #eaf4ff 75%, #ffffff 100%);
+      background:linear-gradient(180deg,var(--indigo) 0%, #eaf4ff 75%, #ffffff 100%);
       box-shadow:0 20px 60px rgba(2,6,23,.15);
+      transform-origin: top center;
+      transform: scale(var(--zoom));           /* ← المقياس يتغير تلقائياً */
+      print-color-adjust:exact; -webkit-print-color-adjust:exact;
     }
     .pad{padding:16mm}
 
     /* شريط الأدوات */
-    .toolbar{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.75); backdrop-filter:blur(8px); border-bottom:1px solid #e5e7eb}
+    .toolbar{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.78); backdrop-filter:blur(8px); border-bottom:1px solid #e5e7eb}
     .btn{border:1px solid #e5e7eb; background:#fff; border-radius:999px; padding:.55rem .9rem; font-size:.9rem}
     .btn:hover{background:#f8fafc}
 
     /* العنوان */
     .hero{position:relative; text-align:center; padding-top:18mm; padding-bottom:10mm; color:#fff}
-    .hero h1{
-      font-family:'Tajawal', 'IBM Plex Sans Arabic', sans-serif;
-      font-weight:900; font-size:28pt; margin:0; line-height:1.25;
-      text-shadow:0 0 10px rgba(255,255,255,.2);
-      letter-spacing:0;
-    }
-    .hero p{max-width:180mm; margin:4mm auto 0; color:#e6efff}
-
+    .hero h1{font-family:'Tajawal','IBM Plex Sans Arabic',sans-serif;font-weight:900;font-size:28pt;margin:0;line-height:1.25;text-shadow:0 0 10px rgba(255,255,255,.2)}
+    .hero p{max-width:180mm;margin:4mm auto 0;color:#e6efff}
     .brain{position:absolute; inset-inline-start:10mm; top:8mm; opacity:.22}
-    .brain svg{width:60mm; height:60mm}
+    .brain svg{width:60mm;height:60mm}
 
-    /* شبكة البطاقات: إصلاح التمطّط */
-    .grid-areas{
-      display:grid;
-      grid-template-columns:repeat(6, minmax(0,1fr));
-      grid-auto-rows:auto;                /* ← كان 1fr ويسبب فراغات هائلة */
-      align-items:start; gap:8mm 6mm;     /* row-gap / col-gap */
-    }
-
-    /* الخلفيات اللونية الخفيفة لكل صف */
+    /* شبكة البطاقات */
+    .grid-areas{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); grid-auto-rows:auto; align-items:start; gap:8mm 6mm}
     .row{position:relative}
-    .row::before{
-      content:""; position:absolute; inset:-2mm 0; border-radius:18px; z-index:0; pointer-events:none;
-      background:var(--row1);
-    }
+    .row::before{content:""; position:absolute; inset:-2mm 0; border-radius:18px; z-index:0; pointer-events:none; background:var(--row1)}
     .row.middle::before{background:var(--row2)}
     .row.bottom::before{background:var(--row3)}
     .row > *{position:relative; z-index:1}
 
     /* البطاقة */
-    .card{
-      background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:6mm;
-      box-shadow:0 10px 28px rgba(2,6,23,.08);
-      break-inside:avoid; page-break-inside:avoid; /* لا تنقسم في الطباعة */
-    }
+    .card{background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:6mm; box-shadow:0 10px 28px rgba(2,6,23,.08); break-inside:avoid; page-break-inside:avoid}
     .card h3{font-size:14pt; font-weight:800; margin:0 0 2mm}
     .meta{display:flex; align-items:center; gap:3mm; margin-bottom:2mm}
     .num{display:grid; place-items:center; width:9mm; height:9mm; border-radius:999px; color:#fff; font-weight:800}
     .desc{font-size:11pt; color:#334155}
     .prompt{margin-top:3mm; border-radius:12px; background:#0b143708; border:1px dashed #94a3b8; padding:4mm}
     .prompt-title{font-weight:800; font-size:10.5pt; color:#0b1437; margin-bottom:1.5mm}
-    .prompt pre{
-      white-space:pre-wrap;
-      font: 600 10.5pt 'IBM Plex Sans Arabic', ui-sans-serif, system-ui;
-      color:#111827; letter-spacing:0; line-height:1.7;
-    }
-
-    /* ألوان الأرقام */
-    .c1{--main: var(--sky)} .c2{--main: var(--violet)} .c3{--main: var(--orange)}
-    .c4{--main: var(--turq)} .c5{--main: #7c3aed} .c6{--main:#475569} .c7{--main:#f59e0b}
-    .num{background:var(--main)}
+    .prompt pre{white-space:pre-wrap; font:600 10.5pt 'IBM Plex Sans Arabic',ui-sans-serif,system-ui; color:#111827; letter-spacing:0; line-height:1.7}
     .badge{display:inline-block; border:1px solid #e5e7eb; border-radius:999px; padding:.5mm 2.5mm; font-size:9.5pt; color:#334155; background:#fff; margin-inline-start:2mm}
 
-    /* الفوتر */
-    .footer{
-      margin-top:8mm; background:linear-gradient(180deg,#3b1d72,#4c28a6);
-      color:#fff; border-radius:16px; padding:5mm 6mm; text-align:center;
-      box-shadow:inset 0 18px 40px rgba(255,255,255,.08)
-    }
+    /* ألوان أرقام البطاقات */
+    .c1{--main:var(--sky)} .c2{--main:var(--violet)} .c3{--main:var(--orange)}
+    .c4{--main:var(--turq)} .c5{--main:#7c3aed} .c6{--main:#475569} .c7{--main:#f59e0b}
+    .num{background:var(--main)}
+
+    /* فوتر */
+    .footer{margin-top:8mm; background:linear-gradient(180deg,#3b1d72,#4c28a6); color:#fff; border-radius:16px; padding:5mm 6mm; text-align:center; box-shadow:inset 0 18px 40px rgba(255,255,255,.08)}
     .footer small{opacity:.9}
 
-    /* الطباعة: دقة وألوان محفوظة */
+    /* وضع مضغوط (نصف الصفحة تقريباً) */
+    .compact .pad{padding:10mm}
+    .compact .hero{padding-top:12mm; padding-bottom:8mm}
+    .compact .hero h1{font-size:24pt}
+    .compact .desc{font-size:10pt}
+    .compact .prompt pre{font-size:10pt}
+    .compact .card{padding:5mm}
+    .compact .grid-areas{gap:6mm}
+
+    /* طباعة */
     @page{ size:A2 portrait; margin:10mm }
     @media print{
-      .toolbar{display:none !important}
+      .toolbar{display:none!important}
       .sheet{margin:0; border-radius:0; box-shadow:none}
       .hero h1{text-shadow:none}
       *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
     }
 
-    /* معاينة الشاشات الصغيرة */
     @media (max-width:1200px){ .sheet{width:100%; height:auto} }
   </style>
 </head>
 <body>
-  <!-- Toolbar -->
+  <!-- شريط أدوات -->
   <div class="toolbar no-print">
     <div class="mx-auto max-w-7xl px-4 py-2 flex items-center gap-2">
       <a href="../posters/" class="btn">⬅️ فهرس البوسترات</a>
+      <button id="btnCompact" class="btn">🧩 وضع مضغوط</button>
       <button onclick="window.print()" class="btn">🖨️ طباعة / PDF</button>
-      <button id="btnPdf" class="btn">⬇️ تصدير PDF</button>
-      <span class="ms-auto text-sm text-slate-600">A2 • 3×3 Grid • RTL</span>
+      <button id="btnPdf" class="btn">⬇️ تصدير PDF (صفحة واحدة)</button>
+      <span class="ms-auto text-sm text-slate-600">A2 • 3×3 Grid • RTL • Fit</span>
     </div>
   </div>
 
-  <!-- Poster -->
-  <main class="sheet">
+  <!-- البوستر -->
+  <main id="sheet" class="sheet">
     <header class="hero pad">
       <div class="brain" aria-hidden="true">
+        <!-- أيقونة دماغ -->
         <svg viewBox="0 0 256 256" fill="none">
-          <defs>
-            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#0ea5e9"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#f59e0b"/>
-            </linearGradient>
-          </defs>
+          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs>
           <path d="M88 80c-20 0-36 16-36 36 0 12 6 22 16 29m16-65c0-18 14-32 32-32s32 14 32 32m-32-32c0-18 14-32 32-32" stroke="url(#g)" stroke-width="6" stroke-linecap="round"/>
           <circle cx="70" cy="116" r="6" fill="#0ea5e9"/><circle cx="92" cy="88" r="6" fill="#8b5cf6"/>
           <circle cx="128" cy="60" r="6" fill="#f59e0b"/><circle cx="160" cy="80" r="6" fill="#10b981"/>
@@ -158,15 +136,12 @@
           <div class="meta"><span class="num">1</span><h3>الأطر الكلاسيكية (Frameworks)</h3><span class="badge">مكعب ◽︎</span></div>
           <div class="desc">
             5 Whys, SCAMPER, قبعات التفكير الست، خرائط ذهنية، Starbursting. اختر الإطار الأنسب لتعميق الفكرة سريعًا.
-            <ul class="list-disc pr-4 mt-2 text-slate-700">
-              <li><b>مثال صحفي:</b> «لماذا ينصرف القرّاء عن التغطية المحلية؟» → سلسلة لماذا حتى الجذر: نقص شبكة المصادر.</li>
-            </ul>
+            <ul class="list-disc pr-4 mt-2 text-slate-700"><li><b>مثال صحفي:</b> «لماذا ينصرف القرّاء عن التغطية المحلية؟» → السبب الجذري: نقص شبكة المصادر.</li></ul>
           </div>
-          <div class="prompt">
-            <div class="prompt-title">💬 قالب برومبت (اختر الإطار):</div>
+          <div class="prompt"><div class="prompt-title">💬 قالب برومبت (اختر الإطار):</div>
 <pre>حلّل موضوع: [العنوان] باستخدام أحد الأطر (5Whys/SCAMPER/قبعات/خريطة/Starbursting).
-- لِـ5Whys: قدّم سلسلة "لماذا → لأن" حتى السبب الجذري + 3 حلول خلال أسبوعين.
-- لِـSCAMPER: فكرتان لكل حرف مع وصف التنفيذ الصحفي.</pre>
+- 5Whys: "لماذا → لأن" حتى السبب الجذري + 3 حلول خلال أسبوعين.
+- SCAMPER: فكرتان لكل حرف مع وصف التنفيذ الصحفي.</pre>
           </div>
         </div>
 
@@ -193,7 +168,7 @@
       <div class="row middle" style="grid-column:1/-1; grid-row:2;">
         <div class="card c4" style="grid-column:1/4;">
           <div class="meta"><span class="num">4</span><h3>خطوة بخطوة (Step-by-Step)</h3><span class="badge">سلم ⤴︎</span></div>
-          <div class="desc">موضوع عام → محاور → أسئلة مفتاحية → مصادر/بيانات → زوايا → عناوين وخطّاف → خطة إنتاج.</div>
+          <div class="desc">موضوع عام → محاور → أسئلة مفتاحية → مصادر/بيانات → زوايا → عناوين/خطّاف → خطة إنتاج.</div>
           <div class="prompt"><div class="prompt-title">💬 برومبت متسلسل:</div>
 <pre>اذكر 12 محورًا فرعيًا لموضوع: [موضوع].
 لكل محور: 3 أسئلة تحقيقيّة ومصادر/بيانات علنية.
@@ -206,8 +181,8 @@
           <div class="meta"><span class="num">5</span><h3>الكلمات الإبداعية (Creative Words)</h3><span class="badge">📣</span></div>
           <div class="desc">اختر كلمة موجِّهة واحدة لكل جلسة: غير متوقَّع، بديل جريء، إنسانيّ النزعة، غير مُتحيز…</div>
           <div class="prompt"><div class="prompt-title">💬 أمثلة جاهزة:</div>
-<pre>• أعطني 12 فكرة <غير متوقعة> لتغطية [موضوع].
-• اقترح 10 زوايا <إنسانية بعمق> لملف [موضوع] مع مصادر محتملة.
+<pre>• أعطني 12 فكرة &lt;غير متوقعة&gt; لتغطية [موضوع].
+• اقترح 10 زوايا &lt;إنسانية بعمق&gt; لملف [موضوع] مع مصادر محتملة.
 • أعد صياغة 5 عناوين بأسلوب متميز وقابل للمشاركة (دون تهويل).</pre>
           </div>
         </div>
@@ -245,20 +220,48 @@
     </section>
   </main>
 
-  <!-- PDF export -->
+  <!-- تصدير PDF + ملاءمة الصفحة -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    document.getElementById('btnPdf').addEventListener('click', () => {
-      const el = document.querySelector('.sheet');
+    const sheet = document.getElementById('sheet');
+    const btnPdf = document.getElementById('btnPdf');
+    const btnCompact = document.getElementById('btnCompact');
+
+    // تفعيل/إلغاء الوضع المضغوط (لتصغير المحتوى ~ 10–15%)
+    btnCompact.addEventListener('click', () => {
+      sheet.classList.toggle('compact');
+      autoFit(); // أعد حساب الملاءمة بعد التبديل
+    });
+
+    // احسب عامل الملاءمة بحيث لا يتجاوز ارتفاع A2 داخل الهامش
+    function autoFit(marginMm = 10){
+      // px لكل مم = عرض العنصر بالبكسل / عرض A2 بالمم
+      const pxPerMm = sheet.offsetWidth / 420;
+      const allowedPx = (594 - marginMm * 2) * pxPerMm;
+      const actual = sheet.scrollHeight;          // الارتفاع الحقيقي قبل التصغير
+      let scale = Math.min(1, (allowedPx / actual) * 0.985);
+      // خزّن في متغيّر CSS
+      sheet.style.setProperty('--zoom', scale.toString());
+      return scale;
+    }
+
+    // عند تحميل الصفحة و قبل الطباعة
+    window.addEventListener('load', autoFit);
+    window.addEventListener('resize', autoFit);
+    window.addEventListener('beforeprint', autoFit);
+
+    btnPdf.addEventListener('click', () => {
+      const scale = autoFit();
       const opt = {
         margin: [10,10,10,10],
         filename: 'chatgpt-brainstorm-a2.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 3, useCORS: true },   // ← دقة أعلى
+        html2canvas: { scale: 3, useCORS: true },   // دقة عالية
         jsPDF: { unit: 'mm', format: 'a2', orientation: 'portrait' },
         pagebreak: { mode: ['avoid'] }
       };
-      html2pdf().set(opt).from(el).save();
+      // انتظر تطبيق الـtransform ثم صدّر
+      requestAnimationFrame(() => html2pdf().set(opt).from(sheet).save());
     });
   </script>
 </body>
