@@ -24,7 +24,7 @@
     .card:hover {transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.5);}    
     .glow-title {text-shadow: 0 0 10px rgba(255,212,77,.7), 0 0 20px rgba(255,212,77,.5);}    
     /* Canvas sized artboard for pixel-perfect PNG (1080x1350) */
-    #poster {width:1080px; height:1350px; box-sizing:border-box; overflow:visible; position:relative;} 
+    #poster-5 {width:1080px; height:1350px; box-sizing:border-box; overflow:visible; position:relative;}
     .exporting .card{ backdrop-filter:none !important; -webkit-backdrop-filter:none !important; box-shadow: 0 8px 24px rgba(0,0,0,.35) !important; }
     .exporting *{ background-clip: padding-box !important; text-rendering: geometricPrecision; -webkit-font-smoothing: antialiased; }
     .exporting{ transform: translateZ(0); }
@@ -34,15 +34,15 @@
   <!-- Toolbar -->
   <div class="no-print sticky top-0 z-50 w-full max-w-5xl mb-3">
     <div class="flex flex-wrap items-center gap-3 rounded-2xl bg-white/10 backdrop-blur border border-white/20 p-3">
-      <button id="downloadPng" class="px-5 py-2 rounded-xl text-white font-bold text-base" style="background-color:#FF3E6C;">⬇️ تحميل البوستر كصورة (PNG)</button>
-      <button id="downloadJpg" class="px-5 py-2 rounded-xl text-white font-bold text-base" style="background-color:#10b981;">⬇️ JPG</button>
-      <button id="selfTest" class="px-4 py-2 rounded-xl text-white font-semibold text-base" style="background-color:#6366f1;">🧪 اختبار سريع</button>
-      <span id="libStatus" class="text-white/80 text-sm ml-auto">المحرّك: جاري الفحص…</span>
+      <button id="btnPng" class="px-5 py-2 rounded-xl text-white font-bold text-base" style="background-color:#FF3E6C;">⬇️ تحميل البوستر كصورة (PNG)</button>
+      <button id="btnJpg" class="px-5 py-2 rounded-xl text-white font-bold text-base" style="background-color:#10b981;">⬇️ JPG</button>
+      <button id="btnPdfFull" class="px-5 py-2 rounded-xl text-white font-bold text-base" style="background-color:#6366f1;">⬇️ PDF كامل</button>
+      <button id="btnPdfHalf" class="px-5 py-2 rounded-xl text-white font-bold text-base" style="background-color:#fbbf24;">⬇️ PDF نصف</button>
     </div>
   </div>
 
   <!-- Artboard -->
-  <main id="poster" class="mx-auto flex flex-col items-center p-8 rounded-[28px]" style="background: var(--bg-gradient); color: var(--text-color);">
+  <main id="poster-5" class="mx-auto flex flex-col items-center p-8 rounded-[28px]" style="background: var(--bg-gradient); color: var(--text-color);">
     <!-- Header -->
     <header class="text-center mb-8">
       <h1 class="text-5xl md:text-6xl font-extrabold glow-title" style="color: var(--title-color)">5 برومبتات خارقة لتفجير طاقتك وتخطي عقباتك الذهنية</h1>
@@ -106,97 +106,103 @@
       <p class="text-base opacity-90">ادمجها مع أدواتك اليومية: يمكنك ربط هذه البرومبتات مع تطبيقات الذكاء الاصطناعي لتتبع التقدم وتنظيم الأهداف.</p>
     </section>
 
-    <!-- Footer with QR (inline SVG generated at runtime for export safety) -->
+    <!-- Footer with QR -->
     <footer class="mt-8 text-center space-y-3">
       <div class="text-lg font-semibold" style="color: var(--title-color)">الذكاء الاصطناعي لتفجير طاقتك وتعزيز إبداعك</div>
       <div>
-        <img id="qrImg" alt="QR Code" class="mx-auto mt-2 shadow-md rounded-xl" width="120" height="120"/>
+        <img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://mohasharif.github.io/Philomoha/" alt="QR Code" class="mx-auto mt-2 shadow-md rounded-xl" width="120" height="120"/>
         <p class="mt-2 text-sm opacity-80">امسح الكود للوصول إلى المزيد من الموارد</p>
       </div>
     </footer>
   </main>
 
-  <!-- Export logic: dom-to-image-more with dynamic loader + QR inline SVG -->
+  <!-- Export (single-image) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5l+Yk1gTz4x6G7I5Q0jD6m5c8qg5hC5x6A+5e6XyI5b9b8w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-YkG2NfV2zq0E1Tz7w+gqQW6I6cC8Xo9F3+1Yp9P5P7E=" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
   <script>
-    // Dynamic loader for export libs & QR
-    function loadScript(src){
-      return new Promise((resolve,reject)=>{ const s=document.createElement('script'); s.src=src; s.async=true; s.onload=()=>resolve(true); s.onerror=()=>reject(new Error('load fail '+src)); document.head.appendChild(s); });
+(function(){
+  const { jsPDF } = window.jspdf || {};
+  const root = document.querySelector('#poster-5') || document.querySelector('[data-poster]') || document.querySelector('main') || document.body;
+
+  // Toast بسيط (اختياري)
+  function toast(msg){
+    let t = document.createElement('div');
+    t.textContent = msg;
+    Object.assign(t.style, {
+      position:'fixed', insetInlineStart:'50%', top:'18px', transform:'translateX(-50%)',
+      background:'rgba(16,185,129,.95)', color:'#fff', padding:'10px 14px',
+      borderRadius:'12px', font:'600 14px/1.1 system-ui, -apple-system, "IBM Plex Sans Arabic", sans-serif',
+      zIndex:99999, boxShadow:'0 10px 20px rgba(2,6,23,.18)'
+    });
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(), 1800);
+  }
+
+  async function captureCanvas(opts={}){
+    const scale = opts.scale ?? 3;                  // دقة عالية
+    const bg = opts.backgroundColor ?? null;       // نحافظ على التدرّجات
+    await document.fonts?.ready?.catch(()=>{});
+    return await html2canvas(root, {
+      scale, backgroundColor: bg, useCORS:true, logging:false,
+      windowWidth: document.documentElement.scrollWidth,
+      windowHeight: document.documentElement.scrollHeight
+    });
+  }
+
+  async function savePNG(){
+    const c = await captureCanvas({ backgroundColor: null });
+    const link = document.createElement('a');
+    link.download = '5-super-prompts.png';
+    link.href = c.toDataURL('image/png');
+    link.click();
+    toast('تم حفظ PNG ✔');
+  }
+
+  async function saveJPG(){
+    // خلفية داكنة ثابتة لصورة JPG (اختياري)
+    const c = await captureCanvas({ backgroundColor: '#0b1437' });
+    const link = document.createElement('a');
+    link.download = '5-super-prompts.jpg';
+    link.href = c.toDataURL('image/jpeg', 0.95);
+    link.click();
+    toast('تم حفظ JPG ✔');
+  }
+
+  async function savePDF(mode='full'){
+    if (!jsPDF) { alert('jsPDF غير محمّل'); return; }
+    const margin = 10; // mm
+    const c = await captureCanvas({ backgroundColor: null });
+    const img = c.toDataURL('image/jpeg', 0.98);
+
+    const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a2', compress:true });
+    const W = pdf.internal.pageSize.getWidth();
+    const H = pdf.internal.pageSize.getHeight();
+
+    let targetW = W - margin*2;
+    if (mode === 'half') targetW *= 0.5;          // نصف صفحة
+    let targetH = targetW * c.height / c.width;
+
+    if (targetH > H - margin*2) {                 // إن زاد الارتفاع
+      targetH = H - margin*2;
+      targetW = targetH * c.width / c.height;
     }
 
-    async function ensureDomToImage(){
-      const st = document.getElementById('libStatus');
-      if(window.domtoimage){ st.textContent='المحرّك: dom-to-image-more (جاهز)'; return 'dom-to-image-more'; }
-      try{ await loadScript('https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js'); }
-      catch(e){ try{ await loadScript('https://unpkg.com/dom-to-image-more@3.4.0/dist/dom-to-image-more.min.js'); }catch(_){} }
-      if(window.domtoimage){ st.textContent='المحرّك: dom-to-image-more'; return 'dom-to-image-more'; }
-      // Fallback to html2canvas
-      if(!window.html2canvas){ try{ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'); }catch(e){} }
-      if(window.html2canvas){ st.textContent='المحرّك: html2canvas (بديل)'; return 'html2canvas'; }
-      st.textContent='المحرّك: غير متوفر'; throw new Error('no exporter');
-    }
+    const x = (W - targetW)/2;
+    const y = (H - targetH)/2;
 
-    // Build QR as inline SVG data URL to avoid CORS
-    async function ensureQR(){
-      if(window.qrcode) return true;
-      try{ await loadScript('https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js'); }
-      catch(e){ try{ await loadScript('https://unpkg.com/qrcode-generator@1.4.4/qrcode.min.js'); }catch(_){} }
-      return !!window.qrcode;
-    }
+    pdf.addImage(img, 'JPEG', x, y, targetW, targetH, '', 'FAST');
+    pdf.save('5-super-prompts.pdf');
+    toast('تم حفظ PDF ✔');
+  }
 
-    async function renderQR(){
-      const ok = await ensureQR();
-      const img = document.getElementById('qrImg');
-      const url = 'https://mohasharif.github.io/Philomoha/';
-      if(!ok){ img.alt='QR غير متاح حالياً'; return; }
-      var qr = qrcode(0,'M');
-      qr.addData(url); qr.make();
-      var svg = qr.createSvgTag({cellSize:2, margin:0});
-      svg = svg.replace(/width="\d+"/,'width="120"').replace(/height="\d+"/,'height="120"');
-      img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
-    }
-
-    async function exportAs(type){
-      const poster = document.getElementById('poster');
-      const st = document.getElementById('libStatus');
-      const btn = type==='png' ? document.getElementById('downloadPng') : document.getElementById('downloadJpg');
-      btn.disabled=true; const old=btn.textContent; btn.textContent='⏳ جارٍ التصدير…';
-      try{
-        await document.fonts?.ready; const engine = await ensureDomToImage();
-        let dataUrl;
-        if(engine==='dom-to-image-more'){
-          poster.classList.add('exporting');
-          dataUrl = await window.domtoimage.toPng(poster, { width:1080, height:1350, cacheBust:true, quality:1, style:{transform:'none'} });
-          poster.classList.remove('exporting');
-          if(type==='jpg'){
-            const img = new Image(); await new Promise(r=>{ img.onload=r; img.src=dataUrl; });
-            const cnv=document.createElement('canvas'); cnv.width=1080; cnv.height=1350; const ctx=cnv.getContext('2d');
-            ctx.fillStyle='#0A0F29'; ctx.fillRect(0,0,cnv.width,cnv.height); ctx.drawImage(img,0,0);
-            dataUrl = cnv.toDataURL('image/jpeg', 0.95);
-          }
-        } else {
-          poster.classList.add('exporting');
-          const rect = poster.getBoundingClientRect();
-          const canvas = await window.html2canvas(poster, {scale:3, useCORS:true, backgroundColor:null, width:1080, height:1350, scrollX:0, scrollY:0, windowWidth: Math.max(1080, Math.ceil(rect.width)), windowHeight: Math.max(1350, Math.ceil(rect.height))});
-          poster.classList.remove('exporting');
-          dataUrl = (type==='jpg') ? canvas.toDataURL('image/jpeg',0.95) : canvas.toDataURL('image/png');
-        }
-        const a=document.createElement('a'); a.download = type==='jpg'?'poster-ai-prompts.jpg':'poster-ai-prompts.png'; a.href=dataUrl; a.click(); st.textContent='تم التصدير بنجاح';
-      }catch(e){ console.error(e); alert('تعذّر إنشاء الصورة تلقائيًا.'); }
-      finally{ btn.disabled=false; btn.textContent=old; }
-    }
-
-    async function runSelfTest(){
-      const st = document.getElementById('libStatus');
-      try{ await document.fonts?.ready; const engine = await ensureDomToImage(); st.textContent = 'اختبار: ' + engine + ' ✅'; }
-      catch(e){ st.textContent = 'اختبار فشل'; }
-    }
-
-    document.getElementById('downloadPng').addEventListener('click', ()=>exportAs('png'));
-    document.getElementById('downloadJpg').addEventListener('click', ()=>exportAs('jpg'));
-    document.getElementById('selfTest').addEventListener('click', runSelfTest);
-
-    // Init
-    renderQR(); ensureDomToImage().catch(()=>{});
+  // وصل الأزرار الحالية (أضف هذه الـid للأزرار لديك)
+  document.getElementById('btnPng')?.addEventListener('click', savePNG);
+  document.getElementById('btnJpg')?.addEventListener('click', saveJPG);
+  document.getElementById('btnPdfFull')?.addEventListener('click', ()=>savePDF('full'));
+  document.getElementById('btnPdfHalf')?.addEventListener('click', ()=>savePDF('half'));
+})();
   </script>
+
 </body>
 </html>
