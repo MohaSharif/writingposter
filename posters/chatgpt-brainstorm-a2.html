@@ -4,9 +4,9 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>كيف تستخدم ChatGPT للعصف الذهني؟ — بوستر A2</title>
-  <meta name="description" content="بوستر A2 احترافي: الأطر السبعة للعصف الذهني مع أمثلة صحفية وبرومبتات جاهزة. قابل للطباعة وتصدير PDF في صفحة واحدة.">
+  <meta name="description" content="بوستر A2 احترافي: الأطر السبعة للعصف الذهني مع أمثلة صحفية وبرومبتات جاهزة. تصدير PDF في صفحة واحدة، أو نصف صفحة.">
 
-  <!-- Fonts: أوضح -->
+  <!-- خطوط عربية أوضح -->
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700;800&family=Tajawal:wght@700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -16,7 +16,6 @@
       --row1: linear-gradient(90deg,#0ea5e91A,#8b5cf61A);
       --row2: linear-gradient(90deg,#10b9811A,#0ea5e91A);
       --row3: linear-gradient(90deg,#f59e0b1A,#8b5cf61A);
-      --zoom: 1;          /* سيُعدّل تلقائياً للملاءمة */
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -27,13 +26,11 @@
       font-feature-settings:"liga" 1,"calt" 1;
     }
 
-    /* ورقة A2 */
+    /* ورقة A2 (بدون تحجيم CSS؛ التصدير يعالج الملاءمة) */
     .sheet{
       width:420mm; height:594mm; margin:10mm auto; position:relative; overflow:hidden; border-radius:22px;
       background:linear-gradient(180deg,var(--indigo) 0%, #eaf4ff 75%, #ffffff 100%);
       box-shadow:0 20px 60px rgba(2,6,23,.15);
-      transform-origin: top center;
-      transform: scale(var(--zoom));           /* ← المقياس يتغير تلقائياً */
       print-color-adjust:exact; -webkit-print-color-adjust:exact;
     }
     .pad{padding:16mm}
@@ -69,7 +66,7 @@
     .prompt pre{white-space:pre-wrap; font:600 10.5pt 'IBM Plex Sans Arabic',ui-sans-serif,system-ui; color:#111827; letter-spacing:0; line-height:1.7}
     .badge{display:inline-block; border:1px solid #e5e7eb; border-radius:999px; padding:.5mm 2.5mm; font-size:9.5pt; color:#334155; background:#fff; margin-inline-start:2mm}
 
-    /* ألوان أرقام البطاقات */
+    /* ألوان الأرقام */
     .c1{--main:var(--sky)} .c2{--main:var(--violet)} .c3{--main:var(--orange)}
     .c4{--main:var(--turq)} .c5{--main:#7c3aed} .c6{--main:#475569} .c7{--main:#f59e0b}
     .num{background:var(--main)}
@@ -77,15 +74,6 @@
     /* فوتر */
     .footer{margin-top:8mm; background:linear-gradient(180deg,#3b1d72,#4c28a6); color:#fff; border-radius:16px; padding:5mm 6mm; text-align:center; box-shadow:inset 0 18px 40px rgba(255,255,255,.08)}
     .footer small{opacity:.9}
-
-    /* وضع مضغوط (نصف الصفحة تقريباً) */
-    .compact .pad{padding:10mm}
-    .compact .hero{padding-top:12mm; padding-bottom:8mm}
-    .compact .hero h1{font-size:24pt}
-    .compact .desc{font-size:10pt}
-    .compact .prompt pre{font-size:10pt}
-    .compact .card{padding:5mm}
-    .compact .grid-areas{gap:6mm}
 
     /* طباعة */
     @page{ size:A2 portrait; margin:10mm }
@@ -104,10 +92,10 @@
   <div class="toolbar no-print">
     <div class="mx-auto max-w-7xl px-4 py-2 flex items-center gap-2">
       <a href="../posters/" class="btn">⬅️ فهرس البوسترات</a>
-      <button id="btnCompact" class="btn">🧩 وضع مضغوط</button>
-      <button onclick="window.print()" class="btn">🖨️ طباعة / PDF</button>
-      <button id="btnPdf" class="btn">⬇️ تصدير PDF (صفحة واحدة)</button>
-      <span class="ms-auto text-sm text-slate-600">A2 • 3×3 Grid • RTL • Fit</span>
+      <button onclick="window.print()" class="btn">🖨️ طباعة</button>
+      <button id="btnPdfFull" class="btn">⬇️ تصدير PDF — صفحة كاملة</button>
+      <button id="btnPdfHalf" class="btn">⬇️ تصدير PDF — نصف صفحة</button>
+      <span class="ms-auto text-sm text-slate-600">A2 • 3×3 Grid • RTL • Single-Page Export</span>
     </div>
   </div>
 
@@ -181,8 +169,8 @@
           <div class="meta"><span class="num">5</span><h3>الكلمات الإبداعية (Creative Words)</h3><span class="badge">📣</span></div>
           <div class="desc">اختر كلمة موجِّهة واحدة لكل جلسة: غير متوقَّع، بديل جريء، إنسانيّ النزعة، غير مُتحيز…</div>
           <div class="prompt"><div class="prompt-title">💬 أمثلة جاهزة:</div>
-<pre>• أعطني 12 فكرة &lt;غير متوقعة&gt; لتغطية [موضوع].
-• اقترح 10 زوايا &lt;إنسانية بعمق&gt; لملف [موضوع] مع مصادر محتملة.
+<pre>• أعطني 12 فكرة <غير متوقعة> لتغطية [موضوع].
+• اقترح 10 زوايا <إنسانية بعمق> لملف [موضوع] مع مصادر محتملة.
 • أعد صياغة 5 عناوين بأسلوب متميز وقابل للمشاركة (دون تهويل).</pre>
           </div>
         </div>
@@ -220,50 +208,51 @@
     </section>
   </main>
 
-  <!-- تصدير PDF + ملاءمة الصفحة -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- تصدير PDF كصورة واحدة -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
+    const { jsPDF } = window.jspdf;
     const sheet = document.getElementById('sheet');
-    const btnPdf = document.getElementById('btnPdf');
-    const btnCompact = document.getElementById('btnCompact');
 
-    // تفعيل/إلغاء الوضع المضغوط (لتصغير المحتوى ~ 10–15%)
-    btnCompact.addEventListener('click', () => {
-      sheet.classList.toggle('compact');
-      autoFit(); // أعد حساب الملاءمة بعد التبديل
-    });
+    async function exportPDF(mode='full'){
+      const margin = 10; // mm
+      await document.fonts.ready; // تأكد من تحميل الخطوط قبل الالتقاط
 
-    // احسب عامل الملاءمة بحيث لا يتجاوز ارتفاع A2 داخل الهامش
-    function autoFit(marginMm = 10){
-      // px لكل مم = عرض العنصر بالبكسل / عرض A2 بالمم
-      const pxPerMm = sheet.offsetWidth / 420;
-      const allowedPx = (594 - marginMm * 2) * pxPerMm;
-      const actual = sheet.scrollHeight;          // الارتفاع الحقيقي قبل التصغير
-      let scale = Math.min(1, (allowedPx / actual) * 0.985);
-      // خزّن في متغيّر CSS
-      sheet.style.setProperty('--zoom', scale.toString());
-      return scale;
+      // حوّل الورقة إلى Canvas عالي الدقة
+      const canvas = await html2canvas(sheet, {
+        scale: 3,               // دقة أعلى
+        useCORS: true,
+        backgroundColor: null,  // احفظ التدرجات كما هي
+        logging: false
+      });
+
+      const img = canvas.toDataURL('image/jpeg', 0.98);
+      const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a2', compress:true });
+
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+
+      // العرض المستهدف داخل الصفحة
+      let targetW = pageW - margin*2;
+      if (mode === 'half') targetW = (pageW - margin*2) * 0.5; // نصف صفحة
+      let targetH = targetW * canvas.height / canvas.width;
+
+      // في حال تجاوز الارتفاع، اضبط على حسب الارتفاع
+      if (targetH > pageH - margin*2){
+        targetH = pageH - margin*2;
+        targetW = targetH * canvas.width / canvas.height;
+      }
+
+      const x = (pageW - targetW) / 2;
+      const y = (pageH - targetH) / 2;
+
+      pdf.addImage(img, 'JPEG', x, y, targetW, targetH, '', 'FAST');
+      pdf.save('chatgpt-brainstorm-a2.pdf');
     }
 
-    // عند تحميل الصفحة و قبل الطباعة
-    window.addEventListener('load', autoFit);
-    window.addEventListener('resize', autoFit);
-    window.addEventListener('beforeprint', autoFit);
-
-    btnPdf.addEventListener('click', () => {
-      const scale = autoFit();
-      const opt = {
-        margin: [10,10,10,10],
-        filename: 'chatgpt-brainstorm-a2.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 3, useCORS: true },   // دقة عالية
-        jsPDF: { unit: 'mm', format: 'a2', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid'] }
-      };
-      // انتظر تطبيق الـtransform ثم صدّر
-      requestAnimationFrame(() => html2pdf().set(opt).from(sheet).save());
-    });
+    document.getElementById('btnPdfFull').addEventListener('click', () => exportPDF('full'));
+    document.getElementById('btnPdfHalf').addEventListener('click', () => exportPDF('half'));
   </script>
 </body>
 </html>
-
