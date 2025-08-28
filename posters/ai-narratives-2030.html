@@ -47,6 +47,8 @@
     .hdr{display:flex; align-items:baseline; justify-content:space-between; gap:24px; margin-bottom:36px}
     .title{font-size:38px; font-weight:900; letter-spacing:.2px}
     .subtitle{font-size:18px; color:var(--muted); font-weight:700}
+    .survey{font-size:32px; font-weight:900; color:var(--orange); text-decoration:none; border:2px solid var(--orange); border-radius:16px; padding:10px 16px; line-height:1; display:inline-flex; align-items:center; gap:8px; transition:all .2s ease}
+    .survey:hover, .survey:focus-visible{background:var(--orange); color:#0f1221; transform:translateY(-1px)}
 
     /* Grid 2x3 */
     .grid{display:grid; grid-template-columns: repeat(3, 1fr); gap:var(--grid-gap)}
@@ -109,6 +111,7 @@
           <div class="title">السرديّات الستة للذكاء الاصطناعي حتى 2030</div>
           <div class="subtitle">AI Narratives · 2025 → 2030</div>
         </div>
+        <a class="survey" href="https://forms.gle/Rg4j1s2wSPiFwM6U7" target="_blank" rel="noopener">📝 استبيان</a>
       </header>
 
       <main class="grid" id="grid">
