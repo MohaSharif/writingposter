@@ -6,6 +6,7 @@
   <title>السرديّات الستة للذكاء الاصطناعي حتى 2030</title>
   <!-- Google Fonts: Arabic-friendly -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Changa:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
       /* Color palette */
@@ -67,8 +68,17 @@
     .score{font-size:13px; color:var(--muted); font-weight:800}
     .rate-hint{font-size:12px; color:var(--muted)}
 
-    /* Tagline */
-    .tagline{font-size:64px; font-weight:900; text-align:center; color:var(--ink); margin:40px auto 0}
+    /* العبارة تحت البوستر فقط */
+    .tagline-out{
+      font-family:'Changa','Tajawal','Cairo',sans-serif;
+      font-weight:800;
+      font-size:clamp(24px,2.6vw,44px);
+      line-height:1.2;
+      color:var(--ink);
+      text-align:center;
+      margin:20px 0 28px;
+      letter-spacing:0;
+    }
 
     /* Print to PDF (A4) */
     @media print{
@@ -82,6 +92,7 @@
       .lead{font-size:34px}
       .bullets{font-size:26px}
       .tag{font-size:32px}
+      .tagline-out{font-size:54px;margin-top:40px}
     }
   </style>
 </head>
@@ -243,7 +254,8 @@
       </main>
     </section>
   </div>
-  <h1 class="tagline">المستقبل ليس حتميًا… سرديّاتنا هي التي تُشكّله.</h1>
+  <!-- العبارة تحت البوستر -->
+  <div class="tagline-out">المستقبل ليس حتميًا… سرديّاتنا هي التي تُشكّله.</div>
 
   <!-- html2canvas for PNG export -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
