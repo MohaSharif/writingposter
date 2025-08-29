@@ -67,13 +67,8 @@
     .score{font-size:13px; color:var(--muted); font-weight:800}
     .rate-hint{font-size:12px; color:var(--muted)}
 
-    /* Footer timeline */
-    .footer{position:absolute; left:56px; right:56px; bottom:36px}
-    .timeline{position:relative; height:6px; background:#20264a; border-radius:99px; overflow:visible}
-    .timeline .fill{position:absolute; left:0; top:0; bottom:0; width:72%; background:linear-gradient(90deg,#3c82ff,#75e3c8); border-radius:99px}
-    .timeline .labelbar{display:flex; justify-content:space-between; margin-top:10px; color:var(--muted); font-size:13px; font-weight:800}
-    .chips{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
-    .chip{background:#1a1f3b; border:1px solid #2a2e51; color:var(--muted); padding:6px 10px; border-radius:999px; font-size:12px; font-weight:800}
+    /* Tagline */
+    .tagline{font-size:64px; font-weight:900; text-align:center; color:var(--ink); margin:40px auto 0}
 
     /* Print to PDF (A4) */
     @media print{
@@ -87,7 +82,6 @@
       .lead{font-size:34px}
       .bullets{font-size:26px}
       .tag{font-size:32px}
-      .footer{bottom:80px}
     }
   </style>
 </head>
@@ -247,22 +241,9 @@
           </div>
         </article>
       </main>
-
-      <!-- Footer timeline & tagline -->
-      <footer class="footer">
-        <div class="timeline" aria-hidden="true">
-          <span class="fill"></span>
-        </div>
-        <div class="labelbar"><span>اليوم</span><span>2030</span><span>ما بعد 2030</span></div>
-        <div class="chips" aria-label="اتجاهات">
-          <span class="chip">⬆︎ تصاعد: الاستعمار الرقمي</span>
-          <span class="chip">⬆︎ تصاعد: السرديّة الأخلاقية</span>
-          <span class="chip">⬇︎ محدود: ما بعد الإنسانيّة</span>
-        </div>
-        <div style="margin-top:18px; font-weight:900; color:var(--ink); opacity:.95">المستقبل ليس حتميًا… سرديّاتنا هي التي تُشكّله.</div>
-      </footer>
     </section>
   </div>
+  <h1 class="tagline">المستقبل ليس حتميًا… سرديّاتنا هي التي تُشكّله.</h1>
 
   <!-- html2canvas for PNG export -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
