@@ -10,7 +10,8 @@
 body{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;line-height:1.7;background:#f8fafc;color:#0f172a;margin:0;padding-top:60px;}
 .toolbar{position:fixed;top:0;right:0;left:0;background:#fff;border-bottom:1px solid #e5e7eb;padding:.5rem 1rem;display:flex;gap:.5rem;z-index:10;}
 .btn{border:1px solid #e5e7eb;background:#fff;border-radius:6px;padding:.4rem .8rem;font-size:.9rem;cursor:pointer;}
-.btn:hover{background:#f1f5f9;}
+button{transition:background-color .3s ease,transform .2s ease;}
+button:hover{background:#f1f5f9;transform:translateY(-2px);}
 main{max-width:800px;margin:0 auto;padding:1rem;}
 .sec{margin-bottom:1rem;}
 details{background:#fff;border:1px solid #e5e7eb;border-radius:8px;}
@@ -45,6 +46,41 @@ summary:hover .anchor{visibility:visible;}
 - 5Whys: "لماذا → لأن" حتى السبب الجذري + 3 حلول خلال أسبوعين.
 - SCAMPER: فكرتان لكل حرف مع وصف التنفيذ الصحفي.</pre></div>
 </details>
+<div id="classic-wrap" class="desc">
+  <button id="toggleFrameworks" class="btn">الأطر الكلاسيكية</button>
+  <div id="frameworksList" style="display:none;">
+    <details>
+      <summary>5 Whys</summary>
+      <div class="desc">اسأل «لماذا؟» خمس مرات لاكتشاف الجذر.</div>
+      <div class="prompt" id="fw-5"><button class="copy" data-copy="fw-5">نسخ البرومبت</button><pre>طبّق 5 Whys على: [المشكلة].
+اعرض سلسلة الأسئلة ثم 3 حلول ممكنة.</pre></div>
+    </details>
+    <details>
+      <summary>SCAMPER</summary>
+      <div class="desc">استبدل، وادمج، وتكيّف، وعدّل، واستخدم، واستبعد، واعكس.</div>
+      <div class="prompt" id="fw-s"><button class="copy" data-copy="fw-s">نسخ البرومبت</button><pre>طوّر فكرة [الموضوع] باستخدام SCAMPER.
+قدّم اقتراحين لكل حرف.</pre></div>
+    </details>
+    <details>
+      <summary>قبعات التفكير الست</summary>
+      <div class="desc">أبيض=حقائق، أحمر=مشاعر، أسود=مخاطر، أصفر=فوائد، أخضر=إبداع، أزرق=تنظيم.</div>
+      <div class="prompt" id="fw-h"><button class="copy" data-copy="fw-h">نسخ البرومبت</button><pre>حلّل [القضية] بقبعات التفكير الست.
+خلاصة موجزة لكل قبعة.</pre></div>
+    </details>
+    <details>
+      <summary>الخرائط الذهنية</summary>
+      <div class="desc">ضع الفكرة في المركز ووسّع الفروع حتى تتضح الروابط.</div>
+      <div class="prompt" id="fw-m"><button class="copy" data-copy="fw-m">نسخ البرومبت</button><pre>ابنِ خريطة ذهنية لـ[الفكرة].
+اذكر الفروع الرئيسة و3 فروع فرعية لكل منها.</pre></div>
+    </details>
+    <details>
+      <summary>Starbursting</summary>
+      <div class="desc">ابدأ بنجمة الأسئلة الستة: من، ماذا، أين، متى، لماذا، كيف.</div>
+      <div class="prompt" id="fw-b"><button class="copy" data-copy="fw-b">نسخ البرومبت</button><pre>ولّد أسئلة Starbursting حول [الموضوع].
+قدّم إجابات مختصرة لأهم 10 أسئلة.</pre></div>
+    </details>
+  </div>
+</div>
 </section>
 <section class="sec" id="s2">
 <details>
@@ -118,6 +154,13 @@ document.querySelectorAll('button[data-copy]').forEach(btn=>{
     });
   });
 });
+const fwBtn=document.getElementById('toggleFrameworks');
+if(fwBtn){
+  const fwList=document.getElementById('frameworksList');
+  fwBtn.addEventListener('click',()=>{
+    fwList.style.display=fwList.style.display==='none'?'block':'none';
+  });
+}
 const toggleBtn=document.getElementById('toggleAll');
 toggleBtn.addEventListener('click',()=>{
   const details=document.querySelectorAll('.sec details');
