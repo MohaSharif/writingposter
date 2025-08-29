@@ -51,8 +51,13 @@
     .survey{font-size:32px; font-weight:900; color:var(--orange); text-decoration:none; border:2px solid var(--orange); border-radius:16px; padding:10px 16px; line-height:1; display:inline-flex; align-items:center; gap:8px; transition:all .2s ease}
     .survey:hover, .survey:focus-visible{background:var(--orange); color:#0f1221; transform:translateY(-1px)}
 
-    /* Grid */
-    .grid{display:grid; gap:20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))}
+    /* Responsive grid */
+    .grid{
+      display:grid;
+      gap:var(--grid-gap);
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    }
+
     .card{background:var(--paper); border:1px solid #1f2443; border-radius: var(--radius); padding:26px 26px 22px; display:flex; flex-direction:column; gap:14px; box-shadow: var(--shadow); position:relative}
     .tag{display:inline-flex; align-items:center; gap:8px; font-weight:900; font-size:18px; letter-spacing:.3px}
     .tag .dot{width:12px;height:12px;border-radius:50%}
@@ -86,6 +91,16 @@
       .bullets{font-size:13px}
       .tag{font-size:16px}
       .tagline-out{font-size:20px;margin:8px 0 16px}
+    }
+
+    /* Force full width stacking on phones */
+    @media (max-width: 600px){
+      .grid{
+        grid-template-columns:1fr; /* كل سردية تاخذ السطر كامل */
+        gap:16px;
+      }
+      .card{padding:14px}
+      .tagline-out{font-size:18px;margin:12px 0 20px}
     }
 
     /* Print to PDF (A4) */
