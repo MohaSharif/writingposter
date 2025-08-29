@@ -40,9 +40,19 @@
 
     /* Poster canvas (on-screen scale) */
     .canvas-shell{display:flex; justify-content:center}
-    #poster{width: calc(var(--w) / 2.5); height: calc(var(--h) / 2.5); /* scale down for screen */
-            background: linear-gradient(180deg,#0f1221,#0c1020 40%, #0e1430 100%);
-            border-radius: 28px; box-shadow: var(--shadow); position: relative; padding: 56px; overflow:hidden}
+    /* Poster container must grow with content (no clipping) */
+    #poster{
+      width: 100%;
+      max-width: 1200px;
+      height: auto;           /* ← was fixed; now flexible */
+      min-height: 0;
+      background: linear-gradient(180deg,#0f1221,#0c1020 40%, #0e1430 100%);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      position: relative;
+      padding: 24px;
+      overflow: visible;      /* ← allow content to flow */
+    }
 
     /* Header */
     .hdr{display:flex; align-items:baseline; justify-content:space-between; gap:24px; margin-bottom:36px}
@@ -55,7 +65,7 @@
     .grid{
       display:grid;
       gap:var(--grid-gap);
-      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
     }
 
     .card{background:var(--paper); border:1px solid #1f2443; border-radius: var(--radius); padding:26px 26px 22px; display:flex; flex-direction:column; gap:14px; box-shadow: var(--shadow); position:relative}
@@ -85,29 +95,35 @@
       letter-spacing:0;
     }
 
-    @media(max-width:768px){
-      #poster{padding:12px}
-      .lead{font-size:14px}
-      .bullets{font-size:13px}
-      .tag{font-size:16px}
-      .tagline-out{font-size:20px;margin:8px 0 16px}
-    }
-
-    /* Force full width stacking on phones */
+    /* Phones: stack all six cards vertically, then show tagline */
     @media (max-width: 600px){
       .grid{
-        grid-template-columns:1fr; /* كل سردية تاخذ السطر كامل */
-        gap:16px;
+        grid-template-columns: 1fr;   /* one card per row */
+        gap: 16px;
       }
-      .card{padding:14px}
-      .tagline-out{font-size:18px;margin:12px 0 20px}
+      #poster{ padding: 16px; border-radius: 16px; }
+      .tag{ font-size: 16px; }
+      .lead{ font-size: 14px; }
+      .bullets{ font-size: 13px; }
+      .tagline-out{ font-size: 18px; margin: 12px 0 20px; }
+    }
+
+    /* Tablets: two columns */
+    @media (min-width: 601px) and (max-width: 1024px){
+      .grid{ grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      #poster{ padding: 20px; }
+    }
+
+    /* Desktops: three columns */
+    @media (min-width: 1025px){
+      .grid{ grid-template-columns: repeat(3, 1fr); }
     }
 
     /* Print to PDF (A4) */
     @media print{
       body{background:white}
       .wrap, .toolbar{display:none}
-      #poster{width: var(--w); height: var(--h); border-radius:0; padding:120px}
+      #poster{width: var(--w); height: var(--h); border-radius:0; padding:120px; overflow:visible}
       .title{font-size:84px}
       .subtitle{font-size:30px}
       .grid{gap:52px}
