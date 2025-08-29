@@ -51,8 +51,8 @@
     .survey{font-size:32px; font-weight:900; color:var(--orange); text-decoration:none; border:2px solid var(--orange); border-radius:16px; padding:10px 16px; line-height:1; display:inline-flex; align-items:center; gap:8px; transition:all .2s ease}
     .survey:hover, .survey:focus-visible{background:var(--orange); color:#0f1221; transform:translateY(-1px)}
 
-    /* Grid 2x3 */
-    .grid{display:grid; grid-template-columns: repeat(3, 1fr); gap:var(--grid-gap)}
+    /* Grid */
+    .grid{display:grid; gap:20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))}
     .card{background:var(--paper); border:1px solid #1f2443; border-radius: var(--radius); padding:26px 26px 22px; display:flex; flex-direction:column; gap:14px; box-shadow: var(--shadow); position:relative}
     .tag{display:inline-flex; align-items:center; gap:8px; font-weight:900; font-size:18px; letter-spacing:.3px}
     .tag .dot{width:12px;height:12px;border-radius:50%}
@@ -76,8 +76,16 @@
       line-height:1.2;
       color:var(--ink);
       text-align:center;
-      margin:20px 0 28px;
+      margin:10px 0 20px;
       letter-spacing:0;
+    }
+
+    @media(max-width:768px){
+      #poster{padding:12px}
+      .lead{font-size:14px}
+      .bullets{font-size:13px}
+      .tag{font-size:16px}
+      .tagline-out{font-size:20px;margin:8px 0 16px}
     }
 
     /* Print to PDF (A4) */
