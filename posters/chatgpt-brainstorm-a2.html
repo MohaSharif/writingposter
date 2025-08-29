@@ -7,24 +7,131 @@
 <meta name="description" content="بوستر A2 احترافي: الأطر السبعة للعصف الذهني مع أمثلة صحفية وبرومبتات جاهزة. تصدير PDF في صفحة واحدة، أو نصف صفحة.">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-body{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;line-height:1.7;background:#f8fafc;color:#0f172a;margin:0;padding-top:60px;}
-.toolbar{position:fixed;top:0;right:0;left:0;background:#fff;border-bottom:1px solid #e5e7eb;padding:.5rem 1rem;display:flex;gap:.5rem;z-index:10;}
-.btn{border:1px solid #e5e7eb;background:#fff;border-radius:6px;padding:.4rem .8rem;font-size:.9rem;cursor:pointer;}
-button{transition:background-color .3s ease,transform .2s ease;}
-button:hover{background:#f1f5f9;transform:translateY(-2px);}
-main{max-width:800px;margin:0 auto;padding:1rem;}
-.sec{margin-bottom:1rem;}
-details{background:#fff;border:1px solid #e5e7eb;border-radius:8px;}
-summary{padding:.6rem 1rem;cursor:pointer;font-weight:700;display:flex;align-items:center;gap:.5rem;list-style:none;}
-summary::-webkit-details-marker{display:none;}
-summary .anchor{margin-inline-start:auto;text-decoration:none;color:#94a3b8;visibility:hidden;}
-summary:hover .anchor{visibility:visible;}
-.desc{padding:0 1rem 1rem;}
-.prompt{position:relative;margin:0 1rem 1rem;border:1px dashed #94a3b8;border-radius:8px;background:#f8fafc;padding:1rem;}
-.copy{position:absolute;top:.5rem;left:.5rem;font-size:.8rem;border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:.2rem .5rem;cursor:pointer;}
-.copy-btn{border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:.2rem .5rem;font-size:.8rem;cursor:pointer;}
-.prompt-box{display:none;}
-.footer{text-align:center;margin-top:2rem;color:#334155;}
+  :root{
+    --bg:#0f1b2d;         /* Indigo/Deep night */
+    --bg-2:#1d2a44;       /* Navy */
+    --ink:#f4f7ff;        /* Light ink */
+    --muted:#c9d6ea;      /* Muted text */
+    --teal:#2aa7b9;       /* Teal */
+    --sky:#2d9cdb;        /* Sky blue */
+    --sun:#f2994a;        /* Burnt orange */
+    --gold:#f2c94c;       /* Golden highlight */
+    --rust:#b85c2a;       /* Copper/rust */
+    --plum:#73364a;       /* Deep wine */
+    --shadow:rgba(0,0,0,.25);
+  }
+
+  html,body{
+    font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;
+    line-height:1.7;
+    margin:0;
+    padding-top:60px;
+    background:linear-gradient(180deg,var(--bg) 0%, var(--bg-2) 35%, #10223a 100%);
+    color:var(--ink);
+  }
+
+  .toolbar{
+    position:fixed;
+    top:0;
+    right:0;
+    left:0;
+    background:linear-gradient(90deg, var(--bg) 0%, #132646 100%);
+    border-bottom:1px solid rgba(242,201,76,.35);
+    padding:.5rem 1rem;
+    display:flex;
+    gap:.5rem;
+    z-index:10;
+  }
+
+  header, .hero, .page-hero{
+    background:
+      radial-gradient(1200px 400px at 80% 10%, rgba(42,167,185,.25), transparent 60%),
+      linear-gradient(135deg, var(--rust) 0%, var(--sun) 22%, var(--gold) 35%, var(--teal) 62%, var(--bg-2) 100%);
+    color:var(--ink);
+    border-radius:16px;
+    padding:1rem;
+  }
+
+  main{max-width:800px;margin:0 auto;padding:1rem;}
+
+  .sec, .fw-card{
+    background:linear-gradient(180deg, #0f1b2d 0%, #142542 100%);
+    border:1px solid rgba(45,156,219,.25);
+    border-radius:16px;
+    box-shadow:0 6px 18px var(--shadow);
+    color:var(--ink);
+    margin-bottom:1rem;
+  }
+
+  .sec h2, .sec h3, .fw-card summary{color:#ffffff;}
+
+  details[open]{outline:1px solid rgba(45,156,219,.35);}
+
+  summary{
+    padding:.6rem 1rem;
+    cursor:pointer;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    list-style:none;
+  }
+
+  summary::-webkit-details-marker{display:none;}
+
+  summary .anchor{
+    margin-inline-start:auto;
+    text-decoration:none;
+    color:var(--sky);
+    visibility:hidden;
+  }
+
+  summary:hover .anchor{visibility:visible;}
+
+  .desc{padding:0 1rem 1rem;}
+
+  .prompt, .prompt-box{
+    background:#0a1630;
+    border:1px dashed rgba(42,167,185,.55);
+    color:#eaf3ff;
+    position:relative;
+    margin:0 1rem 1rem;
+    border-radius:8px;
+    padding:1rem;
+  }
+
+  .prompt-box{display:none;}
+
+  .fw-meta{color:var(--muted);}
+
+  .footer{text-align:center;margin-top:2rem;color:var(--muted);}
+
+  button, .btn, .copy-btn, .copy{
+    background:#162b54;
+    border:1px solid #2b4f9d;
+    color:var(--ink);
+    border-radius:10px;
+    transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .06s ease, box-shadow .18s ease;
+  }
+
+  .btn{padding:.4rem .8rem;font-size:.9rem;cursor:pointer;}
+
+  .copy-btn, .copy{padding:.2rem .5rem;font-size:.8rem;cursor:pointer;}
+
+  .copy{position:absolute;top:.5rem;left:.5rem;}
+
+  button:hover, .btn:hover, .copy-btn:hover, .copy:hover{
+    background: linear-gradient(180deg, var(--sun), var(--rust));
+    border-color: var(--gold);
+    color:#1b2136;
+    box-shadow: 0 6px 14px rgba(242,153,74,.25), inset 0 0 0 1px rgba(27,33,54,.25);
+  }
+
+  button:active, .btn:active, .copy-btn:active, .copy:active{transform: translateY(1px) scale(.99);}
+
+  a, .anchor{color: var(--sky)}
+
+  mark, .kicker{background: linear-gradient(90deg, rgba(242,201,76,.25), rgba(242,153,74,.15)); color:#fff; padding:0 .25em; border-radius:.3em}
 </style>
 </head>
 <body>
