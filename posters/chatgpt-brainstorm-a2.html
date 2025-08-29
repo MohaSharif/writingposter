@@ -1,258 +1,138 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>كيف تستخدم ChatGPT للعصف الذهني؟ — بوستر A2</title>
-  <meta name="description" content="بوستر A2 احترافي: الأطر السبعة للعصف الذهني مع أمثلة صحفية وبرومبتات جاهزة. تصدير PDF في صفحة واحدة، أو نصف صفحة.">
-
-  <!-- خطوط عربية أوضح -->
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700;800&family=Tajawal:wght@700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <style>
-    :root{
-      --indigo:#0b1437; --sky:#0ea5e9; --violet:#8b5cf6; --orange:#f59e0b; --turq:#10b981;
-      --row1: linear-gradient(90deg,#0ea5e91A,#8b5cf61A);
-      --row2: linear-gradient(90deg,#10b9811A,#0ea5e91A);
-      --row3: linear-gradient(90deg,#f59e0b1A,#8b5cf61A);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      font-family:'IBM Plex Sans Arabic',system-ui,-apple-system,'Noto Sans Arabic',Segoe UI,Roboto,Tahoma,sans-serif;
-      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-      letter-spacing:0; line-height:1.7; color:#0f172a; background:#fff;
-      font-feature-settings:"liga" 1,"calt" 1;
-    }
-
-    /* ورقة A2 (بدون تحجيم CSS؛ التصدير يعالج الملاءمة) */
-    .sheet{
-      width:420mm; height:594mm; margin:10mm auto; position:relative; overflow:hidden; border-radius:22px;
-      background:linear-gradient(180deg,var(--indigo) 0%, #eaf4ff 75%, #ffffff 100%);
-      box-shadow:0 20px 60px rgba(2,6,23,.15);
-      print-color-adjust:exact; -webkit-print-color-adjust:exact;
-    }
-    .pad{padding:16mm}
-
-    /* شريط الأدوات */
-    .toolbar{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.78); backdrop-filter:blur(8px); border-bottom:1px solid #e5e7eb}
-    .btn{border:1px solid #e5e7eb; background:#fff; border-radius:999px; padding:.55rem .9rem; font-size:.9rem}
-    .btn:hover{background:#f8fafc}
-
-    /* العنوان */
-    .hero{position:relative; text-align:center; padding-top:18mm; padding-bottom:10mm; color:#fff}
-    .hero h1{font-family:'Tajawal','IBM Plex Sans Arabic',sans-serif;font-weight:900;font-size:28pt;margin:0;line-height:1.25;text-shadow:0 0 10px rgba(255,255,255,.2)}
-    .hero p{max-width:180mm;margin:4mm auto 0;color:#e6efff}
-    .brain{position:absolute; inset-inline-start:10mm; top:8mm; opacity:.22}
-    .brain svg{width:60mm;height:60mm}
-
-    /* شبكة البطاقات */
-    .grid-areas{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); grid-auto-rows:auto; align-items:start; gap:8mm 6mm}
-    .row{position:relative}
-    .row::before{content:""; position:absolute; inset:-2mm 0; border-radius:18px; z-index:0; pointer-events:none; background:var(--row1)}
-    .row.middle::before{background:var(--row2)}
-    .row.bottom::before{background:var(--row3)}
-    .row > *{position:relative; z-index:1}
-
-    /* البطاقة */
-    .card{background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:6mm; box-shadow:0 10px 28px rgba(2,6,23,.08); break-inside:avoid; page-break-inside:avoid}
-    .card h3{font-size:14pt; font-weight:800; margin:0 0 2mm}
-    .meta{display:flex; align-items:center; gap:3mm; margin-bottom:2mm}
-    .num{display:grid; place-items:center; width:9mm; height:9mm; border-radius:999px; color:#fff; font-weight:800}
-    .desc{font-size:11pt; color:#334155}
-    .prompt{margin-top:3mm; border-radius:12px; background:#0b143708; border:1px dashed #94a3b8; padding:4mm}
-    .prompt-title{font-weight:800; font-size:10.5pt; color:#0b1437; margin-bottom:1.5mm}
-    .prompt pre{white-space:pre-wrap; font:600 10.5pt 'IBM Plex Sans Arabic',ui-sans-serif,system-ui; color:#111827; letter-spacing:0; line-height:1.7}
-    .badge{display:inline-block; border:1px solid #e5e7eb; border-radius:999px; padding:.5mm 2.5mm; font-size:9.5pt; color:#334155; background:#fff; margin-inline-start:2mm}
-
-    /* ألوان الأرقام */
-    .c1{--main:var(--sky)} .c2{--main:var(--violet)} .c3{--main:var(--orange)}
-    .c4{--main:var(--turq)} .c5{--main:#7c3aed} .c6{--main:#475569} .c7{--main:#f59e0b}
-    .num{background:var(--main)}
-
-    /* فوتر */
-    .footer{margin-top:8mm; background:linear-gradient(180deg,#3b1d72,#4c28a6); color:#fff; border-radius:16px; padding:5mm 6mm; text-align:center; box-shadow:inset 0 18px 40px rgba(255,255,255,.08)}
-    .footer small{opacity:.9}
-
-    /* طباعة */
-    @page{ size:A2 portrait; margin:10mm }
-    @media print{
-      .toolbar{display:none!important}
-      .sheet{margin:0; border-radius:0; box-shadow:none}
-      .hero h1{text-shadow:none}
-      *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
-    }
-
-    @media (max-width:1200px){ .sheet{width:100%; height:auto} }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>كيف تستخدم ChatGPT للعصف الذهني؟ — بوستر A2</title>
+<meta name="description" content="بوستر A2 احترافي: الأطر السبعة للعصف الذهني مع أمثلة صحفية وبرومبتات جاهزة. تصدير PDF في صفحة واحدة، أو نصف صفحة.">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;line-height:1.7;background:#f8fafc;color:#0f172a;margin:0;padding-top:60px;}
+.toolbar{position:fixed;top:0;right:0;left:0;background:#fff;border-bottom:1px solid #e5e7eb;padding:.5rem 1rem;display:flex;gap:.5rem;z-index:10;}
+.btn{border:1px solid #e5e7eb;background:#fff;border-radius:6px;padding:.4rem .8rem;font-size:.9rem;cursor:pointer;}
+.btn:hover{background:#f1f5f9;}
+main{max-width:800px;margin:0 auto;padding:1rem;}
+.sec{margin-bottom:1rem;}
+details{background:#fff;border:1px solid #e5e7eb;border-radius:8px;}
+summary{padding:.6rem 1rem;cursor:pointer;font-weight:700;display:flex;align-items:center;gap:.5rem;list-style:none;}
+summary::-webkit-details-marker{display:none;}
+summary .anchor{margin-inline-start:auto;text-decoration:none;color:#94a3b8;visibility:hidden;}
+summary:hover .anchor{visibility:visible;}
+.desc{padding:0 1rem 1rem;}
+.prompt{position:relative;margin:0 1rem 1rem;border:1px dashed #94a3b8;border-radius:8px;background:#f8fafc;padding:1rem;}
+.copy{position:absolute;top:.5rem;left:.5rem;font-size:.8rem;border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:.2rem .5rem;cursor:pointer;}
+.footer{text-align:center;margin-top:2rem;color:#334155;}
+</style>
 </head>
 <body>
-  <!-- شريط أدوات -->
-  <div class="toolbar no-print">
-    <div class="mx-auto max-w-7xl px-4 py-2 flex items-center gap-2">
-      <a href="../posters/" class="btn">⬅️ فهرس البوسترات</a>
-      <button onclick="window.print()" class="btn">🖨️ طباعة</button>
-      <button id="btnPdfFull" class="btn">⬇️ تصدير PDF — صفحة كاملة</button>
-      <button id="btnPdfHalf" class="btn">⬇️ تصدير PDF — نصف صفحة</button>
-      <span class="ms-auto text-sm text-slate-600">A2 • 3×3 Grid • RTL • Single-Page Export</span>
-    </div>
-  </div>
-
-  <!-- البوستر -->
-  <main id="sheet" class="sheet">
-    <header class="hero pad">
-      <div class="brain" aria-hidden="true">
-        <!-- أيقونة دماغ -->
-        <svg viewBox="0 0 256 256" fill="none">
-          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs>
-          <path d="M88 80c-20 0-36 16-36 36 0 12 6 22 16 29m16-65c0-18 14-32 32-32s32 14 32 32m-32-32c0-18 14-32 32-32" stroke="url(#g)" stroke-width="6" stroke-linecap="round"/>
-          <circle cx="70" cy="116" r="6" fill="#0ea5e9"/><circle cx="92" cy="88" r="6" fill="#8b5cf6"/>
-          <circle cx="128" cy="60" r="6" fill="#f59e0b"/><circle cx="160" cy="80" r="6" fill="#10b981"/>
-          <circle cx="172" cy="120" r="6" fill="#0ea5e9"/>
-          <path d="M70 116c12 8 22 16 34 28 18 18 34 26 54 28" stroke="url(#g)" stroke-width="6" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <h1>كيف تستخدم ChatGPT للعصف الذهني؟</h1>
-      <p>العصف الذهني ليس إلهامًا عابرًا؛ بل عملية يمكن إدارتها. هذه الأطر السبعة تمنحك خطوات عملية + برومبتات جاهزة لتوليد أفكار صحفية بسرعة ثم تنقيتها وتطويرها.</p>
-    </header>
-
-    <section class="pad grid-areas">
-      <!-- الصف العلوي -->
-      <div class="row" style="grid-column:1/-1; grid-row:1">
-        <div class="card c1" style="grid-column:1/3;">
-          <div class="meta"><span class="num">1</span><h3>الأطر الكلاسيكية (Frameworks)</h3><span class="badge">مكعب ◽︎</span></div>
-          <div class="desc">
-            5 Whys, SCAMPER, قبعات التفكير الست، خرائط ذهنية، Starbursting. اختر الإطار الأنسب لتعميق الفكرة سريعًا.
-            <ul class="list-disc pr-4 mt-2 text-slate-700"><li><b>مثال صحفي:</b> «لماذا ينصرف القرّاء عن التغطية المحلية؟» → السبب الجذري: نقص شبكة المصادر.</li></ul>
-          </div>
-          <div class="prompt"><div class="prompt-title">💬 قالب برومبت (اختر الإطار):</div>
-<pre>حلّل موضوع: [العنوان] باستخدام أحد الأطر (5Whys/SCAMPER/قبعات/خريطة/Starbursting).
+<div class="toolbar">
+<button id="toggleAll" class="btn">🔄 فتح/إغلاق الكل</button>
+<button id="print" class="btn">🖨️ طباعة/تصدير PDF</button>
+</div>
+<main>
+<header>
+<h1>كيف تستخدم ChatGPT للعصف الذهني؟</h1>
+<p>العصف الذهني ليس إلهامًا عابرًا؛ بل عملية يمكن إدارتها. هذه الأطر السبعة تمنحك خطوات عملية + برومبتات جاهزة لتوليد أفكار صحفية بسرعة ثم تنقيتها وتطويرها.</p>
+</header>
+<section class="sec" id="s1">
+<details>
+<summary><span class="num">1</span> الأطر الكلاسيكية (Frameworks) <a class="anchor" href="#s1">#</a></summary>
+<div class="desc">
+5 Whys, SCAMPER, قبعات التفكير الست، خرائط ذهنية، Starbursting. اختر الإطار الأنسب لتعميق الفكرة سريعًا.
+<ul><li><b>مثال صحفي:</b> «لماذا ينصرف القرّاء عن التغطية المحلية؟» → السبب الجذري: نقص شبكة المصادر.</li></ul>
+</div>
+<div class="prompt" id="p-1"><button class="copy" data-copy="p-1">نسخ البرومبت</button><pre>حلّل موضوع: [العنوان] باستخدام أحد الأطر (5Whys/SCAMPER/قبعات/خريطة/Starbursting).
 - 5Whys: "لماذا → لأن" حتى السبب الجذري + 3 حلول خلال أسبوعين.
-- SCAMPER: فكرتان لكل حرف مع وصف التنفيذ الصحفي.</pre>
-          </div>
-        </div>
-
-        <div class="card c2" style="grid-column:3/5;">
-          <div class="meta"><span class="num">2</span><h3>وجهات نظر مختلفة (Different Perspectives)</h3><span class="badge">👥</span></div>
-          <div class="desc">انظر للموضوع بأدوار: محرّر، مراسل ميداني، محلّل بيانات، قارئ متشكّك، خبير أخلاقيات.</div>
-          <div class="prompt"><div class="prompt-title">💬 برومبت جاهز:</div>
-<pre>نخطط لتغطية: [موضوع]. تصرّف كـ(محرر ← مراسل ← محلّل بيانات ← قارئ ← خبير أخلاقيات).
-لكل دور: 8 أسئلة/مخاوف وزاويتان تحقيق قصصي. ادمج المتكرر واقترح 5 زوايا نهائية.</pre>
-          </div>
-        </div>
-
-        <div class="card c3" style="grid-column:5/7;">
-          <div class="meta"><span class="num">3</span><h3>يوم العكس (Opposite Day)</h3><span class="badge">↔︎</span></div>
-          <div class="desc">فكّر بما يجعل التجربة أسوأ… ثم اعكسه إلى إجراءات تحسين.</div>
-          <div class="prompt"><div class="prompt-title">💬 برومبت جاهز:</div>
-<pre>أعطني 15 طريقة قد تجعل [الجمهور] غير راضٍ عن [المحتوى].
-اعكس كل نقطة إلى إجراء عملي، ثم رتّبها وفق (الأثر × الجهد) مع توصية أول 5 إجراءات.</pre>
-          </div>
-        </div>
-      </div>
-
-      <!-- الصف الأوسط -->
-      <div class="row middle" style="grid-column:1/-1; grid-row:2;">
-        <div class="card c4" style="grid-column:1/4;">
-          <div class="meta"><span class="num">4</span><h3>خطوة بخطوة (Step-by-Step)</h3><span class="badge">سلم ⤴︎</span></div>
-          <div class="desc">موضوع عام → محاور → أسئلة مفتاحية → مصادر/بيانات → زوايا → عناوين/خطّاف → خطة إنتاج.</div>
-          <div class="prompt"><div class="prompt-title">💬 برومبت متسلسل:</div>
-<pre>اذكر 12 محورًا فرعيًا لموضوع: [موضوع].
+- SCAMPER: فكرتان لكل حرف مع وصف التنفيذ الصحفي.</pre></div>
+</details>
+</section>
+<section class="sec" id="s2">
+<details>
+<summary><span class="num">2</span> وجهات نظر مختلفة (Different Perspectives) <a class="anchor" href="#s2">#</a></summary>
+<div class="desc">انظر للموضوع بأدوار: محرّر، مراسل ميداني، محلّل بيانات، قارئ متشكّك، خبير أخلاقيات.</div>
+<div class="prompt" id="p-2"><button class="copy" data-copy="p-2">نسخ البرومبت</button><pre>نخطط لتغطية: [موضوع]. تصرّف كـ(محرر ← مراسل ← محلّل بيانات ← قارئ ← خبير أخلاقيات).
+لكل دور: 8 أسئلة/مخاوف وزاويتان تحقيق قصصي. ادمج المتكرر واقترح 5 زوايا نهائية.</pre></div>
+</details>
+</section>
+<section class="sec" id="s3">
+<details>
+<summary><span class="num">3</span> يوم العكس (Opposite Day) <a class="anchor" href="#s3">#</a></summary>
+<div class="desc">فكّر بما يجعل التجربة أسوأ… ثم اعكسه إلى إجراءات تحسين.</div>
+<div class="prompt" id="p-3"><button class="copy" data-copy="p-3">نسخ البرومبت</button><pre>أعطني 15 طريقة قد تجعل [الجمهور] غير راضٍ عن [المحتوى].
+اعكس كل نقطة إلى إجراء عملي، ثم رتّبها وفق (الأثر × الجهد) مع توصية أول 5 إجراءات.</pre></div>
+</details>
+</section>
+<section class="sec" id="s4">
+<details>
+<summary><span class="num">4</span> خطوة بخطوة (Step-by-Step) <a class="anchor" href="#s4">#</a></summary>
+<div class="desc">موضوع عام → محاور → أسئلة مفتاحية → مصادر/بيانات → زوايا → عناوين/خطّاف → خطة إنتاج.</div>
+<div class="prompt" id="p-4"><button class="copy" data-copy="p-4">نسخ البرومبت</button><pre>اذكر 12 محورًا فرعيًا لموضوع: [موضوع].
 لكل محور: 3 أسئلة تحقيقيّة ومصادر/بيانات علنية.
 استخرج 10 زوايا قصصية، ثم 6 عناوين وخطّاف لكل زاوية.
-صِغ خطة إنتاج أسبوعين: (مهمة/مسؤول/موعد/مؤشر نجاح).</pre>
-          </div>
-        </div>
-
-        <div class="card c5" style="grid-column:4/7;">
-          <div class="meta"><span class="num">5</span><h3>الكلمات الإبداعية (Creative Words)</h3><span class="badge">📣</span></div>
-          <div class="desc">اختر كلمة موجِّهة واحدة لكل جلسة: غير متوقَّع، بديل جريء، إنسانيّ النزعة، غير مُتحيز…</div>
-          <div class="prompt"><div class="prompt-title">💬 أمثلة جاهزة:</div>
-<pre>• أعطني 12 فكرة <غير متوقعة> لتغطية [موضوع].
+صِغ خطة إنتاج أسبوعين: (مهمة/مسؤول/موعد/مؤشر نجاح).</pre></div>
+</details>
+</section>
+<section class="sec" id="s5">
+<details>
+<summary><span class="num">5</span> الكلمات الإبداعية (Creative Words) <a class="anchor" href="#s5">#</a></summary>
+<div class="desc">اختر كلمة موجِّهة واحدة لكل جلسة: غير متوقَّع، بديل جريء، إنسانيّ النزعة، غير مُتحيز…</div>
+<div class="prompt" id="p-5"><button class="copy" data-copy="p-5">نسخ البرومبت</button><pre>• أعطني 12 فكرة <غير متوقعة> لتغطية [موضوع].
 • اقترح 10 زوايا <إنسانية بعمق> لملف [موضوع] مع مصادر محتملة.
-• أعد صياغة 5 عناوين بأسلوب متميز وقابل للمشاركة (دون تهويل).</pre>
-          </div>
-        </div>
-      </div>
-
-      <!-- الصف السفلي -->
-      <div class="row bottom" style="grid-column:1/-1; grid-row:3;">
-        <div class="card c6" style="grid-column:1/4;">
-          <div class="meta"><span class="num">6</span><h3>سلسلة الكثافة (Chain of Density)</h3><span class="badge">⛓︎</span></div>
-          <div class="desc">دورات قصيرة لإضافة زوايا/معلومات ناقصة مع الحفاظ على الإيجاز.</div>
-          <div class="prompt"><div class="prompt-title">💬 برومبت شامل:</div>
-<pre>سنجري سلسلة كثافة حول [موضوع]:
+• أعد صياغة 5 عناوين بأسلوب متميز وقابل للمشاركة (دون تهويل).</pre></div>
+</details>
+</section>
+<section class="sec" id="s6">
+<details>
+<summary><span class="num">6</span> سلسلة الكثافة (Chain of Density) <a class="anchor" href="#s6">#</a></summary>
+<div class="desc">دورات قصيرة لإضافة زوايا/معلومات ناقصة مع الحفاظ على الإيجاز.</div>
+<div class="prompt" id="p-6"><button class="copy" data-copy="p-6">نسخ البرومبت</button><pre>سنجري سلسلة كثافة حول [موضوع]:
 1) اكتب 10 أفكار أساسية.
 2) حدّد 3 فجوات مهمة.
 3) أعد الكتابة بإضافة الفجوات من دون زيادة الطول.
-كرر 5 مرات وقدّم النسخة النهائية مع ملاحظات التحسين.</pre>
-          </div>
-        </div>
-
-        <div class="card c7" style="grid-column:4/7;">
-          <div class="meta"><span class="num">7</span><h3>التفكير بالمبادئ الأولى (First Principles)</h3><span class="badge">◿ مكعب</span></div>
-          <div class="desc">فكّك المشكلة إلى حقائق أولية، وافصل الافتراضات؛ ثم أعد التركيب من الصفر.</div>
-          <div class="prompt"><div class="prompt-title">💬 برومبت جاهز:</div>
-<pre>طبّق مبادئ أولى على: [تحدّي].
+كرر 5 مرات وقدّم النسخة النهائية مع ملاحظات التحسين.</pre></div>
+</details>
+</section>
+<section class="sec" id="s7">
+<details>
+<summary><span class="num">7</span> التفكير بالمبادئ الأولى (First Principles) <a class="anchor" href="#s7">#</a></summary>
+<div class="desc">فكّك المشكلة إلى حقائق أولية، وافصل الافتراضات؛ ثم أعد التركيب من الصفر.</div>
+<div class="prompt" id="p-7"><button class="copy" data-copy="p-7">نسخ البرومبت</button><pre>طبّق مبادئ أولى على: [تحدّي].
 اعرض: الهدف، الحقائق المؤكدة، الافتراضات، القيود.
-اقترح 3 حلول مبنية فقط على الحقائق مع خطة اختبار أسبوع ومقاييس نجاح.</pre>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer" style="grid-column:1/-1;">
-        <div class="text-base font-bold">استخدم هذه الأطر لتفكير أعمق، أفكار أوسع، وإبداع بلا حدود مع ChatGPT.</div>
-        <small class="block mt-1">✏️ 💡 💻</small>
-      </div>
-    </section>
-  </main>
-
-  <!-- تصدير PDF كصورة واحدة -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script>
-    const { jsPDF } = window.jspdf;
-    const sheet = document.getElementById('sheet');
-
-    async function exportPDF(mode='full'){
-      const margin = 10; // mm
-      await document.fonts.ready; // تأكد من تحميل الخطوط قبل الالتقاط
-
-      // حوّل الورقة إلى Canvas عالي الدقة
-      const canvas = await html2canvas(sheet, {
-        scale: 3,               // دقة أعلى
-        useCORS: true,
-        backgroundColor: null,  // احفظ التدرجات كما هي
-        logging: false
-      });
-
-      const img = canvas.toDataURL('image/jpeg', 0.98);
-      const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a2', compress:true });
-
-      const pageW = pdf.internal.pageSize.getWidth();
-      const pageH = pdf.internal.pageSize.getHeight();
-
-      // العرض المستهدف داخل الصفحة
-      let targetW = pageW - margin*2;
-      if (mode === 'half') targetW = (pageW - margin*2) * 0.5; // نصف صفحة
-      let targetH = targetW * canvas.height / canvas.width;
-
-      // في حال تجاوز الارتفاع، اضبط على حسب الارتفاع
-      if (targetH > pageH - margin*2){
-        targetH = pageH - margin*2;
-        targetW = targetH * canvas.width / canvas.height;
-      }
-
-      const x = (pageW - targetW) / 2;
-      const y = (pageH - targetH) / 2;
-
-      pdf.addImage(img, 'JPEG', x, y, targetW, targetH, '', 'FAST');
-      pdf.save('chatgpt-brainstorm-a2.pdf');
-    }
-
-    document.getElementById('btnPdfFull').addEventListener('click', () => exportPDF('full'));
-    document.getElementById('btnPdfHalf').addEventListener('click', () => exportPDF('half'));
-  </script>
+اقترح 3 حلول مبنية فقط على الحقائق مع خطة اختبار أسبوع ومقاييس نجاح.</pre></div>
+</details>
+</section>
+<footer class="footer">
+<div>استخدم هذه الأطر لتفكير أعمق، أفكار أوسع، وإبداع بلا حدود مع ChatGPT.</div>
+<small>✏️ 💡 💻</small>
+</footer>
+</main>
+<script>
+document.querySelectorAll('button[data-copy]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id=btn.getAttribute('data-copy');
+    const text=document.querySelector('#'+id+' pre').innerText;
+    navigator.clipboard.writeText(text).then(()=>{
+      const old=btn.textContent;
+      btn.textContent='تم النسخ ✅';
+      setTimeout(()=>btn.textContent=old,2000);
+    });
+  });
+});
+const toggleBtn=document.getElementById('toggleAll');
+toggleBtn.addEventListener('click',()=>{
+  const details=document.querySelectorAll('.sec details');
+  const allOpen=[...details].every(d=>d.open);
+  details.forEach(d=>d.open=!allOpen);
+});
+document.getElementById('print').addEventListener('click',()=>window.print());
+if(location.hash){
+  const target=document.querySelector(location.hash);
+  if(target){
+    const det=target.querySelector('details');
+    det.open=true;
+    target.scrollIntoView();
+  }
+}
+</script>
 </body>
 </html>
