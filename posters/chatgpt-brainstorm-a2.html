@@ -75,7 +75,28 @@
     margin-bottom:1rem;
   }
 
-  .sec h2, .sec h3, .fw-card summary{color:#ffffff;}
+  .sec h2, .sec h3{color:#ffffff;}
+
+  /* التابات داخل الأطر الكلاسيكية */
+  .fw-card summary {
+    display: flex;
+    justify-content: center;  /* توسيط النص أفقياً */
+    align-items: center;       /* توسيط عمودياً */
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #f2994a, #f2c94c, #2aa7b9); /* برتقالي → ذهبي → فيروزي */
+    color: #1b2136; /* النص غامق ليتباين */
+    font-weight: 700;
+    transition: all 0.25s ease;
+    text-align: center;
+  }
+
+  .fw-card summary:hover {
+    background: linear-gradient(135deg, #2aa7b9, #f2c94c, #f2994a); /* عكس الألوان عند hover */
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  }
 
   details[open]{outline:1px solid rgba(45,156,219,.35);}
 
