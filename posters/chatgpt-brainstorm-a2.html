@@ -26,8 +26,20 @@
     line-height:1.7;
     margin:0;
     padding-top:60px;
-    background:linear-gradient(180deg,var(--bg) 0%, var(--bg-2) 35%, #10223a 100%);
-    color:var(--ink);
+  }
+
+  body{
+    background: linear-gradient(180deg,
+      #0f1b2d 0%,
+      #1d2a44 15%,
+      #2aa7b9 35%,
+      #f2994a 55%,
+      #f2c94c 70%,
+      #73364a 100%
+    );
+    color: var(--ink);
+    min-height: 100vh;
+    background-attachment: fixed;
   }
 
   .toolbar{
@@ -114,11 +126,9 @@
     transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .06s ease, box-shadow .18s ease;
   }
 
-  .btn{padding:.4rem .8rem;font-size:.9rem;cursor:pointer;}
+  .btn, .copy-btn{padding:.45rem .8rem;font-size:.9rem;cursor:pointer;}
 
-  .copy-btn, .copy{padding:.2rem .5rem;font-size:.8rem;cursor:pointer;}
-
-  .copy{position:absolute;top:.5rem;left:.5rem;}
+  .copy{position:absolute;top:.5rem;left:.5rem;padding:.2rem .5rem;font-size:.8rem;cursor:pointer;}
 
   button:hover, .btn:hover, .copy-btn:hover, .copy:hover{
     background: linear-gradient(180deg, var(--sun), var(--rust));
