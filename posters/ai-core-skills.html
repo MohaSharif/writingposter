@@ -6,26 +6,70 @@
   <title>مهارات الأساس في عصر الذكاء الاصطناعي | البوسترات المصممة</title>
   <style>
     :root{ --bg:#0A0F29; --core:#00D1FF; --orbit1:#FFD44D; --orbit2:#A3F7FF; --text:#FFFFFF; }
-    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:System-ui,-apple-system,Segoe UI,Roboto,"Cairo",Tahoma,Arial}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:System-ui,-apple-system,Segoe UI,Roboto,"Cairo",Tahoma,Arial}
     .wrap{max-width:1200px;margin:auto;padding:16px}
     .title{font-weight:900;text-align:center;margin:8px 0 16px}
     .subtitle{opacity:.85;text-align:center;margin:-6px 0 20px}
-    .poster{ position:relative; margin:0 auto 16px; width:min(92vw,1080px); aspect-ratio:4/5; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 50px rgba(0,0,0,.45); background:var(--bg); }
-    .poster-head{ position:absolute;left:50%;transform:translateX(-50%); top:14px;text-align:center;filter:drop-shadow(0 0 12px rgba(0,209,255,.35)); }
+
+    .poster{
+      position:relative;margin:0 auto 16px;width:min(92vw,1080px);
+      aspect-ratio:4/5;border-radius:16px;overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 10px 50px rgba(0,0,0,.45);background:var(--bg);
+    }
+    .poster-head{position:absolute;left:50%;transform:translateX(-50%);top:14px;text-align:center;filter:drop-shadow(0 0 12px rgba(0,209,255,.35))}
     .poster-head h1{margin:0;font-weight:900;color:var(--orbit1)}
     .poster-head small{display:block;opacity:.85}
+
     .bg-streams{position:absolute;inset:0;opacity:.3;pointer-events:none}
     .orbits{position:absolute;inset:0;pointer-events:none}
-    .core{ position:absolute;left:50%;top:50%;transform:translate(-50%,-50%); display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center; border-radius:999px;border:1px solid rgba(255,255,255,.16); box-shadow:0 0 60px rgba(0,209,255,.4), inset 0 0 40px rgba(255,255,255,.06); background:radial-gradient(circle at 50% 40%, var(--core), rgba(0,209,255,.2) 60%, rgba(0,209,255,.08) 80%); color:#031018; }
-    .node{ position:absolute;display:flex;align-items:center;justify-content:center;text-align:center; border-radius:999px; color:#0A0F29; padding:2px 6px; border:1px solid rgba(255,255,255,.10); filter:saturate(110%); transform:translate(-50%,-50%); user-select:none; }
+
+    .core{
+      position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+      border-radius:999px;border:1px solid rgba(255,255,255,.16);
+      box-shadow:0 0 60px rgba(0,209,255,.4), inset 0 0 40px rgba(255,255,255,.06);
+      background:radial-gradient(circle at 50% 40%, var(--core), rgba(0,209,255,.2) 60%, rgba(0,209,255,.08) 80%);
+      color:#031018;
+    }
+
+    .node{
+      position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;
+      border-radius:999px;color:#0A0F29;padding:2px 6px;
+      border:1px solid rgba(255,255,255,.10);filter:saturate(110%);
+      transform:translate(-50%,-50%);user-select:none;
+      transition:transform .12s ease;
+    }
+    .node:hover{ transform:translate(-50%,-50%) scale(1.03); }
     .node.glow{box-shadow:0 0 0 2px rgba(255,255,255,.12), 0 0 30px rgba(255,212,77,.4)}
     .node .inner{line-height:1.12;padding:0 4px}
     .node .icon{margin-bottom:2px}
     .node .name{font-weight:700;white-space:normal;word-break:break-word;overflow-wrap:anywhere}
-    .cta{ position:absolute;left:0;right:0;bottom:0; height:10%;min-height:58px;padding:0 16px; display:flex;align-items:center;justify-content:space-between; background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.04)); }
+
+    .cta{
+      position:absolute;left:0;right:0;bottom:0;height:10%;min-height:58px;padding:0 16px;
+      display:flex;align-items:center;justify-content:space-between;
+      background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.04));
+    }
     .pill{background:rgba(255,255,255,.10);padding:8px 12px;border-radius:999px}
     .qr{display:block}
     a, a:visited{color:#A3F7FF}
+
+    /* ====== Tooltip ====== */
+    .tooltip {
+      position: fixed; z-index: 1000; max-width: 280px;
+      background: rgba(10,15,41,.96); color: #EAFBFF;
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 8px 10px; border-radius: 10px;
+      font-size: 12px; line-height: 1.4;
+      box-shadow: 0 10px 30px rgba(0,0,0,.45);
+      pointer-events: none; transform: translate(-50%,-120%);
+      opacity: 0; visibility: hidden; transition: opacity .12s ease;
+      direction: rtl;
+    }
+    .tooltip.show { opacity: 1; visibility: visible; }
+    .tooltip .t-title { font-weight:800; margin-bottom: 4px; color:#A3F7FF; }
   </style>
 </head>
 <body>
@@ -36,6 +80,7 @@
     </div>
 
     <div id="poster" class="poster" aria-label="بوستر مهارات الأساس في عصر الذكاء الاصطناعي">
+      <!-- خطوط بيانات خفيفة -->
       <svg class="bg-streams" viewBox="0 0 1200 1500" preserveAspectRatio="none" aria-hidden="true">
         <g stroke="rgba(0,209,255,.08)" stroke-width="1" fill="none">
           <path d="M 0 100 C 200 280, 360 40, 560 320" />
@@ -44,11 +89,13 @@
         </g>
       </svg>
 
+      <!-- العنوان داخل البوستر -->
       <div class="poster-head">
         <h1 id="h1" style="font-size:32px;">مهارات الأساس في عصر الذكاء الاصطناعي</h1>
         <small id="h2" style="font-size:14px;">(Core Skills for the AI Era)</small>
       </div>
 
+      <!-- دوائر المدارين -->
       <svg class="orbits" id="orbits" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         <circle cx="50" cy="50" r="35" fill="none" stroke="rgba(255,255,255,.06)" stroke-dasharray="8 6"/>
         <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,.04)" stroke-dasharray="6 8"/>
@@ -56,18 +103,21 @@
         <g id="links2" stroke="rgba(255,255,255,.05)" stroke-width="0.5"></g>
       </svg>
 
+      <!-- المركز -->
       <div id="core" class="core" style="width:40%;height:40%;">
         <div style="font-size:clamp(18px,3.6vw,36px);font-weight:900">الذكاء الاصطناعي</div>
         <div style="opacity:.9">(AI Core)</div>
         <div style="opacity:.75;font-size:12px;margin-top:4px;">المحرك المركزي للعالم القادم</div>
       </div>
 
+      <!-- الشريط السفلي -->
       <div class="cta">
         <div>
           <span class="pill">تعلّم اليوم لتقود الغد ✦</span>
           <span class="pill" style="margin-inline-start:6px;opacity:.9">Learn Today, Lead Tomorrow</span>
         </div>
         <a class="qr" href="https://mohasharif.github.io/writingposter/" title="المنصة التعليمية" target="_blank" rel="noreferrer">
+          <!-- QR Placeholder -->
           <svg width="68" height="68" viewBox="0 0 64 64" aria-hidden="true">
             <rect width="64" height="64" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.25)"/>
             <g fill="#EAFBFF" stroke="#EAFBFF">
@@ -93,7 +143,10 @@
     </div>
   </div>
 
+  <div id="tooltip" class="tooltip" role="status" aria-live="polite" aria-hidden="true"></div>
+
   <script>
+    // ===== البيانات =====
     const CORE_SKILLS = [
       ["📝","هندسة البرومبتات","صياغة أوامر دقيقة لإنتاج أفضل المخرجات"],
       ["🧠","التفكير النقدي","تحليل الافتراضات والتحقق من صحة المعلومات"],
@@ -128,50 +181,101 @@
       ["🌐","آداب المصدر المفتوح","احترام الرخص والمساهمة التعاونية"],
       ["🧘‍♂️","الرفاه الرقمي","التوازن بين التقنية والصحة النفسية"],
     ];
+
+    // ===== أدوات =====
     const poster = document.getElementById('poster');
     const links1 = document.getElementById('links1');
     const links2 = document.getElementById('links2');
+    const tooltip = document.getElementById('tooltip');
 
-    function polar(cx,cy,r,deg){ const rad = deg*Math.PI/180; return {x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad)}; }
+    const polar=(cx,cy,r,deg)=>{const rad=deg*Math.PI/180;return {x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad)}};
 
+    function showTooltip(title, desc, x, y){
+      tooltip.innerHTML = '<div class="t-title">'+title+'</div>' + (desc||'');
+      tooltip.classList.add('show'); tooltip.setAttribute('aria-hidden','false');
+      positionTooltip(x,y);
+    }
+    function hideTooltip(){
+      tooltip.classList.remove('show'); tooltip.setAttribute('aria-hidden','true');
+    }
+    function positionTooltip(x,y){
+      const pad=12;
+      // نؤجل القياس حتى تُعرض المحتويات
+      const rect=tooltip.getBoundingClientRect();
+      let nx = Math.min(window.innerWidth - rect.width/2 - pad, Math.max(rect.width/2 + pad, x));
+      let ny = Math.max(rect.height + pad, y);
+      tooltip.style.left = nx + 'px';
+      tooltip.style.top  = (ny - 18) + 'px';
+    }
+    function attachTooltip(node, title, desc){
+      node.addEventListener('mouseenter', e => {
+        if(!desc) return;
+        showTooltip(title, desc, e.clientX, e.clientY);
+      });
+      node.addEventListener('mousemove', e => positionTooltip(e.clientX, e.clientY));
+      node.addEventListener('mouseleave', hideTooltip);
+      // دعم اللمس/النقر
+      node.addEventListener('touchstart', e => {
+        const t = e.touches[0]; if(!t||!desc) return;
+        showTooltip(title, desc, t.clientX, t.clientY);
+        setTimeout(hideTooltip, 1800);
+      }, {passive:true});
+      node.addEventListener('click', e => {
+        if(!desc) return;
+        showTooltip(title, desc, e.clientX, e.clientY);
+        setTimeout(hideTooltip, 1600);
+      });
+    }
+
+    // ===== توليد العقد =====
     function render(){
       document.querySelectorAll('.node').forEach(n=>n.remove());
       links1.innerHTML=''; links2.innerHTML='';
 
       const rect = poster.getBoundingClientRect(); const w=rect.width, h=rect.height; const min=Math.min(w,h);
-      const coreR = 0.20*min; const core = document.getElementById('core');
+
+      // المركز
+      const coreR = 0.20*min;
+      const core = document.getElementById('core');
       core.style.width = (coreR*2)+'px'; core.style.height = (coreR*2)+'px';
       document.getElementById('h1').style.fontSize = Math.max(22, w*0.035) + 'px';
       document.getElementById('h2').style.fontSize = Math.max(12, w*0.014) + 'px';
 
+      // المدارات
       const r1 = 0.35 * (Math.min(w,h)/2) * 2;
       const r2 = 0.46 * (Math.min(w,h)/2) * 2;
       const d1 = Math.max(92, w*0.09);  // مدار 1
       const d2 = Math.max(76, w*0.07);  // مدار 2
 
-      placeRing(CORE_SKILLS, r1, d1, '#FFD44D', true, links1);
-      placeRing(SUPPORT_SKILLS, r2, d2, '#A3F7FF', false, links2);
+      placeRing(CORE_SKILLS,   r1, d1, '#FFD44D', true,  links1);
+      placeRing(SUPPORT_SKILLS,r2, d2, '#A3F7FF', false, links2);
     }
 
     function placeRing(data, radiusPx, sizePx, color, glow, linkGroup){
       const rect = poster.getBoundingClientRect(); const w=rect.width, h=rect.height; const cx=w/2, cy=h/2;
-      const count=data.length; const step=360/count; const start = -90 + (glow?0:8);
+      const count=data.length; const step=360/count; const start=-90 + (glow?0:8);
+
       for(let i=0;i<count;i++){
         const angle=start+i*step; const p=polar(cx,cy,radiusPx,angle);
+
         const node=document.createElement('div');
         node.className='node'+(glow?' glow':'');
         node.style.cssText += `width:${sizePx}px;height:${sizePx}px;left:${p.x}px;top:${p.y}px;background:${color};`;
+
         const [icon,name,desc]=data[i];
         node.innerHTML=`
-          <div class="inner" title="${desc||''}">
+          <div class="inner">
             <div class="icon" style="font-size:${Math.max(18, sizePx*0.22)}px">${icon}</div>
             <div class="name" style="font-size:${Math.max(10, sizePx*0.11)}px">${name}</div>
           </div>`;
+
+        attachTooltip(node, name, desc);
         poster.appendChild(node);
 
         const xPct=(p.x/w)*100, yPct=(p.y/h)*100;
         const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
-        ln.setAttribute('x1','50'); ln.setAttribute('y1','50'); ln.setAttribute('x2',String(xPct)); ln.setAttribute('y2',String(yPct));
+        ln.setAttribute('x1','50'); ln.setAttribute('y1','50');
+        ln.setAttribute('x2',String(xPct)); ln.setAttribute('y2',String(yPct));
         linkGroup.appendChild(ln);
       }
     }
