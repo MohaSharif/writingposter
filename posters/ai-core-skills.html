@@ -14,7 +14,7 @@
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:System-ui,-apple-system,Segoe UI,Roboto,"Cairo",Tahoma,Arial}
     .wrap{max-width:1200px;margin:auto;padding:16px; padding-top:calc(16px + var(--safe-top)); padding-bottom:calc(16px + var(--safe-bottom));}
 
-    /* عنوان خارجي (يختفي على الهاتف لمنع التكرار) */
+    /* العنوان خارج البوستر (مخفى على الهاتف لمنع التكرار) */
     .title{font-weight:900;text-align:center;margin:6px 0 12px}
     .title .ar{font-size:clamp(18px,4.2vw,32px); color:#FFD44D; text-shadow:0 0 18px rgba(255,212,77,.35)}
     .title .en{opacity:.85; font-size:clamp(11px,2.3vw,16px); margin-top:-4px}
@@ -26,6 +26,7 @@
       aspect-ratio:4/5; border-radius:16px; overflow:hidden;
       border:1px solid rgba(255,255,255,.08);
       box-shadow:0 10px 50px rgba(0,0,0,.45); background:var(--bg);
+      transform-origin: center top;
     }
     /* fallback إذا aspect-ratio غير مدعوم */
     .no-aspect .poster{ height: calc(min(96vw,1080px) * 1.25); }
@@ -51,6 +52,7 @@
       box-shadow:0 0 60px rgba(0,209,255,.4), inset 0 0 40px rgba(255,255,255,.06);
       background:radial-gradient(circle at 50% 40%, var(--core), rgba(0,209,255,.2) 60%, rgba(0,209,255,.08) 80%);
       color:#031018;
+      padding:4px;
     }
 
     /* عقد المهارات */
@@ -64,7 +66,6 @@
     .node .inner{ line-height:1.12; padding:0 4px; width:88% }
     .node .icon{ margin-bottom:2px }
     .node .name{ font-weight:700; white-space:normal; word-break:break-word; overflow-wrap:anywhere; letter-spacing:-.2px }
-
     .node:hover{ transform:translate(-50%,-50%) scale(1.03) }
     .node.glow{ box-shadow:0 0 0 2px rgba(255,255,255,.12), 0 0 30px rgba(255,212,77,.35) }
 
@@ -101,6 +102,20 @@
     .tooltip .t-title { font-weight:800; margin-bottom: 4px; color:#A3F7FF; font-size: 12.5px }
     @media (pointer:coarse){ .node:hover{ transform:translate(-50%,-50%) } .tooltip{ font-size:13.5px; padding:12px 14px; border-radius:14px; transform: translate(-50%,-110%) } .tooltip .t-title{ font-size:14px } }
     @media (prefers-reduced-motion: reduce){ .node, .tooltip{ transition:none } }
+
+    /* أزرار التكبير/التصغير */
+    .zoom-controls{
+      position:absolute; top:10px; inset-inline-end:10px; z-index:20;
+      display:flex; gap:6px; align-items:center;
+    }
+    .zoom-btn{
+      background:rgba(255,255,255,.1); color:#EAFBFF; border:1px solid rgba(255,255,255,.18);
+      width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+      font-weight:800; cursor:pointer; user-select:none;
+      backdrop-filter: blur(4px);
+    }
+    .zoom-btn:active{ transform: translateY(1px) }
+    .zoom-level{color:#EAFBFF; font-size:12px; opacity:.9; min-width:46px; text-align:center}
   </style>
 </head>
 <body>
@@ -112,6 +127,14 @@
 
     <div id="poster-root">
       <div id="poster" class="poster" aria-label="بوستر مهارات الأساس في عصر الذكاء الاصطناعي">
+        <!-- Zoom controls -->
+        <div class="zoom-controls" aria-label="Zoom controls">
+          <button id="zoomOut" class="zoom-btn" title="تصغير">−</button>
+          <div id="zoomLevel" class="zoom-level">100%</div>
+          <button id="zoomIn" class="zoom-btn" title="تكبير">+</button>
+          <button id="zoomReset" class="zoom-btn" title="إعادة">⟳</button>
+        </div>
+
         <!-- خلفية -->
         <svg class="bg-streams" viewBox="0 0 1200 1500" preserveAspectRatio="none" aria-hidden="true">
           <g stroke="rgba(0,209,255,.08)" stroke-width="1" fill="none">
@@ -215,9 +238,9 @@
       ["🧘‍♂️","الرفاه الرقمي","التوازن بين التقنية والصحة النفسية"],
     ];
 
-    // ===== أدوات =====
-    const poster   = document.getElementById('poster');
+    // ===== أدوات عامة =====
     const rootWrap = document.getElementById('poster-root');
+    const poster   = document.getElementById('poster');
     const links1   = document.getElementById('links1');
     const links2   = document.getElementById('links2');
     const tooltip  = document.getElementById('tooltip');
@@ -228,7 +251,19 @@
     const polar=(cx,cy,r,deg)=>{ const rad=deg*Math.PI/180; return {x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad)}; };
     const clamp=(v,min,max)=>Math.max(min, Math.min(max, v));
 
-    // تولتيب
+    // ===== Zoom =====
+    let scale = 1;
+    const minScale = 0.7, maxScale = 1.7, step=0.1;
+    const zoomLevel = document.getElementById('zoomLevel');
+    function applyScale(){
+      poster.style.transform = `scale(${scale})`;
+      zoomLevel.textContent = Math.round(scale*100) + "%";
+    }
+    document.getElementById('zoomIn').onclick  = ()=>{ scale = clamp(scale+step, minScale, maxScale); applyScale(); };
+    document.getElementById('zoomOut').onclick = ()=>{ scale = clamp(scale-step, minScale, maxScale); applyScale(); };
+    document.getElementById('zoomReset').onclick = ()=>{ scale = 1; applyScale(); };
+
+    // ===== Tooltip =====
     function showTooltip(title, desc, x, y){
       if(!desc){ hideTooltip(); return; }
       tooltip.innerHTML = '<div class="t-title">'+title+'</div>' + desc;
@@ -251,9 +286,47 @@
       node.addEventListener('click', e => { if (matchMedia('(pointer:coarse)').matches){ showTooltip(title, desc, e.clientX, e.clientY); clearTimeout(node.__tt); node.__tt=setTimeout(hideTooltip, 1800);} });
     }
 
-    // حساب التخطيط
+    // ===== قياس وملاءمة النص داخل الدائرة (Autofit) =====
+    function autofitNode(node, sizePx){
+      const nameEl = node.querySelector('.name');
+      const iconEl = node.querySelector('.icon');
+      if(!nameEl || !iconEl) return;
+
+      // حدود المساحة المتاحة للنص تحت الأيقونة
+      const pad = 8;
+      const maxW = sizePx - pad*2;
+      const maxH = sizePx - pad*2 - iconEl.getBoundingClientRect().height;
+
+      let nameFS = parseFloat(getComputedStyle(nameEl).fontSize);
+      let iconFS = parseFloat(getComputedStyle(iconEl).fontSize);
+
+      // قلّل الخط تدريجيًا حتى يدخل بالكامل
+      let guard = 0;
+      while (guard++ < 30 && (nameEl.scrollHeight > maxH || nameEl.scrollWidth > maxW)) {
+        nameFS = Math.max(8, nameFS - 1);
+        nameEl.style.fontSize = nameFS + "px";
+      }
+      // إن بقي ارتفاع زائد، قلّل الأيقونة قليلًا ثم أعد المحاولة
+      guard = 0;
+      while (guard++ < 10 && nameEl.scrollHeight > maxH) {
+        iconFS = Math.max(14, iconFS - 1);
+        iconEl.style.fontSize = iconFS + "px";
+        nameFS = Math.max(8, nameFS - 1);
+        nameEl.style.fontSize = nameFS + "px";
+      }
+      // كلمّة طويلة جدًا؟ شدّد التفافها قليلًا
+      if (nameEl.scrollHeight > maxH) {
+        nameEl.style.letterSpacing = "-0.4px";
+        nameEl.style.lineHeight = "1.08";
+      }
+    }
+
+    // ===== تخطيط وتوزيع =====
     function computeLayout(){
-      const { width:w, height:h } = poster.getBoundingClientRect();
+      // نعتمد على clientWidth/Height (غير متأثرين بالـtransform)
+      const w = poster.clientWidth;
+      const h = poster.clientHeight;
+
       const isPhone  = w < 520;
       const isTablet = w >= 520 && w < 900;
 
@@ -266,8 +339,8 @@
       const r2 = (isPhone ? 0.41 : isTablet ? 0.44 : 0.46) * Math.min(w,h);
 
       // أحجام العقد
-      const d1 = clamp(w * (isPhone ? 0.105 : 0.09), 54, isTablet ? 96 : 112); // الأساسي
-      const d2 = clamp(w * (isPhone ? 0.090 : 0.070), 46, isTablet ? 86 : 100); // المساند
+      const d1 = clamp(w * (isPhone ? 0.105 : 0.09), 52, isTablet ? 96 : 112); // الأساسي
+      const d2 = clamp(w * (isPhone ? 0.090 : 0.070), 44, isTablet ? 86 : 100); // المساند
 
       // حجم المركز
       const core = document.getElementById('core');
@@ -275,8 +348,8 @@
       core.style.width  = coreD + 'px';
       core.style.height = coreD + 'px';
 
-      // زاوية «فتحة» أسفل البوستر لتجنب تكدس العقد قرب الـCTA/QR
-      const gapDeg = isPhone ? 80 : (isTablet ? 60 : 0); // 80° على الهاتف
+      // فتحة سفلية أكبر على الهاتف لتجنّب التكدّس قرب الـCTA/QR
+      const gapDeg = isPhone ? 110 : (isTablet ? 80 : 40);
       return { w,h,isPhone,isTablet,r1,r2,d1,d2,gapDeg };
     }
 
@@ -285,20 +358,21 @@
       links1.innerHTML=''; links2.innerHTML='';
 
       const L = computeLayout();
-      const cx = L.w/2, cy = L.h/2;
+      const cx = poster.clientWidth / 2;
+      const cy = poster.clientHeight / 2;
 
       placeRingWithBottomGap(CORE_SKILLS,    L.r1, L.d1, '#FFD44D', true,  links1, cx, cy, L);
       placeRingWithBottomGap(SUPPORT_SKILLS, L.r2, L.d2, '#A3F7FF', false, links2, cx, cy, L);
     }
 
-    // توزيع العقد على 360° ناقص فتحة سفلية (gap) متمركزة عند 90° (أسفل)
+    // توزيع على 360° ناقص فتحة سفلية centered at bottom
     function placeRingWithBottomGap(data, radiusPx, sizePx, color, glow, linkGroup, cx, cy, L){
       const totalSpan = 360 - L.gapDeg;
       const step  = totalSpan / data.length;
-      const start = 90 + (L.gapDeg/2); // نبدأ بعد منتصف الفتحة مباشرة وندور عكس عقارب الساعة
+      const start = 90 + (L.gapDeg/2); // أسفل ثم نلتف
       for(let i=0;i<data.length;i++){
         const angle = start + i*step;          // 90..(90+totalSpan)
-        const ang   = angle - 180;             // تحويل للاتجاه القياسي لدينا (أعلى = -90)
+        const ang   = angle - 180;             // تحويل لاتجاهنا (أعلى = -90)
         const p     = polar(cx, cy, radiusPx, ang);
 
         const node=document.createElement('div');
@@ -309,7 +383,7 @@
         const iconSize = clamp(sizePx * 0.20, 16, 26);
         const textSize = clamp(sizePx * 0.105, 9, 15);
         node.innerHTML = `
-          <div class="inner" title="${desc||''}">
+          <div class="inner">
             <div class="icon" style="font-size:${iconSize}px">${icon}</div>
             <div class="name" style="font-size:${textSize}px">${name}</div>
           </div>`;
@@ -317,8 +391,11 @@
         attachTooltip(node, name, desc);
         poster.appendChild(node);
 
+        // بعد الإضافة: اضبط الخط تلقائيًا حتى يَدخل بالكامل
+        requestAnimationFrame(()=>autofitNode(node, sizePx));
+
         // خط ربط للمركز
-        const xPct = (p.x / L.w) * 100, yPct = (p.y / L.h) * 100;
+        const xPct = (p.x / poster.clientWidth) * 100, yPct = (p.y / poster.clientHeight) * 100;
         const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
         ln.setAttribute('x1','50'); ln.setAttribute('y1','50');
         ln.setAttribute('x2', String(xPct)); ln.setAttribute('y2', String(yPct));
@@ -326,9 +403,10 @@
       }
     }
 
-    addEventListener('scroll', ()=>{ /* اغلاق التولتيب عند التمرير */ const s=tooltip; s && s.classList.remove('show'); }, {passive:true});
-    addEventListener('resize', ()=>{ const s=tooltip; s && s.classList.remove('show'); render(); });
-    addEventListener('load', render);
+    // أحداث عامة
+    addEventListener('scroll', ()=>{ tooltip.classList.remove('show'); }, {passive:true});
+    addEventListener('resize', ()=>{ tooltip.classList.remove('show'); render(); });
+    addEventListener('load', ()=>{ applyScale(); render(); });
   </script>
 </body>
 </html>
