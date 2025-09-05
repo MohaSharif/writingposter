@@ -14,23 +14,33 @@
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:System-ui,-apple-system,Segoe UI,Roboto,"Cairo",Tahoma,Arial}
     .wrap{max-width:1200px;margin:auto;padding:16px; padding-top:calc(16px + var(--safe-top)); padding-bottom:calc(16px + var(--safe-bottom));}
 
-    /* العنوان خارج البوستر (مخفى على الهاتف لمنع التكرار) */
-    .title{font-weight:900;text-align:center;margin:6px 0 12px}
-    .title .ar{font-size:clamp(18px,4.2vw,32px); color:#FFD44D; text-shadow:0 0 18px rgba(255,212,77,.35)}
-    .title .en{opacity:.85; font-size:clamp(11px,2.3vw,16px); margin-top:-4px}
-    @media (max-width:520px){ .title{display:none} }
+    /* عناوين الصفحة */
+    .title-desktop{font-weight:900;text-align:center;margin:6px 0 12px}
+    .title-desktop .ar{font-size:clamp(18px,4.2vw,32px); color:#FFD44D; text-shadow:0 0 18px rgba(255,212,77,.35)}
+    .title-desktop .en{opacity:.85; font-size:clamp(11px,2.3vw,16px); margin-top:-4px}
+    .title-mobile{display:none;text-align:center;margin:10px 0 2px}
+    .title-mobile .ar{font-weight:900;color:#FFD44D;font-size:clamp(16px,4.6vw,22px)}
+    .title-mobile .en{opacity:.85;font-size:clamp(10px,3.2vw,14px);margin-top:2px}
+
+    @media (max-width:520px){
+      .title-desktop{display:none}
+      .title-mobile{display:block}
+    }
 
     /* إطار البوستر */
     .poster{
-      position:relative; margin:0 auto 16px; width:min(96vw,1080px);
+      position:relative; margin:0 auto 8px; width:min(96vw,1080px);
       aspect-ratio:4/5; border-radius:16px; overflow:hidden;
       border:1px solid rgba(255,255,255,.08);
       box-shadow:0 10px 50px rgba(0,0,0,.45); background:var(--bg);
       transform-origin: center top;
     }
+    /* على الهاتف نجعلها مربّعة لتوسيع المساحة الرأسية */
+    @media (max-width:520px){ .poster{ aspect-ratio:1/1 } }
     .no-aspect .poster{ height: calc(min(96vw,1080px) * 1.25); }
+    @media (max-width:520px){ .no-aspect .poster{ height: min(96vw,1080px); } }
 
-    /* عنوان داخل البوستر */
+    /* عنوان داخل الإطار (يُخفى على الهاتف) */
     .poster-head{
       position:absolute;left:50%;transform:translateX(-50%);top:10px;text-align:center;
       filter:drop-shadow(0 0 12px rgba(0,209,255,.35));
@@ -38,6 +48,7 @@
     }
     .poster-head h1{margin:0;font-weight:900;color:var(--orbit1);font-size:clamp(18px,3.5vw,32px)}
     .poster-head small{display:block;opacity:.85;font-size:clamp(10px,2vw,14px)}
+    @media (max-width:520px){ .poster-head{display:none} }
 
     /* الخلفية والمدارات */
     .bg-streams{position:absolute;inset:0;opacity:.24;pointer-events:none}
@@ -67,20 +78,25 @@
     .node:hover{ transform:translate(-50%,-50%) scale(1.03) }
     .node.glow{ box-shadow:0 0 0 2px rgba(255,255,255,.12), 0 0 30px rgba(255,212,77,.35) }
 
-    /* شريط CTA */
-    .cta{
+    /* CTA داخل الإطار لسطح المكتب فقط */
+    .cta-in{
       position:absolute; left:0; right:0; bottom:0;
       height:10%; min-height:54px; padding:0 10px;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.04));
     }
-    .pill{ background:rgba(255,255,255,.10); padding:8px 12px; border-radius:999px; font-size:clamp(11px,1.8vw,13px) }
-    .pill.en{ opacity:.9 }
-    .qr svg{ width:62px; height:62px }
-    @media (max-width:520px){
-      .qr svg{ width:44px; height:44px }
-      .pill.en{ display:none }
+    @media (max-width:520px){ .cta-in{display:none} }
+
+    /* CTA خارج الإطار للهاتف */
+    .cta-out{
+      display:none; align-items:center; justify-content:space-between; gap:10px;
+      margin:10px auto 6px; width:min(96vw,1080px);
     }
+    .cta-out .pill{ background:rgba(255,255,255,.10); padding:10px 14px; border-radius:999px; font-size:14px }
+    @media (max-width:520px){ .cta-out{display:flex} }
+
+    .qr svg{ width:62px; height:62px }
+    @media (max-width:520px){ .qr svg{ width:44px; height:44px } }
 
     a, a:visited{ color:#A3F7FF }
 
@@ -100,9 +116,9 @@
     @media (pointer:coarse){ .node:hover{ transform:translate(-50%,-50%) } .tooltip{ font-size:13.5px; padding:12px 14px; border-radius:14px; transform: translate(-50%,-110%) } .tooltip .t-title{ font-size:14px } }
     @media (prefers-reduced-motion: reduce){ .node, .tooltip{ transition:none } }
 
-    /* أزرار التكبير/التصغير — أزحناها يسار العنوان */
+    /* أزرار التكبير/التصغير */
     .zoom-controls{
-      position:absolute; top:56px; inset-inline-start:8px; z-index:20;
+      position:absolute; top:10px; inset-inline-end:10px; z-index:20;
       display:flex; gap:6px; align-items:center;
     }
     .zoom-btn{
@@ -116,7 +132,8 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="title">
+    <!-- عنوان أعلى (ديسكتوب) -->
+    <div class="title-desktop">
       <div class="ar">مهارات الأساس في عصر الذكاء الاصطناعي</div>
       <div class="en">(Core Skills for the AI Era)</div>
     </div>
@@ -140,13 +157,13 @@
           </g>
         </svg>
 
-        <!-- عنوان داخل البوستر -->
+        <!-- عنوان داخل الإطار (مخفي على الهاتف) -->
         <div class="poster-head">
           <h1 id="h1">مهارات الأساس في عصر الذكاء الاصطناعي</h1>
           <small id="h2">(Core Skills for the AI Era)</small>
         </div>
 
-        <!-- المدارات -->
+        <!-- أوعية الروابط -->
         <svg class="orbits" id="orbits" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           <g id="links1" stroke="rgba(255,255,255,.07)" stroke-width="0.5"></g>
           <g id="links2" stroke="rgba(255,255,255,.05)" stroke-width="0.5"></g>
@@ -159,14 +176,13 @@
           <div style="opacity:.75;font-size:12px;margin-top:4px;">المحرك المركزي للعالم القادم</div>
         </div>
 
-        <!-- CTA -->
-        <div class="cta">
+        <!-- CTA داخلي (ديسكتوب فقط) -->
+        <div class="cta-in">
           <div style="display:flex;flex-wrap:wrap;gap:6px 8px">
             <span class="pill">تعلّم اليوم لتقود الغد ✦</span>
-            <span class="pill en">Learn Today, Lead Tomorrow</span>
+            <span class="pill" style="opacity:.9">Learn Today, Lead Tomorrow</span>
           </div>
           <a class="qr" href="https://mohasharif.github.io/writingposter/" title="المنصة التعليمية" target="_blank" rel="noreferrer">
-            <!-- QR Placeholder -->
             <svg viewBox="0 0 64 64" aria-hidden="true">
               <rect width="64" height="64" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.25)"/>
               <g fill="#EAFBFF" stroke="#EAFBFF">
@@ -186,6 +202,35 @@
           </a>
         </div>
       </div>
+    </div>
+
+    <!-- عنوان أسفل الصورة (هاتف) -->
+    <div class="title-mobile">
+      <div class="ar">مهارات الأساس في عصر الذكاء الاصطناعي</div>
+      <div class="en">(Core Skills for the AI Era)</div>
+    </div>
+
+    <!-- CTA خارجي (هاتف) -->
+    <div class="cta-out">
+      <div class="pill">تعلّم اليوم لتقود الغد ✦</div>
+      <a class="qr" href="https://mohasharif.github.io/writingposter/" title="المنصة التعليمية" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <rect width="64" height="64" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.25)"/>
+          <g fill="#EAFBFF" stroke="#EAFBFF">
+            <rect x="6" y="6" width="16" height="16" fill="none" stroke-width="2"/>
+            <rect x="10" y="10" width="8" height="8"/>
+            <rect x="42" y="6" width="16" height="16" fill="none" stroke-width="2"/>
+            <rect x="46" y="10" width="8" height="8"/>
+            <rect x="6" y="42" width="16" height="16" fill="none" stroke-width="2"/>
+            <rect x="10" y="46" width="8" height="8"/>
+            <rect x="30" y="30" width="4" height="4"/>
+            <rect x="36" y="22" width="4" height="4"/>
+            <rect x="38" y="38" width="4" height="4"/>
+            <rect x="26" y="44" width="4" height="4"/>
+            <rect x="44" y="30" width="4" height="4"/>
+          </g>
+        </svg>
+      </a>
     </div>
 
     <div style="text-align:center;opacity:.7;font-size:12px">
@@ -241,47 +286,14 @@
     try { if (!CSS.supports('aspect-ratio: 4 / 5')) { rootWrap.classList.add('no-aspect'); } } catch(e){}
 
     const clamp=(v,min,max)=>Math.max(min, Math.min(max, v));
-    const deg2rad = d => d*Math.PI/180;
-
-    // إحداثيات بيضاوية (rx, ry) + انزياح رأسي اختياري
-    function ellipsePoint(cx, cy, rx, ry, deg, yShift=0){
-      const r = deg2rad(deg);
-      return { x: cx + rx*Math.cos(r), y: cy + ry*Math.sin(r) + yShift };
-    }
-
-    // توزيع زوايا مع تنافر لضمان حد أدنى للفصل الزاوي
-    function distributeAngles(count, start, span, minArc){
-      const angles = Array.from({length:count}, (_,i)=> start + i*(span/count));
-      // 6 مرات تنافر كافية
-      for(let pass=0; pass<6; pass++){
-        for(let i=0;i<count;i++){
-          const prev = (i-1+count)%count, next = (i+1)%count;
-          const a = angles[i], ap = angles[prev], an = angles[next];
-          // فرق مع السابق
-          let diffP = a - ap; if(diffP<0) diffP += span;
-          if(diffP < minArc){ const push = (minArc - diffP)/2; angles[i] += push; angles[prev] -= push; }
-          // فرق مع التالي
-          let diffN = an - a; if(diffN<0) diffN += span;
-          if(diffN < minArc){ const push = (minArc - diffN)/2; angles[i] -= push; angles[next] += push; }
-        }
-      }
-      // إعادة التطبيع داخل [start, start+span)
-      for(let i=0;i<count;i++){
-        while(angles[i] < start) angles[i]+=span;
-        while(angles[i] >= start+span) angles[i]-=span;
-      }
-      angles.sort((a,b)=>a-b);
-      return angles;
-    }
+    const deg2rad=d=>d*Math.PI/180;
+    const polar=(cx,cy,r,deg)=>({x:cx + r*Math.cos(deg2rad(deg)), y:cy + r*Math.sin(deg2rad(deg))});
 
     // ===== Zoom =====
     let scale = 1;
     const minScale = 0.7, maxScale = 1.7, step=0.1;
     const zoomLevel = document.getElementById('zoomLevel');
-    function applyScale(){
-      poster.style.transform = `scale(${scale})`;
-      zoomLevel.textContent = Math.round(scale*100) + "%";
-    }
+    function applyScale(){ poster.style.transform = `scale(${scale})`; zoomLevel.textContent = Math.round(scale*100) + "%"; }
     document.getElementById('zoomIn').onclick  = ()=>{ scale = clamp(scale+step, minScale, maxScale); applyScale(); };
     document.getElementById('zoomOut').onclick = ()=>{ scale = clamp(scale-step, minScale, maxScale); applyScale(); };
     document.getElementById('zoomReset').onclick = ()=>{ scale = 1; applyScale(); };
@@ -309,7 +321,7 @@
       node.addEventListener('click', e => { if (matchMedia('(pointer:coarse)').matches){ showTooltip(title, desc, e.clientX, e.clientY); clearTimeout(node.__tt); node.__tt=setTimeout(hideTooltip, 1800);} });
     }
 
-    // Autofit: صغّر حجم النص (ثم الأيقونة) حتى يَدخل ضمن الدائرة
+    // ===== Autofit =====
     function autofitNode(node, sizePx){
       const nameEl = node.querySelector('.name');
       const iconEl = node.querySelector('.icon');
@@ -334,15 +346,28 @@
       }
     }
 
-    // ========== تخطيط وتوزيع ==========
+    // ===== توزيع زوايا مع تنافر (repulsion) =====
+    function distributeAngles(count, start, span, minArc){
+      const angles = Array.from({length:count}, (_,i)=> start + i*(span/count));
+      for(let pass=0; pass<6; pass++){
+        for(let i=0;i<count;i++){
+          const prev=(i-1+count)%count, next=(i+1)%count;
+          const a=angles[i], ap=angles[prev], an=angles[next];
+          let diffP=a-ap; if(diffP<0) diffP+=span;
+          if(diffP<minArc){ const push=(minArc-diffP)/2; angles[i]+=push; angles[prev]-=push; }
+          let diffN=an-a; if(diffN<0) diffN+=span;
+          if(diffN<minArc){ const push=(minArc-diffN)/2; angles[i]-=push; angles[next]+=push; }
+        }
+      }
+      for(let i=0;i<count;i++){ while(angles[i]<start) angles[i]+=span; while(angles[i]>=start+span) angles[i]-=span; }
+      angles.sort((x,y)=>x-y);
+      return angles;
+    }
+
+    // ===== تخطيط وتوزيع =====
     function computeLayout(){
       const w = poster.clientWidth, h = poster.clientHeight;
       const isPhone  = w < 520;
-      const isTablet = w >= 520 && w < 900;
-
-      // عنوان داخل البوستر
-      document.getElementById('h1').style.fontSize = clamp(w*0.035, 18, 32) + 'px';
-      document.getElementById('h2').style.fontSize = clamp(w*0.014, 10, 14) + 'px';
 
       // حجم المركز: أصغر قليلًا على الهاتف لزيادة محيط المدارين
       const core = document.getElementById('core');
@@ -350,27 +375,19 @@
       core.style.width  = coreD + 'px';
       core.style.height = coreD + 'px';
 
-      // مدارات بيضاوية على الهاتف (لملء العرض والارتفاع بشكل أفضل)
-      // rx = أفقي، ry = رأسي. yShift لرفع الحلقة بعيدًا عن شريط CTA.
-      const yShift = isPhone ? -h*0.02 : 0;
-      const rx1 = (isPhone ? w*0.42 : Math.min(w,h)*0.35);
-      const ry1 = (isPhone ? h*0.32 : Math.min(w,h)*0.35);
-      const rx2 = (isPhone ? w*0.49 : Math.min(w,h)*0.46);
-      const ry2 = (isPhone ? h*0.40 : Math.min(w,h)*0.46);
+      // دوائر كاملة على الهاتف (360°) — لا CTA داخلي يزاحمها
+      const minSide = Math.min(w,h);
+      const r1 = (isPhone ? 0.36 : 0.35) * minSide;
+      const r2 = (isPhone ? 0.48 : 0.46) * minSide;
 
-      // أحجام العقد — أصغر افتراضيًا على الهاتف
-      const d1 = clamp(w * (isPhone ? 0.095 : 0.09), 50, isTablet ? 96 : 112); // الأساسي
-      const d2 = clamp(w * (isPhone ? 0.082 : 0.070), 42, isTablet ? 86 : 100); // المساند
+      const d1 = clamp(w * (isPhone ? 0.085 : 0.09), 48, 112);
+      const d2 = clamp(w * (isPhone ? 0.072 : 0.070), 42, 100);
 
-      // فجوة سفلية بسيطة فقط لحماية الـCTA (بدل 80° سابقًا)
-      const gapDeg = isPhone ? 24 : 0;
+      // زاوية الفصل الدنيا نشتقها من القطر ومحيط المدار
+      const minArc1 = clamp((d1 / (2*Math.PI*r1)) * 360 * 1.15, 6, 22);
+      const minArc2 = clamp((d2 / (2*Math.PI*r2)) * 360 * 1.15, 5, 18);
 
-      // فصل زاوي أدنى (بالدرجات) يتناسب مع القطر ونصف القطر المتوسط
-      const rAvg1 = (rx1 + ry1) / 2, rAvg2 = (rx2 + ry2) / 2;
-      const minArc1 = clamp((d1 / (2*Math.PI*rAvg1)) * 360 * 1.2, 6, 22);
-      const minArc2 = clamp((d2 / (2*Math.PI*rAvg2)) * 360 * 1.2, 4, 18);
-
-      return { w,h,isPhone,isTablet, coreD, rx1,ry1, rx2,ry2, yShift, d1,d2, gapDeg, minArc1, minArc2 };
+      return { w,h,isPhone, r1,r2, d1,d2, minArc1,minArc2 };
     }
 
     function render(){
@@ -381,27 +398,23 @@
       const cx = poster.clientWidth / 2;
       const cy = poster.clientHeight / 2;
 
-      // زوايا موزعة مع تنافر — حلقة 1
-      const span = 360 - L.gapDeg;
-      const start = 90 + (L.gapDeg/2);    // gap centered at bottom
-      const ang1 = distributeAngles(CORE_SKILLS.length, start, span, L.minArc1);
-      // الحلقة الثانية نزيحها نصف خطوة لعدم تراكب العقد مع الحلقة الأولى
-      const ang2 = distributeAngles(SUPPORT_SKILLS.length, start + (span/SUPPORT_SKILLS.length)/2, span, L.minArc2);
+      // زوايا كاملة 360° مع أوفست بسيط للمدار الثاني
+      const ang1 = distributeAngles(CORE_SKILLS.length, -90, 360, L.minArc1);
+      const ang2 = distributeAngles(SUPPORT_SKILLS.length, -90 + (360/SUPPORT_SKILLS.length)/2, 360, L.minArc2);
 
-      placeRingEllipse(CORE_SKILLS,   L.rx1, L.ry1, L.d1, '#FFD44D', true,  links1, cx, cy, ang1, L.yShift);
-      placeRingEllipse(SUPPORT_SKILLS,L.rx2, L.ry2, L.d2, '#A3F7FF', false, links2, cx, cy, ang2, L.yShift);
+      placeRing(CORE_SKILLS,    L.r1, L.d1, '#FFD44D', true,  links1, cx, cy, ang1);
+      placeRing(SUPPORT_SKILLS, L.r2, L.d2, '#A3F7FF', false, links2, cx, cy, ang2);
     }
 
-    function placeRingEllipse(data, rx, ry, sizePx, color, glow, linkGroup, cx, cy, angles, yShift){
+    function placeRing(data, radius, sizePx, color, glow, linkGroup, cx, cy, angles){
       for(let i=0;i<data.length;i++){
-        const {x,y} = ellipsePoint(cx, cy, rx, ry, angles[i], yShift);
+        const {x,y} = polar(cx, cy, radius, angles[i]);
 
         const node=document.createElement('div');
         node.className='node'+(glow?' glow':'');
         node.style.cssText += `width:${sizePx}px;height:${sizePx}px;left:${x}px;top:${y}px;background:${color};`;
 
         const [icon,name,desc]=data[i];
-        // أصغر من قبل بشكل افتراضي
         const iconSize = clamp(sizePx * 0.18, 16, 24);
         const textSize = clamp(sizePx * 0.095, 8, 14);
         node.innerHTML = `
