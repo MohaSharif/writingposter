@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>المهارات المتقدمة لصنّاع المستقبل | Advanced AI Skills for Future Innovators</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="description" content="ارتقِ بمهاراتك من الأساس إلى الاحتراف، واستعد لصناعة المستقبل. Advanced AI Skills for Future Innovators."/>
+  <style>
+    :root{
+      --bg:#1A093F;
+      --path:#00FFB3;
+      --planet:#A86EFF;
+      --moon:#FFD44D;
+      --text:#FFFFFF;
+      --title:#FFD44D;
+      --ratio-w:420;   /* A2 portrait ratio by default (42cm x 59.4cm) */
+      --ratio-h:594;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans Arabic","Tahoma","Arial",sans-serif}
+    .wrap{
+      min-height:100svh;display:flex;align-items:center;justify-content:center;padding:24px;
+      background:
+       radial-gradient(1200px 800px at 10% 90%, #2a1466 0%, transparent 60%),
+       radial-gradient(1000px 700px at 90% 10%, #210d57 0%, transparent 55%),
+       radial-gradient(800px 800px at 50% 50%, #14063b 0%, transparent 65%),
+       repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 80px),
+       repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 80px),
+       var(--bg);
+    }
+    .poster{
+      width:min(100%,1200px);
+      aspect-ratio: var(--ratio-w) / var(--ratio-h);
+      position:relative;border-radius:24px;overflow:hidden;
+      box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 20px 80px rgba(0,0,0,.5);
+      background: radial-gradient(120% 120% at 50% 100%, rgba(168,110,255,.15), transparent 40%) var(--bg);
+      isolation:isolate;
+    }
+    /* Title area */
+    .title{
+      position:absolute;inset:24px 24px auto 24px;text-align:center;z-index:4;pointer-events:none;
+      text-shadow:0 0 12px rgba(255,212,77,.35), 0 0 30px rgba(168,110,255,.2);
+    }
+    .title h1{
+      margin:0 0 6px;font-weight:800;letter-spacing:.3px;line-height:1.15;
+      font-size: clamp(24px, 3.2vw, 42px);
+      color:var(--title);
+      filter: drop-shadow(0 0 10px rgba(255,212,77,.25));
+    }
+    .title h2{margin:6px 0 8px;font-weight:700;font-size:clamp(14px,1.6vw,18px);opacity:.95}
+    .title p{
+      margin:0;font-size:clamp(12px,1.4vw,16px);opacity:.9
+    }
+
+    /* CTA bar */
+    .cta{
+      position:absolute;inset:auto 0 0 0;z-index:4;
+      background:linear-gradient(180deg, transparent, rgba(0,0,0,.35) 30%, rgba(0,0,0,.7));
+      padding:16px 20px 18px; display:flex; gap:12px; justify-content:center; align-items:center;
+      backdrop-filter: blur(4px);
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .cta .chip{
+      border:1px solid rgba(255,255,255,.15); border-radius:999px; padding:8px 14px; font-weight:700;
+      background: radial-gradient(60% 180% at 50% 0%, rgba(255,212,77,.08), rgba(168,110,255,.08));
+      text-shadow:0 0 8px rgba(255,212,77,.15);
+    }
+
+    /* SVG canvas holds the whole composition */
+    svg{position:absolute; inset:0; width:100%; height:100%; display:block; z-index:1}
+
+    /* Path glow/flow */
+    .path{
+      stroke:var(--path); stroke-width:6; fill:none;
+      filter: drop-shadow(0 0 12px rgba(0,255,179,.55)) drop-shadow(0 0 30px rgba(0,255,179,.35));
+      stroke-linecap:round;
+    }
+    .path-flow{
+      stroke:var(--path); stroke-width:2.5; fill:none; opacity:.85; stroke-dasharray:14 10; animation:flow 5s linear infinite;
+      filter: drop-shadow(0 0 6px rgba(0,255,179,.65));
+    }
+    @keyframes flow{to{stroke-dashoffset:-500}}
+
+    /* Planets & moons */
+    .planet{
+      filter: drop-shadow(0 0 18px rgba(168,110,255,.7)) drop-shadow(0 0 36px rgba(168,110,255,.4));
+    }
+    .planet circle.core{ fill:url(#planet-grad); }
+    .planet text{ font-weight:800; font-size:14px; letter-spacing:.2px; }
+
+    .orbit{ stroke: rgba(255,255,255,.12); stroke-width:1.25; fill:none; }
+    .moon{ fill: var(--moon); filter: drop-shadow(0 0 14px rgba(255,212,77,.6)); }
+    .moon.pulse{ animation:pulse 2.4s ease-in-out infinite; transform-origin:center; }
+    @keyframes pulse{ 0%,100%{ transform:scale(1)} 50%{ transform:scale(1.08)} }
+
+    .label{
+      font-size:12px; font-weight:700; fill:#fff; paint-order:stroke; stroke:#000; stroke-width:.8px;
+      text-shadow: 0 0 12px rgba(0,0,0,.6);
+    }
+    .hint{
+      font-size:10px; font-weight:600; fill:rgba(255,255,255,.9)
+    }
+
+    /* Subtle starfield */
+    .stars g circle{ fill:rgba(255,255,255,.9); }
+    .stars g circle.dim{ opacity:.45}
+    .stars g circle.tiny{ r:.75 }
+    .stars g circle.mid{ r:1.2 }
+    .stars g circle.big{ r:1.8 }
+
+    /* Print & size helpers */
+    @media print{
+      body{background:#fff}
+      .wrap{padding:0}
+      .poster{
+        width: 59.4cm; height: 42cm; /* A2 landscape print if needed */
+        box-shadow:none; border-radius:0
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="poster" id="poster">
+
+      <!-- Title & subtitle -->
+      <header class="title">
+        <h1>المهارات المتقدمة لصنّاع المستقبل</h1>
+        <h2>Advanced AI Skills for Future Innovators</h2>
+        <p>ارتقِ بمهاراتك من الأساس إلى الاحتراف، واستعد لصناعة المستقبل.</p>
+      </header>
+
+      <!-- The SVG scene -->
+      <svg viewBox="0 0 1200 1700" aria-label="خريطة طريق مستقبلية بأربع محطات للمهارات المتقدمة">
+
+        <defs>
+          <!-- Neon planet gradient -->
+          <radialGradient id="planet-grad" cx="50%" cy="45%" r="65%">
+            <stop offset="0%" stop-color="#E2D2FF"/>
+            <stop offset="35%" stop-color="#C5A9FF"/>
+            <stop offset="100%" stop-color="#A86EFF"/>
+          </radialGradient>
+          <!-- Stars filter softness -->
+          <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="0.6"/>
+          </filter>
+        </defs>
+
+        <!-- Light starfield -->
+        <g class="stars" opacity=".65" filter="url(#soft)">
+          <!-- Random-ish stars -->
+          <g>
+            <circle class="tiny" cx="80" cy="140" r="1"/>
+            <circle class="mid" cx="220" cy="200" r="1.2"/>
+            <circle class="dim big" cx="360" cy="90" r="1.8"/>
+            <circle class="tiny" cx="540" cy="180" r="1"/>
+            <circle class="mid" cx="980" cy="130" r="1.2"/>
+            <circle class="tiny" cx="1100" cy="220" r="1"/>
+            <circle class="mid" cx="1080" cy="480" r="1.2"/>
+            <circle class="tiny" cx="160" cy="540" r="1"/>
+            <circle class="mid" cx="300" cy="820" r="1.2"/>
+            <circle class="big" cx="1020" cy="900" r="1.8"/>
+            <circle class="tiny" cx="400" cy="1180" r="1"/>
+            <circle class="mid" cx="860" cy="1300" r="1.2"/>
+            <circle class="tiny" cx="150" cy="1500" r="1"/>
+            <circle class="tiny" cx="1140" cy="1580" r="1"/>
+          </g>
+        </g>
+
+        <!-- Learning path -->
+        <path id="learning-path"
+              d="M 90 1580
+                 C 280 1420, 360 1220, 520 1040
+                 S 820 760, 940 560
+                 S 1040 320, 1120 160"
+              class="path"/>
+        <path d="M 90 1580
+                 C 280 1420, 360 1220, 520 1040
+                 S 820 760, 940 560
+                 S 1040 320, 1120 160"
+              class="path-flow"/>
+
+        <!-- Cluster groups will be injected here by JS -->
+        <g id="clusters"></g>
+
+      </svg>
+
+      <!-- CTA -->
+      <footer class="cta" aria-label="دعوة لاتخاذ إجراء">
+        <span class="chip">تعلّم، ابتكر، قد المستقبل ✦ Learn, Innovate, Lead</span>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Allow aspect ratio override via ?size=45 or ?size=169
+    (function(){
+      const params = new URLSearchParams(location.search);
+      const size = params.get('size');
+      const root = document.documentElement;
+      if(size === '45'){ root.style.setProperty('--ratio-w', '4'); root.style.setProperty('--ratio-h','5'); }
+      else if(size === '169'){ root.style.setProperty('--ratio-w', '16'); root.style.setProperty('--ratio-h','9'); }
+      // default stays A2 portrait ratio
+    })();
+
+    // Data model for clusters & skills
+    const clusters = [
+      {
+        t: 0.18,
+        nameAr: "الذكاء الاصطناعي المتقدم",
+        nameEn: "Advanced AI",
+        emoji: "🤖",
+        skills: [
+          {emoji:"🧩", ar:"هندسة النماذج المصغّرة", en:"Model Customization"},
+          {emoji:"🧠", ar:"محو الأمية في تعلم الآلة", en:"ML Literacy"},
+          {emoji:"🔍", ar:"التفاعل العميق مع النماذج", en:"AI Query Mastery"},
+          {emoji:"🖼️", ar:"الذكاء متعدد الوسائط", en:"Multimodal AI"},
+        ]
+      },
+      {
+        t: 0.40,
+        nameAr: "المهارات المستقبلية الناشئة",
+        nameEn: "Next-Gen Skills",
+        emoji: "🚀",
+        skills: [
+          {emoji:"🌐", ar:"التوأم الرقمي", en:"Digital Twin Thinking"},
+          {emoji:"⚡", ar:"تفكير معزّز بالذكاء", en:"AI-Augmented Thinking"},
+          {emoji:"🛠️", ar:"الهندسة العكسية للذكاء", en:"AI Reverse Engineering"},
+          {emoji:"🎨", ar:"الأتمتة الإبداعية", en:"Creative Automation"},
+        ]
+      },
+      {
+        t: 0.64,
+        nameAr: "القيادة والابتكار",
+        nameEn: "Leadership & Innovation",
+        emoji: "🌟",
+        skills: [
+          {emoji:"💡", ar:"ابتكار المنتجات المعززة", en:"AI-Powered Product Innovation"},
+          {emoji:"💸", ar:"الاقتصاد التوليدي", en:"Generative Economy"},
+          {emoji:"🧭", ar:"القيادة الرقمية", en:"Digital Leadership"},
+          {emoji:"🧩", ar:"إدارة الفرق الهجينة", en:"Hybrid Workforce Management"},
+        ]
+      },
+      {
+        t: 0.86,
+        nameAr: "الحوكمة والأخلاقيات",
+        nameEn: "Ethics & Governance",
+        emoji: "⚖️",
+        skills: [
+          {emoji:"🛡️", ar:"ذكاء اصطناعي أخلاقي", en:"Ethical AI"},
+          {emoji:"🌍", ar:"مواطنة رقمية مسؤولة", en:"Responsible Digital Citizenship"},
+          {emoji:"🌱", ar:"الاستدامة الرقمية", en:"Digital Sustainability"},
+          {emoji:"🚨", ar:"إدارة المخاطر المستقبلية", en:"Future Risk Management"},
+        ]
+      },
+    ];
+
+    const svg = document.querySelector('svg');
+    const path = document.getElementById('learning-path');
+    const host = document.getElementById('clusters');
+
+    function pointAt(t){
+      const L = path.getTotalLength();
+      const p = path.getPointAtLength(L*t);
+      return {x:p.x, y:p.y};
+    }
+
+    function addCluster(c){
+      const g = document.createElementNS("http://www.w3.org/2000/svg","g");
+      g.setAttribute("class","cluster");
+      const pos = pointAt(c.t);
+
+      // planet
+      const planetG = document.createElementNS(svg.namespaceURI,"g");
+      planetG.setAttribute("class","planet");
+      const core = document.createElementNS(svg.namespaceURI,"circle");
+      core.setAttribute("class","core");
+      core.setAttribute("cx", pos.x);
+      core.setAttribute("cy", pos.y);
+      core.setAttribute("r", 44);
+      planetG.appendChild(core);
+
+      // planet label
+      const label = document.createElementNS(svg.namespaceURI,"text");
+      label.setAttribute("x", pos.x);
+      label.setAttribute("y", pos.y - 62);
+      label.setAttribute("text-anchor","middle");
+      label.setAttribute("class","label");
+      label.textContent = c.emoji+"  "+c.nameAr+" | "+c.nameEn;
+      planetG.appendChild(label);
+
+      // orbit
+      const orbit = document.createElementNS(svg.namespaceURI,"circle");
+      orbit.setAttribute("class","orbit");
+      orbit.setAttribute("cx", pos.x);
+      orbit.setAttribute("cy", pos.y);
+      const R = 86;
+      orbit.setAttribute("r", R);
+      planetG.appendChild(orbit);
+
+      g.appendChild(planetG);
+
+      // moons (place at 4 angles that avoid overlap with path)
+      const angles = [-20, 75, 170, 255]; // degrees
+      c.skills.forEach((s, i)=>{
+        const a = angles[i] * Math.PI/180;
+        const mx = pos.x + R*Math.cos(a);
+        const my = pos.y + R*Math.sin(a);
+
+        const moon = document.createElementNS(svg.namespaceURI,"circle");
+        moon.setAttribute("class","moon pulse");
+        moon.setAttribute("cx", mx);
+        moon.setAttribute("cy", my);
+        moon.setAttribute("r", 12);
+        g.appendChild(moon);
+
+        // connector
+        const conn = document.createElementNS(svg.namespaceURI,"line");
+        conn.setAttribute("x1", pos.x + 52*Math.cos(a));
+        conn.setAttribute("y1", pos.y + 52*Math.sin(a));
+        conn.setAttribute("x2", mx);
+        conn.setAttribute("y2", my);
+        conn.setAttribute("stroke","rgba(255,255,255,.18)");
+        conn.setAttribute("stroke-width","1");
+        g.appendChild(conn);
+
+        // skill label
+        const tx = document.createElementNS(svg.namespaceURI,"text");
+        tx.setAttribute("x", mx +  (Math.cos(a)>0 ? 16: -16));
+        tx.setAttribute("y", my + 4);
+        tx.setAttribute("text-anchor", (Math.cos(a)>0 ? "start":"end"));
+        tx.setAttribute("class","label");
+        tx.textContent = s.emoji+"  "+s.ar+" / "+s.en;
+        g.appendChild(tx);
+
+        // hint (small)
+        const hint = document.createElementNS(svg.namespaceURI,"text");
+        hint.setAttribute("x", mx);
+        hint.setAttribute("y", my - 18);
+        hint.setAttribute("text-anchor","middle");
+        hint.setAttribute("class","hint");
+        hint.textContent = "★";
+        g.appendChild(hint);
+      });
+
+      host.appendChild(g);
+    }
+
+    // Draw all clusters
+    clusters.forEach(addCluster);
+  </script>
+</body>
+</html>
