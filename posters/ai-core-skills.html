@@ -13,21 +13,24 @@
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:System-ui,-apple-system,Segoe UI,Roboto,"Cairo",Tahoma,Arial}
     .wrap{max-width:1200px;margin:auto;padding:16px; padding-top:calc(16px + var(--safe-top)); padding-bottom:calc(16px + var(--safe-bottom));}
+
+    /* عنوان خارجي (يختفي على الهاتف لمنع التكرار) */
     .title{font-weight:900;text-align:center;margin:6px 0 12px}
     .title .ar{font-size:clamp(18px,4.2vw,32px); color:#FFD44D; text-shadow:0 0 18px rgba(255,212,77,.35)}
     .title .en{opacity:.85; font-size:clamp(11px,2.3vw,16px); margin-top:-4px}
+    @media (max-width:520px){ .title{display:none} }
 
-    /* Poster frame */
+    /* إطار البوستر */
     .poster{
       position:relative; margin:0 auto 16px; width:min(96vw,1080px);
       aspect-ratio:4/5; border-radius:16px; overflow:hidden;
       border:1px solid rgba(255,255,255,.08);
       box-shadow:0 10px 50px rgba(0,0,0,.45); background:var(--bg);
     }
-    /* Fallback if aspect-ratio unsupported */
+    /* fallback إذا aspect-ratio غير مدعوم */
     .no-aspect .poster{ height: calc(min(96vw,1080px) * 1.25); }
 
-    /* Poster heading */
+    /* عنوان داخل البوستر */
     .poster-head{
       position:absolute;left:50%;transform:translateX(-50%);top:10px;text-align:center;
       filter:drop-shadow(0 0 12px rgba(0,209,255,.35));
@@ -36,11 +39,11 @@
     .poster-head h1{margin:0;font-weight:900;color:var(--orbit1);font-size:clamp(18px,3.5vw,32px)}
     .poster-head small{display:block;opacity:.85;font-size:clamp(10px,2vw,14px)}
 
-    /* Background & Orbits */
-    .bg-streams{position:absolute;inset:0;opacity:.28;pointer-events:none}
+    /* الخلفية والمدارات */
+    .bg-streams{position:absolute;inset:0;opacity:.26;pointer-events:none}
     .orbits{position:absolute;inset:0;pointer-events:none}
 
-    /* Core */
+    /* المركز */
     .core{
       position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
       display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
@@ -50,7 +53,7 @@
       color:#031018;
     }
 
-    /* Skill nodes */
+    /* عقد المهارات */
     .node{
       position:absolute; display:flex; align-items:center; justify-content:center; text-align:center;
       border-radius:999px; color:#0A0F29; padding:2px 6px;
@@ -58,25 +61,31 @@
       transform:translate(-50%,-50%); user-select:none; transition:transform .12s ease;
       touch-action:manipulation;
     }
-    .node:hover{ transform:translate(-50%,-50%) scale(1.03); }
-    .node.glow{ box-shadow:0 0 0 2px rgba(255,255,255,.12), 0 0 30px rgba(255,212,77,.35) }
-    .node .inner{ line-height:1.12; padding:0 4px }
+    .node .inner{ line-height:1.12; padding:0 4px; width:88% }
     .node .icon{ margin-bottom:2px }
-    .node .name{ font-weight:700; white-space:normal; word-break:break-word; overflow-wrap:anywhere }
+    .node .name{ font-weight:700; white-space:normal; word-break:break-word; overflow-wrap:anywhere; letter-spacing:-.2px }
 
-    /* CTA bar */
+    .node:hover{ transform:translate(-50%,-50%) scale(1.03) }
+    .node.glow{ box-shadow:0 0 0 2px rgba(255,255,255,.12), 0 0 30px rgba(255,212,77,.35) }
+
+    /* شريط CTA */
     .cta{
       position:absolute; left:0; right:0; bottom:0;
-      height:10%; min-height:56px; padding:0 12px;
+      height:10%; min-height:54px; padding:0 10px;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.04));
     }
     .pill{ background:rgba(255,255,255,.10); padding:8px 12px; border-radius:999px; font-size:clamp(11px,1.8vw,13px) }
-    .qr{ display:block }
+    .pill.en{ opacity:.9 }
+    .qr svg{ width:62px; height:62px }
+    @media (max-width:520px){
+      .qr svg{ width:44px; height:44px }
+      .pill.en{ display:none } /* أخفي الإنجليزية لتقليل الازدحام */
+    }
 
     a, a:visited{ color:#A3F7FF }
 
-    /* ====== Tooltip ====== */
+    /* تولتيب */
     .tooltip {
       position: fixed; z-index: 1000; max-width: min(86vw, 320px);
       background: rgba(10,15,41,.98); color: #EAFBFF;
@@ -90,19 +99,8 @@
     }
     .tooltip.show { opacity: 1; visibility: visible; }
     .tooltip .t-title { font-weight:800; margin-bottom: 4px; color:#A3F7FF; font-size: 12.5px }
-
-    /* Phones & tablets: larger tap targets, calmer motion */
-    @media (pointer:coarse){
-      .node:hover{ transform:translate(-50%,-50%) } /* لا تكبير مع اللمس */
-      .tooltip{ font-size: 13.5px; padding: 12px 14px; border-radius: 14px; transform: translate(-50%,-110%) }
-      .tooltip .t-title{ font-size: 14px }
-    }
-
-    /* Reduce motion */
-    @media (prefers-reduced-motion: reduce) {
-      .node{ transition:none }
-      .tooltip{ transition:none }
-    }
+    @media (pointer:coarse){ .node:hover{ transform:translate(-50%,-50%) } .tooltip{ font-size:13.5px; padding:12px 14px; border-radius:14px; transform: translate(-50%,-110%) } .tooltip .t-title{ font-size:14px } }
+    @media (prefers-reduced-motion: reduce){ .node, .tooltip{ transition:none } }
   </style>
 </head>
 <body>
@@ -114,7 +112,7 @@
 
     <div id="poster-root">
       <div id="poster" class="poster" aria-label="بوستر مهارات الأساس في عصر الذكاء الاصطناعي">
-        <!-- Streams -->
+        <!-- خلفية -->
         <svg class="bg-streams" viewBox="0 0 1200 1500" preserveAspectRatio="none" aria-hidden="true">
           <g stroke="rgba(0,209,255,.08)" stroke-width="1" fill="none">
             <path d="M 0 100 C 200 280, 360 40, 560 320" />
@@ -123,21 +121,21 @@
           </g>
         </svg>
 
-        <!-- Head inside poster -->
+        <!-- عنوان داخل البوستر -->
         <div class="poster-head">
           <h1 id="h1">مهارات الأساس في عصر الذكاء الاصطناعي</h1>
           <small id="h2">(Core Skills for the AI Era)</small>
         </div>
 
-        <!-- Orbits -->
+        <!-- المدارات -->
         <svg class="orbits" id="orbits" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <circle id="orb1" cx="50" cy="50" r="35" fill="none" stroke="rgba(255,255,255,.06)" stroke-dasharray="8 6"/>
-          <circle id="orb2" cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,.04)" stroke-dasharray="6 8"/>
+          <circle cx="50" cy="50" r="35" fill="none" stroke="rgba(255,255,255,.06)" stroke-dasharray="8 6"/>
+          <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,.04)" stroke-dasharray="6 8"/>
           <g id="links1" stroke="rgba(255,255,255,.07)" stroke-width="0.5"></g>
           <g id="links2" stroke="rgba(255,255,255,.05)" stroke-width="0.5"></g>
         </svg>
 
-        <!-- Core -->
+        <!-- المركز -->
         <div id="core" class="core">
           <div style="font-size:clamp(18px,3.6vw,36px);font-weight:900">الذكاء الاصطناعي</div>
           <div style="opacity:.9">(AI Core)</div>
@@ -148,11 +146,11 @@
         <div class="cta">
           <div style="display:flex;flex-wrap:wrap;gap:6px 8px">
             <span class="pill">تعلّم اليوم لتقود الغد ✦</span>
-            <span class="pill" style="opacity:.9">Learn Today, Lead Tomorrow</span>
+            <span class="pill en">Learn Today, Lead Tomorrow</span>
           </div>
           <a class="qr" href="https://mohasharif.github.io/writingposter/" title="المنصة التعليمية" target="_blank" rel="noreferrer">
             <!-- QR Placeholder -->
-            <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
               <rect width="64" height="64" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.25)"/>
               <g fill="#EAFBFF" stroke="#EAFBFF">
                 <rect x="6" y="6" width="16" height="16" fill="none" stroke-width="2"/>
@@ -181,7 +179,7 @@
   <div id="tooltip" class="tooltip" role="status" aria-live="polite" aria-hidden="true"></div>
 
   <script>
-    // ===== Data =====
+    // ===== البيانات =====
     const CORE_SKILLS = [
       ["📝","هندسة البرومبتات","صياغة أوامر دقيقة لإنتاج أفضل المخرجات"],
       ["🧠","التفكير النقدي","تحليل الافتراضات والتحقق من صحة المعلومات"],
@@ -217,89 +215,69 @@
       ["🧘‍♂️","الرفاه الرقمي","التوازن بين التقنية والصحة النفسية"],
     ];
 
-    // ===== Helpers =====
+    // ===== أدوات =====
     const poster   = document.getElementById('poster');
     const rootWrap = document.getElementById('poster-root');
     const links1   = document.getElementById('links1');
     const links2   = document.getElementById('links2');
     const tooltip  = document.getElementById('tooltip');
 
-    // Force height if aspect-ratio unsupported
+    // دعم fallback للـ aspect-ratio
     try { if (!CSS.supports('aspect-ratio: 4 / 5')) { rootWrap.classList.add('no-aspect'); } } catch(e){}
 
     const polar=(cx,cy,r,deg)=>{ const rad=deg*Math.PI/180; return {x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad)}; };
+    const clamp=(v,min,max)=>Math.max(min, Math.min(max, v));
 
-    function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
-
+    // تولتيب
     function showTooltip(title, desc, x, y){
       if(!desc){ hideTooltip(); return; }
       tooltip.innerHTML = '<div class="t-title">'+title+'</div>' + desc;
-      tooltip.classList.add('show');
-      tooltip.setAttribute('aria-hidden','false');
+      tooltip.classList.add('show'); tooltip.setAttribute('aria-hidden','false');
       positionTooltip(x,y);
     }
-    function hideTooltip(){
-      tooltip.classList.remove('show');
-      tooltip.setAttribute('aria-hidden','true');
-    }
+    function hideTooltip(){ tooltip.classList.remove('show'); tooltip.setAttribute('aria-hidden','true'); }
     function positionTooltip(x,y){
-      const pad=12;
-      const rect=tooltip.getBoundingClientRect();
-      let nx = clamp(x, rect.width/2 + pad, window.innerWidth - rect.width/2 - pad);
-      // ارفع التولتيب قليلاً على الهواتف حتى لا يغطيه الإصبع
-      const isCoarse = matchMedia('(pointer:coarse)').matches;
+      const pad=12, rect=tooltip.getBoundingClientRect(), isCoarse = matchMedia('(pointer:coarse)').matches;
+      let nx = clamp(x, rect.width/2 + pad, innerWidth - rect.width/2 - pad);
       let ny = y - (isCoarse ? 38 : 18);
       ny = Math.max(rect.height + pad, ny);
-      tooltip.style.left = nx + 'px';
-      tooltip.style.top  = ny + 'px';
+      tooltip.style.left = nx + 'px'; tooltip.style.top = ny + 'px';
     }
     function attachTooltip(node, title, desc){
       node.addEventListener('mouseenter', e => showTooltip(title, desc, e.clientX, e.clientY));
       node.addEventListener('mousemove',  e => positionTooltip(e.clientX, e.clientY));
       node.addEventListener('mouseleave', hideTooltip);
-
-      // Touch-friendly: tap to show briefly
-      node.addEventListener('touchstart', e => {
-        const t = e.touches[0]; if(!t) return;
-        showTooltip(title, desc, t.clientX, t.clientY);
-        // أغلق تلقائيًا بعد 2s
-        clearTimeout(node.__tt);
-        node.__tt = setTimeout(hideTooltip, 2000);
-      }, {passive:true});
-      node.addEventListener('click', e => {
-        // على الأجهزة اللوحية/الهواتف، النقر يعرض أيضًا
-        if (matchMedia('(pointer:coarse)').matches) {
-          showTooltip(title, desc, e.clientX, e.clientY);
-          clearTimeout(node.__tt); node.__tt = setTimeout(hideTooltip, 1800);
-        }
-      });
+      node.addEventListener('touchstart', e => { const t=e.touches[0]; if(!t) return; showTooltip(title, desc, t.clientX, t.clientY); clearTimeout(node.__tt); node.__tt=setTimeout(hideTooltip, 2000); }, {passive:true});
+      node.addEventListener('click', e => { if (matchMedia('(pointer:coarse)').matches){ showTooltip(title, desc, e.clientX, e.clientY); clearTimeout(node.__tt); node.__tt=setTimeout(hideTooltip, 1800);} });
     }
 
-    // ===== Layout =====
+    // حساب التخطيط
     function computeLayout(){
       const { width:w, height:h } = poster.getBoundingClientRect();
       const isPhone  = w < 520;
       const isTablet = w >= 520 && w < 900;
 
-      // عنوان أعلى البوستر
+      // عنوان داخل البوستر
       document.getElementById('h1').style.fontSize = clamp(w*0.035, 18, 32) + 'px';
       document.getElementById('h2').style.fontSize = clamp(w*0.014, 10, 14) + 'px';
 
-      // أنصاف الأقطار: ضيق قليلاً على الهواتف لتوفير حافة آمنة
-      const r1 = (isPhone ? 0.32 : isTablet ? 0.34 : 0.35) * Math.min(w,h);
-      const r2 = (isPhone ? 0.44 : isTablet ? 0.45 : 0.46) * Math.min(w,h);
+      // نصف القطر للمدارات (أضيق على الهاتف)
+      const r1 = (isPhone ? 0.30 : isTablet ? 0.33 : 0.35) * Math.min(w,h);
+      const r2 = (isPhone ? 0.41 : isTablet ? 0.44 : 0.46) * Math.min(w,h);
 
-      // أحجام العقد (قابلة للمس + لا تتزاحم)
-      const d1 = clamp(w * (isPhone ? 0.12 : 0.09), 56, isTablet ? 96 : 120); // الأساسي
-      const d2 = clamp(w * (isPhone ? 0.10 : 0.07), 48, isTablet ? 86 : 100); // المساند
+      // أحجام العقد
+      const d1 = clamp(w * (isPhone ? 0.105 : 0.09), 54, isTablet ? 96 : 112); // الأساسي
+      const d2 = clamp(w * (isPhone ? 0.090 : 0.070), 46, isTablet ? 86 : 100); // المساند
 
       // حجم المركز
       const core = document.getElementById('core');
-      const coreD = clamp(Math.min(w,h) * (isPhone ? 0.38 : 0.40), 220, 520);
+      const coreD = clamp(Math.min(w,h) * (isPhone ? 0.36 : 0.40), 210, 520);
       core.style.width  = coreD + 'px';
       core.style.height = coreD + 'px';
 
-      return { w,h, isPhone, isTablet, r1, r2, d1, d2 };
+      // زاوية «فتحة» أسفل البوستر لتجنب تكدس العقد قرب الـCTA/QR
+      const gapDeg = isPhone ? 80 : (isTablet ? 60 : 0); // 80° على الهاتف
+      return { w,h,isPhone,isTablet,r1,r2,d1,d2,gapDeg };
     }
 
     function render(){
@@ -309,28 +287,29 @@
       const L = computeLayout();
       const cx = L.w/2, cy = L.h/2;
 
-      placeRing(CORE_SKILLS,    L.r1, L.d1, '#FFD44D', true,  links1, cx, cy, L);
-      placeRing(SUPPORT_SKILLS, L.r2, L.d2, '#A3F7FF', false, links2, cx, cy, L);
+      placeRingWithBottomGap(CORE_SKILLS,    L.r1, L.d1, '#FFD44D', true,  links1, cx, cy, L);
+      placeRingWithBottomGap(SUPPORT_SKILLS, L.r2, L.d2, '#A3F7FF', false, links2, cx, cy, L);
     }
 
-    function placeRing(data, radiusPx, sizePx, color, glow, linkGroup, cx, cy, L){
-      const count = data.length;
-      const step  = 360 / count;
-      const start = -90 + (glow ? 0 : 8); // offset ring 2
+    // توزيع العقد على 360° ناقص فتحة سفلية (gap) متمركزة عند 90° (أسفل)
+    function placeRingWithBottomGap(data, radiusPx, sizePx, color, glow, linkGroup, cx, cy, L){
+      const totalSpan = 360 - L.gapDeg;
+      const step  = totalSpan / data.length;
+      const start = 90 + (L.gapDeg/2); // نبدأ بعد منتصف الفتحة مباشرة وندور عكس عقارب الساعة
+      for(let i=0;i<data.length;i++){
+        const angle = start + i*step;          // 90..(90+totalSpan)
+        const ang   = angle - 180;             // تحويل للاتجاه القياسي لدينا (أعلى = -90)
+        const p     = polar(cx, cy, radiusPx, ang);
 
-      for(let i=0;i<count;i++){
-        const angle = start + i*step;
-        const {x,y} = polar(cx, cy, radiusPx, angle);
+        const node=document.createElement('div');
+        node.className='node'+(glow?' glow':'');
+        node.style.cssText += `width:${sizePx}px;height:${sizePx}px;left:${p.x}px;top:${p.y}px;background:${color};`;
 
-        const node = document.createElement('div');
-        node.className = 'node' + (glow ? ' glow' : '');
-        node.style.cssText += `width:${sizePx}px;height:${sizePx}px;left:${x}px;top:${y}px;background:${color};`;
-
-        const [icon,name,desc] = data[i];
-        const iconSize = clamp(sizePx * 0.22, 16, 28);
-        const textSize = clamp(sizePx * 0.115, 9, 16);
+        const [icon,name,desc]=data[i];
+        const iconSize = clamp(sizePx * 0.20, 16, 26);
+        const textSize = clamp(sizePx * 0.105, 9, 15);
         node.innerHTML = `
-          <div class="inner">
+          <div class="inner" title="${desc||''}">
             <div class="icon" style="font-size:${iconSize}px">${icon}</div>
             <div class="name" style="font-size:${textSize}px">${name}</div>
           </div>`;
@@ -338,20 +317,17 @@
         attachTooltip(node, name, desc);
         poster.appendChild(node);
 
-        // link to core
-        const xPct = (x / L.w) * 100, yPct = (y / L.h) * 100;
-        const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+        // خط ربط للمركز
+        const xPct = (p.x / L.w) * 100, yPct = (p.y / L.h) * 100;
+        const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
         ln.setAttribute('x1','50'); ln.setAttribute('y1','50');
         ln.setAttribute('x2', String(xPct)); ln.setAttribute('y2', String(yPct));
         linkGroup.appendChild(ln);
       }
     }
 
-    // Close tooltip on scroll/resize
-    addEventListener('scroll', hideTooltip, {passive:true});
-    addEventListener('resize', () => { hideTooltip(); render(); });
-
-    // Initial render
+    addEventListener('scroll', ()=>{ /* اغلاق التولتيب عند التمرير */ const s=tooltip; s && s.classList.remove('show'); }, {passive:true});
+    addEventListener('resize', ()=>{ const s=tooltip; s && s.classList.remove('show'); render(); });
     addEventListener('load', render);
   </script>
 </body>
