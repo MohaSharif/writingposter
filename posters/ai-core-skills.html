@@ -1,420 +1,183 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>مهارات الأساس في عصر الذكاء الاصطناعي</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/framer-motion@10/umd/framer-motion.umd.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <style>body{font-family:system-ui,-apple-system,'Cairo','Noto Sans Arabic',Segoe UI,Roboto,Tahoma,sans-serif}</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>مهارات الأساس في عصر الذكاء الاصطناعي | البوسترات المصممة</title>
+  <style>
+    :root{ --bg:#0A0F29; --core:#00D1FF; --orbit1:#FFD44D; --orbit2:#A3F7FF; --text:#FFFFFF; }
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:System-ui,-apple-system,Segoe UI,Roboto,"Cairo",Tahoma,Arial}
+    .wrap{max-width:1200px;margin:auto;padding:16px}
+    .title{font-weight:900;text-align:center;margin:8px 0 16px}
+    .subtitle{opacity:.85;text-align:center;margin:-6px 0 20px}
+    .poster{ position:relative; margin:0 auto 16px; width:min(92vw,1080px); aspect-ratio:4/5; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 50px rgba(0,0,0,.45); background:var(--bg); }
+    .poster-head{ position:absolute;left:50%;transform:translateX(-50%); top:14px;text-align:center;filter:drop-shadow(0 0 12px rgba(0,209,255,.35)); }
+    .poster-head h1{margin:0;font-weight:900;color:var(--orbit1)}
+    .poster-head small{display:block;opacity:.85}
+    .bg-streams{position:absolute;inset:0;opacity:.3;pointer-events:none}
+    .orbits{position:absolute;inset:0;pointer-events:none}
+    .core{ position:absolute;left:50%;top:50%;transform:translate(-50%,-50%); display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center; border-radius:999px;border:1px solid rgba(255,255,255,.16); box-shadow:0 0 60px rgba(0,209,255,.4), inset 0 0 40px rgba(255,255,255,.06); background:radial-gradient(circle at 50% 40%, var(--core), rgba(0,209,255,.2) 60%, rgba(0,209,255,.08) 80%); color:#031018; }
+    .node{ position:absolute;display:flex;align-items:center;justify-content:center;text-align:center; border-radius:999px; color:#0A0F29; padding:2px 6px; border:1px solid rgba(255,255,255,.10); filter:saturate(110%); transform:translate(-50%,-50%); user-select:none; }
+    .node.glow{box-shadow:0 0 0 2px rgba(255,255,255,.12), 0 0 30px rgba(255,212,77,.4)}
+    .node .inner{line-height:1.12;padding:0 4px}
+    .node .icon{margin-bottom:2px}
+    .node .name{font-weight:700;white-space:normal;word-break:break-word;overflow-wrap:anywhere}
+    .cta{ position:absolute;left:0;right:0;bottom:0; height:10%;min-height:58px;padding:0 16px; display:flex;align-items:center;justify-content:space-between; background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.04)); }
+    .pill{background:rgba(255,255,255,.10);padding:8px 12px;border-radius:999px}
+    .qr{display:block}
+    a, a:visited{color:#A3F7FF}
+  </style>
 </head>
-<body class="bg-[#0A0F29] min-h-screen text-white flex items-center justify-center p-4">
-  <div id="root" class="w-full"></div>
-  <script type="text/babel" data-presets="typescript,react">
-    const { useMemo, useState } = React;
-    const { motion } = window['framerMotion'];
+<body>
+  <div class="wrap">
+    <div class="title">
+      <div>مهارات الأساس في عصر الذكاء الاصطناعي</div>
+      <div class="subtitle">(Core Skills for the AI Era)</div>
+    </div>
 
-/**
- * 🛰️ بوستر: مهارات الأساس في عصر الذكاء الاصطناعي
- * تصميم تفاعلي بملف واحد (React + Tailwind + Framer Motion)
- * — جاهز للمعاينة والتصدير من أي بيئة React.
- *
- * ✅ مطابق للمواصفات:
- * - خلفية فضائية #0A0F29
- * - مركز متوهج (AI Core) #00D1FF
- * - مدار أول (10 مهارات أساسية) #FFD44D
- * - مدار ثانٍ (20 مهارة مساندة) #A3F7FF
- * - عنوان عربي + إنجليزي أصغر
- * - شريط سفلي مع عبارة تحفيزية + QR Placeholder
- * - Glow + خطوط ترابط مع المركز
- *
- * 💡 ملاحظات:
- * - الأيقونات هنا بُيّنت كـ Emoji (Placeholder). يمكن استبدالها لاحقًا بـ lucide-react بسهولة.
- * - لتغيير رابط الـ QR: عدّل qrLink أدناه وضع صورة QR فعلية بدل Placeholder إن رغبت.
- */
+    <div id="poster" class="poster" aria-label="بوستر مهارات الأساس في عصر الذكاء الاصطناعي">
+      <svg class="bg-streams" viewBox="0 0 1200 1500" preserveAspectRatio="none" aria-hidden="true">
+        <g stroke="rgba(0,209,255,.08)" stroke-width="1" fill="none">
+          <path d="M 0 100 C 200 280, 360 40, 560 320" />
+          <path d="M -40 260 C 140 420, 340 160, 620 520" />
+          <path d="M -80 520 C 180 660, 420 360, 820 760" />
+        </g>
+      </svg>
 
-// ---------- ألوان الهوية ----------
-const COLORS = {
-  bg: "#0A0F29",
-  core: "#00D1FF",
-  orbit1: "#FFD44D",
-  orbit2: "#A3F7FF",
-  text: "#FFFFFF",
-};
-
-// ---------- البيانات: 10 مهارات أساسية + 20 مساندة ----------
-const CORE_SKILLS = [
-  { name: "هندسة البرومبتات", icon: "📝", desc: "صياغة أوامر دقيقة لإنتاج أفضل المخرجات" },
-  { name: "التفكير النقدي", icon: "🧠", desc: "تحليل الافتراضات والتحقق من صحة المعلومات" },
-  { name: "التفكير الإبداعي", icon: "🎨", desc: "ابتكار حلول جديدة عبر دمج الأفكار المتباعدة" },
-  { name: "التحقق من الحقائق", icon: "🔍", desc: "مقارنة الأدلة ومراجعة المصادر" },
-  { name: "محو الأمية البيانية", icon: "📊", desc: "قراءة الرسوم والجداول وتحليل الاتجاهات" },
-  { name: "التفكير الخوارزمي", icon: "🧩", desc: "تحويل المشكلات إلى خطوات منظمة قابلة للتنفيذ" },
-  { name: "كشف التحيزات", icon: "⚖️", desc: "رصد انحياز البيانات أو اللغة وتصحيحه" },
-  { name: "الاستدلال الأخلاقي", icon: "🛡️", desc: "اتخاذ قرارات تراعي العدالة والخصوصية" },
-  { name: "إدارة الخصوصية", icon: "🔐", desc: "حماية البيانات الشخصية والحساسة" },
-  { name: "التواصل متعدد الوسائط", icon: "🗣️", desc: "اختيار أفضل وسائط إيصال الفكرة بوضوح" },
-];
-
-const SUPPORT_SKILLS = [
-  { name: "تعاطف تجربة المستخدم", icon: "🤝", desc: "فهم احتياجات المستخدم وتجربته" },
-  { name: "الوعي بالوصولية", icon: "♿", desc: "تصميم محتوى متاح للجميع" },
-  { name: "تصميم التفكير", icon: "🧩", desc: "ابتكار حلول عبر فهم أعمق لاحتياجات الناس" },
-  { name: "تفكيك المشكلات", icon: "🔗", desc: "تقسيم التحديات الكبيرة إلى مهام صغيرة" },
-  { name: "التصور البياني", icon: "📈", desc: "سرد القصة الرقمية عبر المخططات" },
-  { name: "النمذجة السريعة", icon: "⚡", desc: "بناء نسخة أولية واختبارها سريعًا" },
-  { name: "مهارات الاستقصاء", icon: "❓", desc: "طرح أسئلة عميقة لفهم أفضل" },
-  { name: "مراجعة النظراء", icon: "👥", desc: "تلقي وتقديم تغذية راجعة بناءة" },
-  { name: "إدارة الوقت الذاتي", icon: "⏳", desc: "تحديد الأولويات وتحقيق التوازن" },
-  { name: "عقلية النمو", icon: "🌱", desc: "التعلم المستمر والنظر للأخطاء كفرص" },
-  { name: "التفكير المنظومي", icon: "🔄", desc: "فهم العلاقات المتشابكة داخل الأنظمة" },
-  { name: "إدارة الإصدارات", icon: "🗂️", desc: "تتبع التغييرات في المشاريع والملفات" },
-  { name: "التعاون الافتراضي", icon: "💻", desc: "تنظيم فرق العمل عن بُعد بكفاءة" },
-  { name: "دمج التغذية الراجعة", icon: "📝", desc: "تحويل الملاحظات إلى تحسينات قابلة للتنفيذ" },
-  { name: "الاسترجاع المعرفي", icon: "📚", desc: "الوصول للمعلومة الصحيحة بسرعة" },
-  { name: "السرد القصصي بالبيانات", icon: "📖", desc: "دمج الحقائق مع الحكايات لإقناع الجمهور" },
-  { name: "تقييم المخاطر التقنية", icon: "🚨", desc: "استباق الأخطاء ووضع خطط وقائية" },
-  { name: "تصفية الضوضاء المعلوماتية", icon: "🔇", desc: "فرز المعلومات الموثوقة من المكررة" },
-  { name: "آداب المصدر المفتوح", icon: "🌐", desc: "احترام الرخص والمساهمة التعاونية" },
-  { name: "الرفاه الرقمي", icon: "🧘‍♂️", desc: "التوازن بين التقنية والصحة النفسية" },
-];
-
-// ---------- أدوات مساعدة ----------
-function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
-  const rad = (Math.PI / 180) * angleDeg;
-  return {
-    x: cx + r * Math.cos(rad),
-    y: cy + r * Math.sin(rad),
-  };
-}
-
-function useOrbitPositions(count: number, radiusPct: number, startAngle = -90) {
-  // يوزّع العناصر بالتساوي على محيط دائرة
-  return useMemo(() => {
-    const step = 360 / count;
-    return new Array(count).fill(0).map((_, i) => {
-      const angle = startAngle + i * step;
-      const { x, y } = polarToCartesian(50, 50, radiusPct, angle);
-      return { left: `${x}%`, top: `${y}%`, angle };
-    });
-  }, [count, radiusPct, startAngle]);
-}
-
-// ---------- مكوّن دائرة مهارة ----------
-function SkillNode({
-  color,
-  name,
-  icon,
-  size = 120,
-  glow = false,
-  desc,
-}: {
-  color: string;
-  name: string;
-  icon: string;
-  size?: number;
-  glow?: boolean;
-  desc?: string;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5 }}
-      className="flex items-center justify-center text-center rounded-full select-none"
-      style={{
-        width: size,
-        height: size,
-        background: color,
-        color: "#0A0F29",
-        boxShadow: glow
-          ? `0 0 0 2px rgba(255,255,255,0.15), 0 0 30px ${color}66`
-          : `0 0 0 1px rgba(255,255,255,0.08)`,
-        filter: "saturate(110%)",
-      }}
-      title={desc}
-    >
-      <div className="px-1.5" style={{ lineHeight: 1.1 }}>
-        <div className="mb-0.5" style={{ fontSize: Math.max(18, size * 0.22) }}>{icon}</div>
-        <div
-          className="font-semibold"
-          dir="rtl"
-          style={{
-            fontSize: Math.max(10, size * 0.11),
-            lineHeight: 1.15,
-            whiteSpace: "normal",
-            wordBreak: "break-word",
-            overflowWrap: "anywhere",
-          }}
-        >
-          {name}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-// ---------- المكوّن الرئيسي ----------
-function AICoreSkillsPoster() {
-  const [ratio, setRatio] = useState<"A2" | "4:5" | "16:9">("4:5");
-
-  // نصف الأقطار النسبية للمدارات
-  const rCorePct = 20; // نصف قطر الدائرة المركزية كنسبة من الحاوية
-  const rOrbit1Pct = 35; // المدار الأول
-  const rOrbit2Pct = 46; // المدار الثاني
-
-  // مواقع العناصر على المدارات
-  const orbit1 = useOrbitPositions(CORE_SKILLS.length, rOrbit1Pct);
-  const orbit2 = useOrbitPositions(SUPPORT_SKILLS.length, rOrbit2Pct, -82); // إزاحة طفيفة للتوازن البصري
-
-  // أبعاد الحاوية حسب النسبة المختارة
-  const containerStyle = useMemo(() => {
-    if (ratio === "A2") return { width: 1000, height: Math.round((1000 * 594) / 420) }; // مقياس تقريبي لـ A2
-    if (ratio === "16:9") return { width: 1280, height: 720 };
-    return { width: 1080, height: 1350 }; // 4:5
-  }, [ratio]);
-
-  const qrLink = "https://your-edu-platform.example.com"; // ← غيّر هذا الرابط
-
-  return (
-    <div className="w-full min-h-screen flex flex-col items-center gap-4 py-6" style={{ background: COLORS.bg }}>
-      {/* شريط علوي صغير لاختيار المقاس */}
-      <div className="flex items-center gap-2 text-white/90 text-sm">
-        <span className="opacity-80">المقاس:</span>
-        <button
-          onClick={() => setRatio("A2")}
-          className={`px-3 py-1 rounded-full border ${ratio === "A2" ? "bg-white/10" : "border-white/20"}`}
-        >
-          A2 (طباعة)
-        </button>
-        <button
-          onClick={() => setRatio("4:5")}
-          className={`px-3 py-1 rounded-full border ${ratio === "4:5" ? "bg-white/10" : "border-white/20"}`}
-        >
-          4:5 (سوشيال)
-        </button>
-        <button
-          onClick={() => setRatio("16:9")}
-          className={`px-3 py-1 rounded-full border ${ratio === "16:9" ? "bg-white/10" : "border-white/20"}`}
-        >
-          16:9 (شاشات)
-        </button>
+      <div class="poster-head">
+        <h1 id="h1" style="font-size:32px;">مهارات الأساس في عصر الذكاء الاصطناعي</h1>
+        <small id="h2" style="font-size:14px;">(Core Skills for the AI Era)</small>
       </div>
 
-      {/* الحاوية الأساسية للبوستر */}
-      <div
-        className="relative rounded-2xl overflow-hidden"
-        style={{
-          width: containerStyle.width,
-          height: containerStyle.height,
-          background: COLORS.bg,
-          boxShadow: "0 10px 60px rgba(0,0,0,0.5)",
-          border: "1px solid rgba(255,255,255,0.06)",
-        }}
-      >
-        {/* خطوط بيانات خلفية (Data Streams) */}
-        <BackgroundDataStreams />
+      <svg class="orbits" id="orbits" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <circle cx="50" cy="50" r="35" fill="none" stroke="rgba(255,255,255,.06)" stroke-dasharray="8 6"/>
+        <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,.04)" stroke-dasharray="6 8"/>
+        <g id="links1" stroke="rgba(255,255,255,.07)" stroke-width="0.5"></g>
+        <g id="links2" stroke="rgba(255,255,255,.05)" stroke-width="0.5"></g>
+      </svg>
 
-        {/* العنوان */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-6 text-center" dir="rtl">
-          <h1
-            className="font-black tracking-tight"
-            style={{
-              fontSize: Math.max(24, containerStyle.width * 0.035),
-              color: COLORS.text,
-              textShadow: "0 0 24px rgba(0,209,255,0.35)",
-            }}
-          >
-            <span
-              style={{
-                color: COLORS.orbit1,
-                filter: "drop-shadow(0 0 12px rgba(255,212,77,0.45))",
-              }}
-            >
-              مهارات الأساس في عصر الذكاء الاصطناعي
-            </span>
-          </h1>
-          <div className="opacity-80" style={{ fontSize: Math.max(12, containerStyle.width * 0.014) }}>
-            (Core Skills for the AI Era)
-          </div>
-        </div>
-
-        {/* دوائر المدارات */}
-        <svg className="absolute inset-0" width="100%" height="100%">
-          {/* المدار الأول */}
-          <circle
-            cx="50%"
-            cy="50%"
-            r={`${rOrbit1Pct}%`}
-            fill="none"
-            stroke="rgba(255,255,255,0.06)"
-            strokeDasharray="8 6"
-          />
-          {/* المدار الثاني */}
-          <circle
-            cx="50%"
-            cy="50%"
-            r={`${rOrbit2Pct}%`}
-            fill="none"
-            stroke="rgba(255,255,255,0.04)"
-            strokeDasharray="6 8"
-          />
-        </svg>
-
-        {/* خطوط ترابط للمركز */}
-        <svg className="absolute inset-0" width="100%" height="100%">
-          {orbit1.map((p, i) => (
-            <line
-              key={`l1-${i}`}
-              x1="50%"
-              y1="50%"
-              x2={p.left}
-              y2={p.top}
-              stroke="rgba(255,255,255,0.07)"
-              strokeWidth={1}
-            />
-          ))}
-          {orbit2.map((p, i) => (
-            <line
-              key={`l2-${i}`}
-              x1="50%"
-              y1="50%"
-              x2={p.left}
-              y2={p.top}
-              stroke="rgba(255,255,255,0.05)"
-              strokeWidth={1}
-            />
-          ))}
-        </svg>
-
-        {/* المركز المتوهج */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full flex flex-col items-center justify-center text-center"
-          style={{
-            width: `${rCorePct * 2}%`,
-            height: `${rCorePct * 2}%`,
-            background: `radial-gradient( circle at 50% 40%, ${COLORS.core}, rgba(0,209,255,0.2) 60%, rgba(0,209,255,0.08) 80% )`,
-            boxShadow: `0 0 60px ${COLORS.core}66, inset 0 0 40px rgba(255,255,255,0.06)`,
-            border: "1px solid rgba(255,255,255,0.14)",
-          }}
-        >
-          <div className="text-[min(4vw,36px)] font-black text-[#031018]" dir="rtl">
-            الذكاء الاصطناعي
-          </div>
-          <div className="text-white/85 text-sm">(AI Core)</div>
-          <div className="text-white/70 text-xs mt-1">المحرك المركزي للعالم القادم</div>
-        </motion.div>
-
-        {/* مهارات المدار الأول */}
-        {CORE_SKILLS.map((s, i) => (
-          <div
-            key={`core-${i}`}
-            className="absolute -translate-x-1/2 -translate-y-1/2"
-            style={{ left: orbit1[i].left, top: orbit1[i].top }}
-          >
-            <SkillNode color={COLORS.orbit1} name={s.name} icon={s.icon} desc={s.desc} size={Math.max(92, containerStyle.width * 0.09)} glow />
-          </div>
-        ))}
-
-        {/* مهارات المدار الثاني */}
-        {SUPPORT_SKILLS.map((s, i) => (
-          <div
-            key={`sup-${i}`}
-            className="absolute -translate-x-1/2 -translate-y-1/2"
-            style={{ left: orbit2[i].left, top: orbit2[i].top }}
-          >
-            <SkillNode color={COLORS.orbit2} name={s.name} icon={s.icon} desc={s.desc} size={Math.max(76, containerStyle.width * 0.07)} />
-          </div>
-        ))}
-
-        {/* الشريط السفلي CTA + QR */}
-        <div
-          className="absolute left-0 right-0 flex items-center justify-between gap-4 px-6"
-          style={{ bottom: 0, height: Math.max(54, containerStyle.height * 0.08), background: "linear-gradient(180deg, rgba(255,255,255,0.00), rgba(255,255,255,0.03))" }}
-        >
-          <div className="text-white/90" dir="rtl">
-            <div className="font-semibold" style={{ fontSize: Math.max(14, containerStyle.width * 0.018) }}>
-              تعلّم اليوم لتقود الغد ✦ <span className="opacity-90">Learn Today, Lead Tomorrow</span>
-            </div>
-          </div>
-
-          {/* QR Placeholder (SVG) */}
-          <a
-            href={qrLink}
-            target="_blank"
-            rel="noreferrer"
-            className="shrink-0"
-            title="المنصة التعليمية التفاعلية"
-          >
-            <QrPlaceholder size={Math.max(56, containerStyle.width * 0.06)} />
-          </a>
-        </div>
+      <div id="core" class="core" style="width:40%;height:40%;">
+        <div style="font-size:clamp(18px,3.6vw,36px);font-weight:900">الذكاء الاصطناعي</div>
+        <div style="opacity:.9">(AI Core)</div>
+        <div style="opacity:.75;font-size:12px;margin-top:4px;">المحرك المركزي للعالم القادم</div>
       </div>
 
-      {/* تلميحات سريعة للمصمم */}
-      <div className="text-white/60 text-xs leading-relaxed px-4 max-w-4xl" dir="rtl">
-        <p>🔧 ملاحظة: يمكن استبدال الـ Emoji بأيقونات Outline لاحقًا (lucide-react). ويمكن تصدير التصميم كصورة عالية الدقة عبر المتصفح أو أدوات التصدير.</p>
+      <div class="cta">
+        <div>
+          <span class="pill">تعلّم اليوم لتقود الغد ✦</span>
+          <span class="pill" style="margin-inline-start:6px;opacity:.9">Learn Today, Lead Tomorrow</span>
+        </div>
+        <a class="qr" href="https://mohasharif.github.io/writingposter/" title="المنصة التعليمية" target="_blank" rel="noreferrer">
+          <svg width="68" height="68" viewBox="0 0 64 64" aria-hidden="true">
+            <rect width="64" height="64" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.25)"/>
+            <g fill="#EAFBFF" stroke="#EAFBFF">
+              <rect x="6" y="6" width="16" height="16" fill="none" stroke-width="2"/>
+              <rect x="10" y="10" width="8" height="8"/>
+              <rect x="42" y="6" width="16" height="16" fill="none" stroke-width="2"/>
+              <rect x="46" y="10" width="8" height="8"/>
+              <rect x="6" y="42" width="16" height="16" fill="none" stroke-width="2"/>
+              <rect x="10" y="46" width="8" height="8"/>
+              <rect x="30" y="30" width="4" height="4"/>
+              <rect x="36" y="22" width="4" height="4"/>
+              <rect x="38" y="38" width="4" height="4"/>
+              <rect x="26" y="44" width="4" height="4"/>
+              <rect x="44" y="30" width="4" height="4"/>
+            </g>
+          </svg>
+        </a>
       </div>
     </div>
-  );
-}
 
-// ---------- خلفية خطوط بيانات شفافة ----------
-function BackgroundDataStreams() {
-  return (
-    <svg className="absolute inset-0" width="100%" height="100%" aria-hidden>
-      {new Array(16).fill(0).map((_, i) => (
-        <path
-          key={i}
-          d={`M ${-50 + i * 80} -10 C ${100 + i * 80} 120, ${200 + i * 80} -20, ${400 + i * 80} 140`}
-          fill="none"
-          stroke="rgba(0,209,255,0.08)"
-          strokeWidth={1}
-        />
-      ))}
-    </svg>
-  );
-}
+    <div style="text-align:center;opacity:.7;font-size:12px">
+      <a href="/writingposter/posters/">← رجوع إلى صفحة البوسترات</a>
+    </div>
+  </div>
 
-// ---------- QR Placeholder (SVG بسيط) ----------
-function QrPlaceholder({ size = 64 }: { size?: number }) {
-  const cell = size / 7;
-  const dark = "#EAFBFF"; // أبيض مزرق على الخلفية الداكنة
-  return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <rect width={size} height={size} fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" />
-      {/* ثلاث عيون QR مبسطة */}
-      {[{ x: 0, y: 0 }, { x: size - 3 * cell, y: 0 }, { x: 0, y: size - 3 * cell }].map((p, i) => (
-        <g key={i}>
-          <rect x={p.x + cell * 0.3} y={p.y + cell * 0.3} width={cell * 2.4} height={cell * 2.4} fill="none" stroke={dark} strokeWidth={Math.max(1, cell * 0.12)} />
-          <rect x={p.x + cell * 0.9} y={p.y + cell * 0.9} width={cell * 1.2} height={cell * 1.2} fill={dark} />
-        </g>
-      ))}
-      {/* نمط عشوائي بسيط */}
-      {[
-        [1, 3],
-        [2, 1],
-        [3, 4],
-        [4, 2],
-        [5, 5],
-        [2, 5],
-        [5, 2],
-        [3, 2],
-        [4, 4],
-      ].map(([cx, cy], i) => (
-        <rect key={i} x={cx * cell} y={cy * cell} width={cell * 0.9} height={cell * 0.9} fill={dark} />
-      ))}
-    </svg>
-  );
-}
+  <script>
+    const CORE_SKILLS = [
+      ["📝","هندسة البرومبتات","صياغة أوامر دقيقة لإنتاج أفضل المخرجات"],
+      ["🧠","التفكير النقدي","تحليل الافتراضات والتحقق من صحة المعلومات"],
+      ["🎨","التفكير الإبداعي","ابتكار حلول جديدة عبر دمج الأفكار المتباعدة"],
+      ["🔍","التحقق من الحقائق","مقارنة الأدلة ومراجعة المصادر"],
+      ["📊","محو الأمية البيانية","قراءة الرسوم والجداول وتحليل الاتجاهات"],
+      ["🧩","التفكير الخوارزمي","تحويل المشكلات إلى خطوات منظمة قابلة للتنفيذ"],
+      ["⚖️","كشف التحيزات","رصد انحياز البيانات أو اللغة وتصحيحه"],
+      ["🛡️","الاستدلال الأخلاقي","اتخاذ قرارات تراعي العدالة والخصوصية"],
+      ["🔐","إدارة الخصوصية","حماية البيانات الشخصية والحساسة"],
+      ["🗣️","التواصل متعدد الوسائط","اختيار أفضل وسائط إيصال الفكرة بوضوح"],
+    ];
+    const SUPPORT_SKILLS = [
+      ["🤝","تعاطف تجربة المستخدم","فهم احتياجات المستخدم وتجربته"],
+      ["♿","الوعي بالوصولية","تصميم محتوى متاح للجميع"],
+      ["🧩","تصميم التفكير","ابتكار حلول عبر فهم أعمق لاحتياجات الناس"],
+      ["🔗","تفكيك المشكلات","تقسيم التحديات الكبيرة إلى مهام صغيرة"],
+      ["📈","التصور البياني","سرد القصة الرقمية عبر المخططات"],
+      ["⚡","النمذجة السريعة","بناء نسخة أولية واختبارها سريعًا"],
+      ["❓","مهارات الاستقصاء","طرح أسئلة عميقة لفهم أفضل"],
+      ["👥","مراجعة النظراء","تلقي وتقديم تغذية راجعة بناءة"],
+      ["⏳","إدارة الوقت الذاتي","تحديد الأولويات وتحقيق التوازن"],
+      ["🌱","عقلية النمو","التعلم المستمر والنظر للأخطاء كفرص"],
+      ["🔄","التفكير المنظومي","فهم العلاقات المتشابكة داخل الأنظمة"],
+      ["🗂️","إدارة الإصدارات","تتبع التغييرات في المشاريع والملفات"],
+      ["💻","التعاون الافتراضي","تنظيم فرق العمل عن بُعد بكفاءة"],
+      ["📝","دمج التغذية الراجعة","تحويل الملاحظات إلى تحسينات قابلة للتنفيذ"],
+      ["📚","الاسترجاع المعرفي","الوصول للمعلومة الصحيحة بسرعة"],
+      ["📖","السرد القصصي بالبيانات","دمج الحقائق مع الحكايات لإقناع الجمهور"],
+      ["🚨","تقييم المخاطر التقنية","استباق الأخطاء ووضع خطط وقائية"],
+      ["🔇","تصفية الضوضاء المعلوماتية","فرز المعلومات الموثوقة من المكررة"],
+      ["🌐","آداب المصدر المفتوح","احترام الرخص والمساهمة التعاونية"],
+      ["🧘‍♂️","الرفاه الرقمي","التوازن بين التقنية والصحة النفسية"],
+    ];
+    const poster = document.getElementById('poster');
+    const links1 = document.getElementById('links1');
+    const links2 = document.getElementById('links2');
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<AICoreSkillsPoster />);
+    function polar(cx,cy,r,deg){ const rad = deg*Math.PI/180; return {x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad)}; }
+
+    function render(){
+      document.querySelectorAll('.node').forEach(n=>n.remove());
+      links1.innerHTML=''; links2.innerHTML='';
+
+      const rect = poster.getBoundingClientRect(); const w=rect.width, h=rect.height; const min=Math.min(w,h);
+      const coreR = 0.20*min; const core = document.getElementById('core');
+      core.style.width = (coreR*2)+'px'; core.style.height = (coreR*2)+'px';
+      document.getElementById('h1').style.fontSize = Math.max(22, w*0.035) + 'px';
+      document.getElementById('h2').style.fontSize = Math.max(12, w*0.014) + 'px';
+
+      const r1 = 0.35 * (Math.min(w,h)/2) * 2;
+      const r2 = 0.46 * (Math.min(w,h)/2) * 2;
+      const d1 = Math.max(92, w*0.09);  // مدار 1
+      const d2 = Math.max(76, w*0.07);  // مدار 2
+
+      placeRing(CORE_SKILLS, r1, d1, '#FFD44D', true, links1);
+      placeRing(SUPPORT_SKILLS, r2, d2, '#A3F7FF', false, links2);
+    }
+
+    function placeRing(data, radiusPx, sizePx, color, glow, linkGroup){
+      const rect = poster.getBoundingClientRect(); const w=rect.width, h=rect.height; const cx=w/2, cy=h/2;
+      const count=data.length; const step=360/count; const start = -90 + (glow?0:8);
+      for(let i=0;i<count;i++){
+        const angle=start+i*step; const p=polar(cx,cy,radiusPx,angle);
+        const node=document.createElement('div');
+        node.className='node'+(glow?' glow':'');
+        node.style.cssText += `width:${sizePx}px;height:${sizePx}px;left:${p.x}px;top:${p.y}px;background:${color};`;
+        const [icon,name,desc]=data[i];
+        node.innerHTML=`
+          <div class="inner" title="${desc||''}">
+            <div class="icon" style="font-size:${Math.max(18, sizePx*0.22)}px">${icon}</div>
+            <div class="name" style="font-size:${Math.max(10, sizePx*0.11)}px">${name}</div>
+          </div>`;
+        poster.appendChild(node);
+
+        const xPct=(p.x/w)*100, yPct=(p.y/h)*100;
+        const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+        ln.setAttribute('x1','50'); ln.setAttribute('y1','50'); ln.setAttribute('x2',String(xPct)); ln.setAttribute('y2',String(yPct));
+        linkGroup.appendChild(ln);
+      }
+    }
+
+    addEventListener('resize', render);
+    addEventListener('load', render);
   </script>
 </body>
 </html>
