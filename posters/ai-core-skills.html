@@ -28,7 +28,6 @@
       box-shadow:0 10px 50px rgba(0,0,0,.45); background:var(--bg);
       transform-origin: center top;
     }
-    /* fallback إذا aspect-ratio غير مدعوم */
     .no-aspect .poster{ height: calc(min(96vw,1080px) * 1.25); }
 
     /* عنوان داخل البوستر */
@@ -41,7 +40,7 @@
     .poster-head small{display:block;opacity:.85;font-size:clamp(10px,2vw,14px)}
 
     /* الخلفية والمدارات */
-    .bg-streams{position:absolute;inset:0;opacity:.26;pointer-events:none}
+    .bg-streams{position:absolute;inset:0;opacity:.24;pointer-events:none}
     .orbits{position:absolute;inset:0;pointer-events:none}
 
     /* المركز */
@@ -51,8 +50,7 @@
       border-radius:999px;border:1px solid rgba(255,255,255,.16);
       box-shadow:0 0 60px rgba(0,209,255,.4), inset 0 0 40px rgba(255,255,255,.06);
       background:radial-gradient(circle at 50% 40%, var(--core), rgba(0,209,255,.2) 60%, rgba(0,209,255,.08) 80%);
-      color:#031018;
-      padding:4px;
+      color:#031018;padding:4px;
     }
 
     /* عقد المهارات */
@@ -81,7 +79,7 @@
     .qr svg{ width:62px; height:62px }
     @media (max-width:520px){
       .qr svg{ width:44px; height:44px }
-      .pill.en{ display:none } /* أخفي الإنجليزية لتقليل الازدحام */
+      .pill.en{ display:none }
     }
 
     a, a:visited{ color:#A3F7FF }
@@ -95,24 +93,22 @@
       font-size: 12px; line-height: 1.45;
       box-shadow: 0 10px 30px rgba(0,0,0,.45);
       pointer-events: none; transform: translate(-50%,-120%);
-      opacity: 0; visibility: hidden; transition: opacity .12s ease;
-      direction: rtl;
+      opacity: 0; visibility: hidden; transition: opacity .12s ease; direction: rtl;
     }
     .tooltip.show { opacity: 1; visibility: visible; }
     .tooltip .t-title { font-weight:800; margin-bottom: 4px; color:#A3F7FF; font-size: 12.5px }
     @media (pointer:coarse){ .node:hover{ transform:translate(-50%,-50%) } .tooltip{ font-size:13.5px; padding:12px 14px; border-radius:14px; transform: translate(-50%,-110%) } .tooltip .t-title{ font-size:14px } }
     @media (prefers-reduced-motion: reduce){ .node, .tooltip{ transition:none } }
 
-    /* أزرار التكبير/التصغير */
+    /* أزرار التكبير/التصغير — أزحناها يسار العنوان */
     .zoom-controls{
-      position:absolute; top:10px; inset-inline-end:10px; z-index:20;
+      position:absolute; top:56px; inset-inline-start:8px; z-index:20;
       display:flex; gap:6px; align-items:center;
     }
     .zoom-btn{
       background:rgba(255,255,255,.1); color:#EAFBFF; border:1px solid rgba(255,255,255,.18);
       width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center;
-      font-weight:800; cursor:pointer; user-select:none;
-      backdrop-filter: blur(4px);
+      font-weight:800; cursor:pointer; user-select:none; backdrop-filter: blur(4px);
     }
     .zoom-btn:active{ transform: translateY(1px) }
     .zoom-level{color:#EAFBFF; font-size:12px; opacity:.9; min-width:46px; text-align:center}
@@ -152,8 +148,6 @@
 
         <!-- المدارات -->
         <svg class="orbits" id="orbits" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <circle cx="50" cy="50" r="35" fill="none" stroke="rgba(255,255,255,.06)" stroke-dasharray="8 6"/>
-          <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,.04)" stroke-dasharray="6 8"/>
           <g id="links1" stroke="rgba(255,255,255,.07)" stroke-width="0.5"></g>
           <g id="links2" stroke="rgba(255,255,255,.05)" stroke-width="0.5"></g>
         </svg>
@@ -244,12 +238,41 @@
     const links1   = document.getElementById('links1');
     const links2   = document.getElementById('links2');
     const tooltip  = document.getElementById('tooltip');
-
-    // دعم fallback للـ aspect-ratio
     try { if (!CSS.supports('aspect-ratio: 4 / 5')) { rootWrap.classList.add('no-aspect'); } } catch(e){}
 
-    const polar=(cx,cy,r,deg)=>{ const rad=deg*Math.PI/180; return {x: cx + r*Math.cos(rad), y: cy + r*Math.sin(rad)}; };
     const clamp=(v,min,max)=>Math.max(min, Math.min(max, v));
+    const deg2rad = d => d*Math.PI/180;
+
+    // إحداثيات بيضاوية (rx, ry) + انزياح رأسي اختياري
+    function ellipsePoint(cx, cy, rx, ry, deg, yShift=0){
+      const r = deg2rad(deg);
+      return { x: cx + rx*Math.cos(r), y: cy + ry*Math.sin(r) + yShift };
+    }
+
+    // توزيع زوايا مع تنافر لضمان حد أدنى للفصل الزاوي
+    function distributeAngles(count, start, span, minArc){
+      const angles = Array.from({length:count}, (_,i)=> start + i*(span/count));
+      // 6 مرات تنافر كافية
+      for(let pass=0; pass<6; pass++){
+        for(let i=0;i<count;i++){
+          const prev = (i-1+count)%count, next = (i+1)%count;
+          const a = angles[i], ap = angles[prev], an = angles[next];
+          // فرق مع السابق
+          let diffP = a - ap; if(diffP<0) diffP += span;
+          if(diffP < minArc){ const push = (minArc - diffP)/2; angles[i] += push; angles[prev] -= push; }
+          // فرق مع التالي
+          let diffN = an - a; if(diffN<0) diffN += span;
+          if(diffN < minArc){ const push = (minArc - diffN)/2; angles[i] -= push; angles[next] += push; }
+        }
+      }
+      // إعادة التطبيع داخل [start, start+span)
+      for(let i=0;i<count;i++){
+        while(angles[i] < start) angles[i]+=span;
+        while(angles[i] >= start+span) angles[i]-=span;
+      }
+      angles.sort((a,b)=>a-b);
+      return angles;
+    }
 
     // ===== Zoom =====
     let scale = 1;
@@ -286,47 +309,34 @@
       node.addEventListener('click', e => { if (matchMedia('(pointer:coarse)').matches){ showTooltip(title, desc, e.clientX, e.clientY); clearTimeout(node.__tt); node.__tt=setTimeout(hideTooltip, 1800);} });
     }
 
-    // ===== قياس وملاءمة النص داخل الدائرة (Autofit) =====
+    // Autofit: صغّر حجم النص (ثم الأيقونة) حتى يَدخل ضمن الدائرة
     function autofitNode(node, sizePx){
       const nameEl = node.querySelector('.name');
       const iconEl = node.querySelector('.icon');
       if(!nameEl || !iconEl) return;
-
-      // حدود المساحة المتاحة للنص تحت الأيقونة
       const pad = 8;
       const maxW = sizePx - pad*2;
       const maxH = sizePx - pad*2 - iconEl.getBoundingClientRect().height;
 
       let nameFS = parseFloat(getComputedStyle(nameEl).fontSize);
       let iconFS = parseFloat(getComputedStyle(iconEl).fontSize);
-
-      // قلّل الخط تدريجيًا حتى يدخل بالكامل
       let guard = 0;
-      while (guard++ < 30 && (nameEl.scrollHeight > maxH || nameEl.scrollWidth > maxW)) {
-        nameFS = Math.max(8, nameFS - 1);
+      while (guard++ < 40 && (nameEl.scrollHeight > maxH || nameEl.scrollWidth > maxW)) {
+        if (nameFS > 8) nameFS -= 1;
         nameEl.style.fontSize = nameFS + "px";
+        if (nameEl.scrollHeight > maxH && iconFS > 14) {
+          iconFS -= 1; iconEl.style.fontSize = iconFS + "px";
+        }
       }
-      // إن بقي ارتفاع زائد، قلّل الأيقونة قليلًا ثم أعد المحاولة
-      guard = 0;
-      while (guard++ < 10 && nameEl.scrollHeight > maxH) {
-        iconFS = Math.max(14, iconFS - 1);
-        iconEl.style.fontSize = iconFS + "px";
-        nameFS = Math.max(8, nameFS - 1);
-        nameEl.style.fontSize = nameFS + "px";
-      }
-      // كلمّة طويلة جدًا؟ شدّد التفافها قليلًا
       if (nameEl.scrollHeight > maxH) {
-        nameEl.style.letterSpacing = "-0.4px";
-        nameEl.style.lineHeight = "1.08";
+        nameEl.style.letterSpacing = "-0.5px";
+        nameEl.style.lineHeight = "1.06";
       }
     }
 
-    // ===== تخطيط وتوزيع =====
+    // ========== تخطيط وتوزيع ==========
     function computeLayout(){
-      // نعتمد على clientWidth/Height (غير متأثرين بالـtransform)
-      const w = poster.clientWidth;
-      const h = poster.clientHeight;
-
+      const w = poster.clientWidth, h = poster.clientHeight;
       const isPhone  = w < 520;
       const isTablet = w >= 520 && w < 900;
 
@@ -334,23 +344,33 @@
       document.getElementById('h1').style.fontSize = clamp(w*0.035, 18, 32) + 'px';
       document.getElementById('h2').style.fontSize = clamp(w*0.014, 10, 14) + 'px';
 
-      // نصف القطر للمدارات (أضيق على الهاتف)
-      const r1 = (isPhone ? 0.30 : isTablet ? 0.33 : 0.35) * Math.min(w,h);
-      const r2 = (isPhone ? 0.41 : isTablet ? 0.44 : 0.46) * Math.min(w,h);
-
-      // أحجام العقد
-      const d1 = clamp(w * (isPhone ? 0.105 : 0.09), 52, isTablet ? 96 : 112); // الأساسي
-      const d2 = clamp(w * (isPhone ? 0.090 : 0.070), 44, isTablet ? 86 : 100); // المساند
-
-      // حجم المركز
+      // حجم المركز: أصغر قليلًا على الهاتف لزيادة محيط المدارين
       const core = document.getElementById('core');
-      const coreD = clamp(Math.min(w,h) * (isPhone ? 0.36 : 0.40), 210, 520);
+      const coreD = clamp(Math.min(w,h) * (isPhone ? 0.32 : 0.40), 190, 520);
       core.style.width  = coreD + 'px';
       core.style.height = coreD + 'px';
 
-      // فتحة سفلية أكبر على الهاتف لتجنّب التكدّس قرب الـCTA/QR
-      const gapDeg = isPhone ? 110 : (isTablet ? 80 : 40);
-      return { w,h,isPhone,isTablet,r1,r2,d1,d2,gapDeg };
+      // مدارات بيضاوية على الهاتف (لملء العرض والارتفاع بشكل أفضل)
+      // rx = أفقي، ry = رأسي. yShift لرفع الحلقة بعيدًا عن شريط CTA.
+      const yShift = isPhone ? -h*0.02 : 0;
+      const rx1 = (isPhone ? w*0.42 : Math.min(w,h)*0.35);
+      const ry1 = (isPhone ? h*0.32 : Math.min(w,h)*0.35);
+      const rx2 = (isPhone ? w*0.49 : Math.min(w,h)*0.46);
+      const ry2 = (isPhone ? h*0.40 : Math.min(w,h)*0.46);
+
+      // أحجام العقد — أصغر افتراضيًا على الهاتف
+      const d1 = clamp(w * (isPhone ? 0.095 : 0.09), 50, isTablet ? 96 : 112); // الأساسي
+      const d2 = clamp(w * (isPhone ? 0.082 : 0.070), 42, isTablet ? 86 : 100); // المساند
+
+      // فجوة سفلية بسيطة فقط لحماية الـCTA (بدل 80° سابقًا)
+      const gapDeg = isPhone ? 24 : 0;
+
+      // فصل زاوي أدنى (بالدرجات) يتناسب مع القطر ونصف القطر المتوسط
+      const rAvg1 = (rx1 + ry1) / 2, rAvg2 = (rx2 + ry2) / 2;
+      const minArc1 = clamp((d1 / (2*Math.PI*rAvg1)) * 360 * 1.2, 6, 22);
+      const minArc2 = clamp((d2 / (2*Math.PI*rAvg2)) * 360 * 1.2, 4, 18);
+
+      return { w,h,isPhone,isTablet, coreD, rx1,ry1, rx2,ry2, yShift, d1,d2, gapDeg, minArc1, minArc2 };
     }
 
     function render(){
@@ -361,27 +381,29 @@
       const cx = poster.clientWidth / 2;
       const cy = poster.clientHeight / 2;
 
-      placeRingWithBottomGap(CORE_SKILLS,    L.r1, L.d1, '#FFD44D', true,  links1, cx, cy, L);
-      placeRingWithBottomGap(SUPPORT_SKILLS, L.r2, L.d2, '#A3F7FF', false, links2, cx, cy, L);
+      // زوايا موزعة مع تنافر — حلقة 1
+      const span = 360 - L.gapDeg;
+      const start = 90 + (L.gapDeg/2);    // gap centered at bottom
+      const ang1 = distributeAngles(CORE_SKILLS.length, start, span, L.minArc1);
+      // الحلقة الثانية نزيحها نصف خطوة لعدم تراكب العقد مع الحلقة الأولى
+      const ang2 = distributeAngles(SUPPORT_SKILLS.length, start + (span/SUPPORT_SKILLS.length)/2, span, L.minArc2);
+
+      placeRingEllipse(CORE_SKILLS,   L.rx1, L.ry1, L.d1, '#FFD44D', true,  links1, cx, cy, ang1, L.yShift);
+      placeRingEllipse(SUPPORT_SKILLS,L.rx2, L.ry2, L.d2, '#A3F7FF', false, links2, cx, cy, ang2, L.yShift);
     }
 
-    // توزيع على 360° ناقص فتحة سفلية centered at bottom
-    function placeRingWithBottomGap(data, radiusPx, sizePx, color, glow, linkGroup, cx, cy, L){
-      const totalSpan = 360 - L.gapDeg;
-      const step  = totalSpan / data.length;
-      const start = 90 + (L.gapDeg/2); // أسفل ثم نلتف
+    function placeRingEllipse(data, rx, ry, sizePx, color, glow, linkGroup, cx, cy, angles, yShift){
       for(let i=0;i<data.length;i++){
-        const angle = start + i*step;          // 90..(90+totalSpan)
-        const ang   = angle - 180;             // تحويل لاتجاهنا (أعلى = -90)
-        const p     = polar(cx, cy, radiusPx, ang);
+        const {x,y} = ellipsePoint(cx, cy, rx, ry, angles[i], yShift);
 
         const node=document.createElement('div');
         node.className='node'+(glow?' glow':'');
-        node.style.cssText += `width:${sizePx}px;height:${sizePx}px;left:${p.x}px;top:${p.y}px;background:${color};`;
+        node.style.cssText += `width:${sizePx}px;height:${sizePx}px;left:${x}px;top:${y}px;background:${color};`;
 
         const [icon,name,desc]=data[i];
-        const iconSize = clamp(sizePx * 0.20, 16, 26);
-        const textSize = clamp(sizePx * 0.105, 9, 15);
+        // أصغر من قبل بشكل افتراضي
+        const iconSize = clamp(sizePx * 0.18, 16, 24);
+        const textSize = clamp(sizePx * 0.095, 8, 14);
         node.innerHTML = `
           <div class="inner">
             <div class="icon" style="font-size:${iconSize}px">${icon}</div>
@@ -390,12 +412,10 @@
 
         attachTooltip(node, name, desc);
         poster.appendChild(node);
-
-        // بعد الإضافة: اضبط الخط تلقائيًا حتى يَدخل بالكامل
         requestAnimationFrame(()=>autofitNode(node, sizePx));
 
-        // خط ربط للمركز
-        const xPct = (p.x / poster.clientWidth) * 100, yPct = (p.y / poster.clientHeight) * 100;
+        // خط إلى المركز (بنِسَب)
+        const xPct = (x / poster.clientWidth) * 100, yPct = (y / poster.clientHeight) * 100;
         const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
         ln.setAttribute('x1','50'); ln.setAttribute('y1','50');
         ln.setAttribute('x2', String(xPct)); ln.setAttribute('y2', String(yPct));
